@@ -1,0 +1,80 @@
+$baseColor: rgba(4,4,4, 0.75);
+$tenPadding: 10px;
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  height:100vh;
+  width:100vw;
+}
+
+#root{
+	height:100%;
+	width:100%;
+
+  > div:first-child {
+    height:inherit;
+    width:inherit;
+  }
+}
+
+
+.Header {
+  //text-align: center;
+  height: 70px;
+  background: $baseColor;
+  div{
+    display: inline-block;
+  }
+  h2{
+    color:white;
+    margin: 0;
+    padding:10px 10px;
+  }
+  a{
+    text-decoration: none;
+    color:white;
+    margin:0px 10px;
+  }
+  .colRight{
+    width:10%;
+  }
+  .colLeft{
+    width:90%;
+  }
+}
+
+.Body {
+  height:calc(100% - 100px);
+}
+
+.Footer {
+  font-size: large;
+  min-height: 50px;
+  background: rgba(0,0,0, 0.5);
+  position:relative;
+}
+
+#Login {
+  padding:10px 10px;
+  > div {
+    vertical-align: top;
+    width:calc(50% - #{2*$tenPadding});
+    padding:0px 10px;
+    display:inline-block;
+    label {
+      display: block;
+      input {
+        margin:5px;
+      }
+    }
+  }
+  .signIn {
+    
+  }
+  .createUser {
+    width:calc(50% - #{2*$tenPadding + 1} );
+    border-left: 1px solid $baseColor;
+  }
+}

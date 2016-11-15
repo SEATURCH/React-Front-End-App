@@ -9,7 +9,7 @@ class AppCont extends Component {
 			userId: "",
 			id: "",
 			title:"",
-			body:""
+			body:"ssss"
 		}
 	}
 
