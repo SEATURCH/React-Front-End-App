@@ -22,7 +22,7 @@ class NotFound extends Component {
       </div>
     );
   }
-} 
+}
 
 class Conts extends Component {
   constructor(){
@@ -31,7 +31,7 @@ class Conts extends Component {
       loggedIn:sessionStorage.token
     }
   }
-  
+
   updateAuth(loggedIn) {
     console.log("REZ")
     console.log(this);
@@ -44,7 +44,7 @@ class Conts extends Component {
     return (
       <div>
         <div className="Header">
-          <h2>LETS Care</h2>
+          <h2>EMR System Company</h2>
           <div className="colLeft">
             <Link to="Dashboard" >Dashboard</Link>
           </div>
@@ -61,7 +61,7 @@ class Conts extends Component {
       </div>
     );
   }
-} 
+}
 
 
 ReactDOM.render(
@@ -78,5 +78,3 @@ ReactDOM.render(
   </Router>,
   document.getElementById('root')
 );
-
-

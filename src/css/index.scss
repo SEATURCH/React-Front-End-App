@@ -5,8 +5,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
-  height:100vh;
-  width:100vw;
+  height:auto;
+  width:auto;
 }
 
 #root{
@@ -71,7 +71,7 @@ body {
     }
   }
   .signIn {
-    
+
   }
   .createUser {
     width:calc(50% - #{2*$tenPadding + 1} );
