@@ -9,15 +9,20 @@ class AppCont extends Component {
 		super(props);
 		this.state = {
 			generalInfoList: {
-				userId: "1u4c5",
-				medicalNumber: "12345678",
-				firstName: "Steven",
-				lastName: "Strange",
-				gender: "Male",
-				birthDate: "Feb-29-1700",
-				contactInfo: "111-222-3333",
-				address: "111 Mall Street, Vancouver, BC, Canada",
-				primaryDoctor: "Dr. Popular"
+				"patientUUID": "",
+				"age": 0,
+				"gender": "",
+				"insuranceNumber": "",
+				"name": ""
+				// userId: "1u4c5",
+				// medicalNumber: "12345678",
+				// firstName: "Steven",
+				// lastName: "Strange",
+				// gender: "Male",
+				// birthDate: "Feb-29-1700",
+				// contactInfo: "111-222-3333",
+				// address: "111 Mall Street, Vancouver, BC, Canada",
+				// primaryDoctor: "Dr. Popular"
 			},
 			allergyList : {},
 			medicationList: {},
@@ -27,17 +32,18 @@ class AppCont extends Component {
 	}
 
 	componentDidMount(){
-		if(!this.props.location.query.id)
-			return;
-
-		requests.testApi(this.props.location.query.id)
-			.then((result) => {
-				console.log("JSON from server : " + result);
-				this.setState(result);
-			})
-			.catch(function(e){
-				console.log("Could not mount")
-			});
+		// if(!this.props.location.query.id)
+		// 	return;
+			console.log(this.props.location)
+			requests.patientSearch("dummy")
+				.then((result) => {
+					console.log("JSON from server : " + result);
+					this.setState({ generalInfoList:result });
+					console.log(this.state)
+				})
+				.catch(function(e){
+					console.log("Could not mount")
+				});
 	}
 
 	render() {

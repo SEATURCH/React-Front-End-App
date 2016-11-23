@@ -4,6 +4,7 @@ import Promise from 'bluebird';
 
 //var prefix = require('superagent-prefix')('/static');
 var root = 'https://jsonplaceholder.typicode.com';
+var goback = 'http://localhost:8080';
 
 var getTest = function(id){
 	return new Promise(function(resolve, reject){
@@ -18,7 +19,21 @@ var getTest = function(id){
 		    }
 
 	  	});
-	});	
+	});
+}
+
+var patientSearch = function(id){
+	return new Promise(function(resolve, reject){
+		request
+		  .get(goback+'/patients/search?PatientUUID=2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
+		  .end(function(err, res){
+		    if(!err && res.ok){
+					resolve(res.body);
+				}else {
+					reject();
+		    }
+			});
+		});
 }
 
 var authenticate = function(email, pass) {
@@ -42,10 +57,11 @@ var authenticate = function(email, pass) {
 	// 	    }
 
 	//   	});
-	// });	
+	// });
   }
 
 export default {
 	authenticate:authenticate,
-	testApi:getTest
+	testApi:getTest,
+	patientSearch:patientSearch
 };
