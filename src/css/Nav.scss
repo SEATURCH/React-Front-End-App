@@ -1,8 +1,12 @@
+$title-color: white;
+
 #navMenu {
 	float: left;
 	display: inline-block;
 	width: 200px;
 	text-align: center;
+	height: 100%;
+	background-color: green;
 }
 
 #menuList {
@@ -11,9 +15,9 @@
 	margin: 0;
 }
 
-// #menuList>li:not(:first-child) {
-// 	margin-top: 10px;
-// }
+.menu-text {
+	color: $title-color;
+}
 
 #menuList>li {
 	background-color: gray;
@@ -24,8 +28,8 @@
 	// padding-bottom: 2px;
   margin-top: 0;
 	margin-bottom: 0;
+	//color: white;
 	color: white;
-
 }
 
 #menuList>li:hover {
@@ -35,4 +39,5 @@
 
 .active{
   color: green;
+	background-color: orange;
 }

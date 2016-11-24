@@ -9,16 +9,16 @@ class Nav extends Component{
         <ul id="menuList">
           <li className="menu-text">Menu</li>
           <li>
-            <IndexLink to="/" activeClassName="active">Dashboard</IndexLink>
+            <IndexLink to="/Dashboard" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</IndexLink>
           </li>
           <li>
-            <Link to="/" activeClassName="active">Documents</Link>
+            <Link to="/Documents" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Documents</Link>
           </li>
           <li>
-            <Link to="/" activeClassName="active">Appointments</Link>
+            <Link to="/Appointments" activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Appointments</Link>
           </li>
           <li>
-            <Link to="/" activeClassName="active">Real-Time Display</Link>
+            <Link to="/RealtimeDisplay" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Real-Time Display</Link>
           </li>
         </ul>
       </div>

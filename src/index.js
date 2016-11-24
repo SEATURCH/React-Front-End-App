@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import { Router, Route, Redirect, Link, browserHistory } from 'react-router';
 
 import App from './AppCont';
+import Dashboard from './Dashboard';
+import Documents from './Documents';
+import Appointments from './Appointments';
+import RealtimeDisplay from './RealtimeDisplay';
 import Auth from './Auth/Auth.js';
 import './css/index.scss';
 
@@ -17,7 +21,7 @@ class NotFound extends Component {
         <div>
         	Error Code: 404
         	Here are some helpful links:
-        	<p><Link to="Dashboard" >Dashboard</Link></p>
+        	<p><Link to="/" >Dashboard</Link></p>
         </div>
       </div>
     );
@@ -46,7 +50,7 @@ class Conts extends Component {
         <div className="Header">
           <h2>EMR System Company</h2>
           <div className="colLeft">
-            <Link to="Dashboard" >Dashboard</Link>
+            <Link to="/" >Dashboard</Link>
           </div>
           <div className="colRight">
             { this.state.loggedIn? <Link to="logout" >Logout</Link> :null}
@@ -67,11 +71,16 @@ class Conts extends Component {
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route component={Conts} >
-    	<Redirect from="/" to="Dashboard" />
-		  <Route path="login" component={Auth.Login} />
+      <Redirect from="/" to="Dashboard"/>
+      <Route path="login" component={Auth.Login} />
       <Route path="logout" component={Auth.Logout} />
   		<Route onEnter={Auth.requireAuth}>
-        <Route path="Dashboard" component={App} />
+        <Route path="/" component={App}>
+          <Route path="Dashboard" component={Dashboard} />
+          <Route path="Documents" component={Documents} />
+          <Route path="Appointments" component={Appointments} />
+          <Route path="RealtimeDisplay" component={RealtimeDisplay} />
+        </Route>
         <Route path="*" component={NotFound} />
       </Route>
     </Route>
