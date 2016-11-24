@@ -4,7 +4,8 @@ import Promise from 'bluebird';
 
 //var prefix = require('superagent-prefix')('/static');
 var root = 'https://jsonplaceholder.typicode.com';
-var goback = 'http://localhost:8080';
+// var goback = 'http://localhost:8080';
+var goServer = process.env.GO_ADDR;
 
 var getTest = function(id){
 	return new Promise(function(resolve, reject){
@@ -25,7 +26,7 @@ var getTest = function(id){
 var patientSearch = function(id){
 	return new Promise(function(resolve, reject){
 		request
-		  .get(goback+'/patients/search?PatientUUID=2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
+		  .get(goServer+'/patients/search?PatientUUID=2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
 		  .end(function(err, res){
 		    if(!err && res.ok){
 					resolve(res.body);
@@ -36,28 +37,31 @@ var patientSearch = function(id){
 		});
 }
 
+
+
+
 var authenticate = function(email, pass) {
     if (sessionStorage.token) {
       	delete sessionStorage.token;
     }
-    // var proxyServer = "http://localhost:8080/";
-    return new Promise(function(resolve, rejevect){
-    	resolve(true);
-    });
- //    return new Promise(function(resolve, reject){
-	// 	request
-	// 	  // .get(root+'/authenticate')
-	// 	  .get(proxyServer)
-	// 	  .withCredentials()
-	// 	  .end(function(err, res){
-	// 	    if(!err && res.ok){
-	// 	    	resolve(res.ok );
-	// 	    }else {
-	// 	    	reject();
-	// 	    }
 
-	//   	});
-	// });
+    return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/login')
+		   .type('form')
+		   .send({
+		   		name: email,
+		   		pass: pass
+		   })
+		  .end(function(err, res){
+		    if(!err && res.ok){
+		    	resolve(res.ok );
+		    }else {
+		    	reject();
+		    }
+
+	  	});
+	});	
   }
 
 export default {

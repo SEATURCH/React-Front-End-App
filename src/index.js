@@ -37,8 +37,6 @@ class Conts extends Component {
   }
 
   updateAuth(loggedIn) {
-    console.log("REZ")
-    console.log(this);
     this.setState({
       loggedIn
     })

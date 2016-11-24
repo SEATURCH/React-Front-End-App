@@ -4,7 +4,6 @@ import req from '../requests.js'
 //import sessionAuth from './sessionAuth.js'
 
 function requireAuth(nextState, replace) {
-	console.log('OKOK')
   if (sessionStorage.token !== 'true') {
   	replace({
       pathname: '/login'

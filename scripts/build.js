@@ -20,6 +20,8 @@ var checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 var recursive = require('recursive-readdir');
 var stripAnsi = require('strip-ansi');
 
+var server = require('pushstate-server');
+
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
   process.exit(1);
@@ -71,6 +73,11 @@ recursive(paths.appBuild, (err, fileNames) => {
 
   // Merge with the public folder
   copyPublicFolder();
+
+  server.start({
+    port:3000,
+    directory:"./build"
+  })
 });
 
 // Print a detailed summary of build files.
