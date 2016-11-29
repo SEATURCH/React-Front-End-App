@@ -26,7 +26,7 @@ var getTest = function(id){
 var patientSearch = function(id){
 	return new Promise(function(resolve, reject){
 		request
-		  .get(goServer+'/patients/search?PatientUUID=2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
+		  .get(goServer+'/patients/search?patientuuid=2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
 		  .end(function(err, res){
 		    if(!err && res.ok){
 					resolve(res.body);

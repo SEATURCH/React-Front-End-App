@@ -8,7 +8,7 @@ class WelcomeBanner extends Component{
       <div className="banner">
         <div className="banner-contents">
           <img src={logo} className="app-logo" alt="logo" />
-          <h1>Welcome, {this.props.firstName}</h1>
+          <h1>Welcome</h1>
         </div>
       </div>
 
