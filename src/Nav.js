@@ -7,7 +7,7 @@ class Nav extends Component{
     return (
       <div id="navMenu">
         <ul id="menuList">
-          <li className="menu-text">Menu</li>
+          <li className="menu-text"></li>
           <li>
             <IndexLink to="/Dashboard" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</IndexLink>
           </li>
@@ -19,6 +19,9 @@ class Nav extends Component{
           </li>
           <li>
             <Link to="/RealtimeDisplay" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Real-Time Display</Link>
+          </li>
+          <li>
+            <Link to="/Home_Doc" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Home_Doc</Link>
           </li>
         </ul>
       </div>
