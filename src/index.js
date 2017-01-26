@@ -8,9 +8,9 @@ import Documents from './Documents';
 import Appointments from './Appointments';
 import RealtimeDisplay from './RealtimeDisplay';
 import Auth from './Auth/Auth.js';
+
 import './css/index.scss';
-
-
+import './css/bootstrap.min.css'
 
 class NotFound extends Component {
   render() {
@@ -47,9 +47,6 @@ class Conts extends Component {
       <div>
         <div className="Header">
           <h2>EMR System Company</h2>
-          <div className="colLeft">
-            <Link to="/" >Dashboard</Link>
-          </div>
           <div className="colRight">
             { this.state.loggedIn? <Link to="logout" >Logout</Link> :null}
             {!this.state.loggedIn? <Link to="login" >Login</Link> :null}

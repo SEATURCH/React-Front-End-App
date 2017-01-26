@@ -118,10 +118,11 @@ module.exports = {
       // "style" loader turns CSS into JS modules that inject <style> tags.
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
-      // {
-      //   test: /\.css$/,
-      //   loader: 'style!css?importLoaders=1!postcss'
-      // },
+      {
+        test: /\.css$/,
+        loader: 'style!css?importLoaders=1!postcss'
+        // loader: 'css'
+      },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
       {
