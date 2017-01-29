@@ -37,6 +37,20 @@ var patientSearch = function(id){
 		});
 }
 
+var patientsByDocSearch = function(id){
+	return new Promise(function(resolve, reject){
+		request
+		  .get(goServer+'/patients/bydoctor?doctoruuid=4498720b-0491-424f-8e52-6e13bd33da71')
+		  .end(function(err, res){
+		    if(!err && res.ok){
+					resolve(res.body);
+				}else {
+					reject();
+		    }
+			});
+		});
+}
+
 
 
 
@@ -59,13 +73,13 @@ var authenticate = function(email, pass) {
 		    }else {
 		    	reject();
 		    }
-
 	  	});
-	});	
+	});
   }
 
 export default {
 	authenticate:authenticate,
 	testApi:getTest,
-	patientSearch:patientSearch
+	patientSearch:patientSearch,
+	patientsByDocSearch:patientsByDocSearch
 };

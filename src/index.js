@@ -7,7 +7,8 @@ import Dashboard from './Dashboard';
 import Documents from './Documents';
 import Appointments from './Appointments';
 import RealtimeDisplay from './RealtimeDisplay';
-import Auth from './Auth/Auth.js';
+import Auth from './Auth/Auth.js';  
+import Home_Doc from './Home_Doc';
 
 import './css/index.scss';
 import './css/bootstrap.min.css'
@@ -34,7 +35,7 @@ class Conts extends Component {
     this.state = {
       loggedIn:sessionStorage.token
     }
-  }
+  }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
   updateAuth(loggedIn) {
     this.setState({
@@ -75,6 +76,7 @@ ReactDOM.render(
           <Route path="Documents" component={Documents} />
           <Route path="Appointments" component={Appointments} />
           <Route path="RealtimeDisplay" component={RealtimeDisplay} />
+          <Route path="Home_Doc" component={Home_Doc} />
         </Route>
         <Route path="*" component={NotFound} />
       </Route>
