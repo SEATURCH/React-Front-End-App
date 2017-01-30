@@ -77,9 +77,29 @@ var authenticate = function(email, pass) {
 	});
   }
 
+var updatePatient = function(patient){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/update/patient')
+		   .type('form')
+		   .send({
+		   		patientuuid: patient.patientuuid,
+		   		notes: patient.notes
+		   })
+		  .end(function(err, res){
+		    if(!err && res.ok){
+		    	resolve(res.ok );
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
 export default {
 	authenticate:authenticate,
 	testApi:getTest,
 	patientSearch:patientSearch,
-	patientsByDocSearch:patientsByDocSearch
+	patientsByDocSearch:patientsByDocSearch,
+	updatePatient:updatePatient
 };

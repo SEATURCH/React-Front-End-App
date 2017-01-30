@@ -1,0 +1,87 @@
+$moduleWidth: 45%;
+
+.module{
+	display: inline-block;
+	vertical-align: top;
+	padding: 10px 10px;
+	width:$moduleWidth;
+	.modeleHeader{
+		font-weight: 600;
+		margin:0px 0px;
+	}
+	.moduleSubHeader{
+		font-weight: 500;
+		margin:0px 0px;
+	}
+
+	table{
+		width:100%;
+		border:none;
+		margin: 5px 5px;
+		margin-bottom: 20px;
+		.subheader{
+			font-size: .75em;
+			padding-left:10%;
+		}		
+		thead{
+			border-bottom: 1px solid #9f9f9f;
+		}
+		th {
+			font-size:1.1em;
+			font-weight: none;
+			padding: 5px 5px;
+			border:none;
+		}
+		td {
+			text-align: left;
+			padding: 5px 0px 5px 10px;
+			border:none;
+		}	
+	}
+}
+
+.GeneralList {
+	display: block;
+	text-align: center;
+	color: red;
+}
+
+.PatientAllergy{
+	form {
+		textarea{
+			width:100%;
+			resize: none;
+		}
+		.btnHolder{
+			clear:both;
+			position: relative;
+			height: 0px;
+			overflow: hidden;
+			transition: height .25s;
+			-webkit-transition: height .25s;
+			&.show{
+				height:35px;
+			}
+			.btn-danger{
+				float:right;
+				margin: 0px 5px;
+			}
+			.btn-success{
+				float:right;	
+			}
+		}
+	}
+}
+
+
+.PatientPrescription {
+	
+}
+
+.PatientAppointments {
+	td {
+		padding-left: 0px !important;
+		text-align: center !important;
+		white-space: nowrap;
+	}
+}

@@ -1,6 +1,10 @@
 $baseColor: rgba(4,4,4, 0.75);
 $tenPadding: 10px;
 
+html{
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -10,8 +14,8 @@ body {
 }
 
 #root{
-	height:100%;
-	width:100%;
+	height:100vh;
+	width:100vw;
 
   > div:first-child {
     height:inherit;
@@ -23,6 +27,7 @@ body {
 .Header {
   //text-align: center;
   height: 70px;
+  line-height: 70px;
   background: $baseColor;
   div{
     display: inline-block;
@@ -31,6 +36,8 @@ body {
     color:white;
     margin: 0;
     padding:10px 10px;
+    display: inline-block;
+    white-space: nowrap;
   }
   a{
     text-decoration: none;
@@ -39,6 +46,15 @@ body {
   }
   .colRight{
     width:10%;
+    float:right;
+    text-align: center;
+    a {
+      line-height: 100%;
+      text-decoration: none;
+      &:hover, &:focus{
+        color:white;
+      }
+    }
   }
   .colLeft{
     width:90%;

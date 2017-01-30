@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import requests from './requests';
 import PatientGeneral from './PatientGeneral';
+import PatientAllergy from './PatientAllergy';
+import PatientPrescription from './PatientPrescription';
+import PatientAppointments from './PatientAppointments';
 //import Nav from './Nav';
 //import WelcomeBanner from './WelcomeBanner';
+
+import './css/Dashboard.scss';
 
 class Dashboard extends Component {
 	constructor(props){
@@ -24,9 +29,51 @@ class Dashboard extends Component {
 				// address: "111 Mall Street, Vancouver, BC, Canada",
 				// primaryDoctor: "Dr. Popular"
 			},
-			allergyList : {},
-			medicationList: {},
-			vitalList: {},
+			prescriptionList:[{
+					doctorName:"Doctor 1",
+					startDate:1485726115,
+					endDate:1485846115,
+					name:"Drug Name 1",
+					notes:"Notes 1"
+				},{
+					doctorName:"Doctor",
+					startDate:1485526115,
+					endDate:1485723115,
+					name:"Drug Name",
+					notes:"Notes"
+				},{
+					doctorName:"Doctor 1",
+					startDate:1485726115,
+					endDate:1485846115,
+					name:"Drug Name 1",
+					notes:"Notes 1"
+				},{
+					doctorName:"Doctor",
+					startDate:1485526115,
+					endDate:1485723115,
+					name:"Drug Name",
+					notes:"Notes"
+				},{
+					doctorName:"Doctor 1",
+					startDate:1485726115,
+					endDate:1485846115,
+					name:"Drug Name 1",
+					notes:"Notes 1"
+				},{
+					doctorName:"Doctor",
+					startDate:1485526115,
+					endDate:1485723115,
+					name:"Drug Name",
+					notes:"Notes"
+				}
+				],
+			appointmentList: [{
+				date:1485726115
+			},{
+				date:1485846115
+			},{
+				date:1485723115
+			}],
 			problemsList: {}
 		}
 	}
@@ -49,8 +96,11 @@ class Dashboard extends Component {
 	render() {
 		return (
 			<div>
+				<PatientAppointments appointmentList={this.state.appointmentList} />
+				<PatientPrescription prescriptionList={this.state.prescriptionList} />
+				<PatientAllergy allergyInfo={this.state.generalInfoList.notes} patientuuid={this.state.generalInfoList.patientuuid} />
 				<PatientGeneral generalInfo={this.state.generalInfoList} />
-				{/* <PatientAllergy allergyInfo = {this.state.allergyList} />
+				{/* 
 				<PatientMedication medicationInfo = {this.state.medicationList} />
 				<PatientProblems problemsInfo = {this.state.problemsList} /> */}
 			</div>
