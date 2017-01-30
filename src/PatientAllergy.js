@@ -52,7 +52,7 @@ class PatientAllergy extends Component {
 			var holderClass = classnames("btnHolder", {"show":this.state.showBtn});
 			return (
 				<div className="PatientAllergy module">
-				<h2 className="modeleHeader">Allergies</h2>
+				<h3 className="modeleHeader">Allergies</h3>
 					<form>
 						<textarea ref="allergies" onFocus={this.showButtons.bind(this)}>
 							{this.props.allergyInfo}

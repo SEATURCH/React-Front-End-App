@@ -56,10 +56,10 @@ class PatientPrescription extends Component {
 		});
 		return (
 			<div className="PatientPrescription module">
-				<h2 className="modeleHeader">Prescriptions</h2>
-				<h3 className="moduleSubHeader">Current</h3> 
+				<h3 className="modeleHeader">Prescriptions</h3>
+				<h4 className="moduleSubHeader">Current</h4> 
 				<MediTable prescripts={current} />
-				<h3 className="moduleSubHeader">Past</h3> 
+				<h4 className="moduleSubHeader">Past</h4> 
 				<MediTable prescripts={past} />
 			</div>
 		)

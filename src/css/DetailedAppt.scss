@@ -1,0 +1,27 @@
+.DetailedAppointments{
+	height:100%;
+	width:100%;
+	background: #FFB647;
+	
+	.module{
+		width:100%;
+	}
+	.moduleBody{
+		height: calc(100% - 72px);
+		overflow-y:scroll;
+		background: white;
+		padding:0px 25px;
+
+		.nextActions{
+			background: aliceblue;
+			padding-bottom:20px;
+		}
+	}
+
+	textarea{
+		width:100%;
+		min-height: 100px;
+		resize: none;
+	}
+
+}
