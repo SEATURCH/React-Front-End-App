@@ -82,10 +82,10 @@ class Dashboard extends Component {
 				.then((result) => {
 					console.log("JSON from server : " + result);
 					this.setState({ generalInfoList:result });
-					console.log(this.state)
+					console.log(this.state);
 				})
 				.catch(function(e){
-					console.log("Could not mount")
+					console.log("Could not mount");
 				});
 	}
 
