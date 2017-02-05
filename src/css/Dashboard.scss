@@ -1,5 +1,10 @@
 $moduleWidth: 45%;
 
+.Dashboard{
+		height: 100%;
+		overflow-y: scroll;
+}
+
 .module{
 	display: inline-block;
 	vertical-align: top;
@@ -41,9 +46,9 @@ $moduleWidth: 45%;
 }
 
 .GeneralList {
-	display: block;
+	/*display: block;
 	text-align: center;
-	color: red;
+	color: red;*/
 }
 
 .PatientAllergy{

@@ -91,7 +91,7 @@ class Dashboard extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className="Dashboard">
 				<PatientAppointments appointmentList={this.state.appointmentList} />
 				<PatientPrescription prescriptionList={this.state.prescriptionList} />
 				<PatientAllergy allergyInfo={this.state.generalInfoList.notes} patientuuid={this.state.generalInfoList.patientuuid} />
