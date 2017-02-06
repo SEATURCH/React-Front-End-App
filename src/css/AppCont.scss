@@ -6,7 +6,7 @@ $selectColor: #FFB647;
 
 #content-body{
 	height:calc(100% - 70px);
-	// overflow-y:scroll;
+	overflow-y:scroll;
 	width:85%;
 	padding: 0% 0%;
 	display:inline-block;
@@ -58,4 +58,3 @@ $selectColor: #FFB647;
 	    color: white;
 	}
 }
-

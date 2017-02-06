@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import requests from './requests';
+import moment from 'moment'
 import './css/Home_Doc.scss';
 
 // The Custom Row format that will be displayed in the Patients Table
 var CustomRow = React.createClass({
     render: function() {
-        return (
-            <tr>
-                <td><a href="patientID">{this.props.name}</a></td>
-                <td>{this.props.gender}</td>
-                <td>{this.props.age}</td>
-                <td>{this.props.phoneNumber}</td>
-            </tr>
-        );
+      var patientAge = moment.unix(this.props.dateOfBirth).format("MM/DD/YYYY");
+      return (
+        <tr>
+          <td><a href="patientID">{this.props.name}</a></td>
+          <td>{this.props.gender}</td>
+          <td>{patientAge}</td>
+          <td>{this.props.phoneNumber}</td>
+        </tr>
+      );
     }
 });
 
 class Home_Doc extends Component {
-
   constructor(props){
 		super(props);
 		this.state = {
@@ -32,18 +33,15 @@ class Home_Doc extends Component {
   }
 
   componentDidMount(){
-		// if(!this.props.location.query.id)
-		// 	return;
-			// console.log(this.props.location)
-			requests.patientsByDocSearch("dummy")
-				.then((result) => {
-					console.log("Patients List from server : " + result);
-					this.setState({ patientsList:result });
-					console.log(this.state)
-				})
-				.catch(function(e){
-					console.log("Could not mount request for patients List from Doc")
-				});
+		requests.patientsByDocSearch("dummy")
+			.then((result) => {
+				console.log("Patients List from server : " + result);
+				this.setState({ patientsList:result });
+				console.log(this.state)
+			})
+			.catch(function(e){
+				console.log("Could not mount request for patients List from Doc")
+			});
 	}
 
   render() {
@@ -65,12 +63,11 @@ class Home_Doc extends Component {
             rows.push(<CustomRow
                 name={item.name}
                 gender={item.gender}
-                age={item.age}
+                dateOfBirth={item.dateOfBirth}
                 phoneNumber={item.phoneNumber}
                 key={item.name} />);
             console.log(item);
         }.bind(this));
-
     }
 
     return (
@@ -87,7 +84,7 @@ class Home_Doc extends Component {
                <tr>
                    <th>Name</th>
                    <th>Gender</th>
-                   <th>Age</th>
+                   <th>Date of Birth (M/D/Y)</th>
                    <th>Phone Number</th>
                </tr>
            </thead>

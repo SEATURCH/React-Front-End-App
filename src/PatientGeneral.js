@@ -8,9 +8,9 @@ class PatientGeneral extends Component {
 
           <p><b>Name:</b> {this.props.generalInfo.name}</p>
           <p><b>Gender:</b> {this.props.generalInfo.gender}</p>
-          <p><b>Insurance Number:</b> {this.props.generalInfo.insuranceNumber}</p>
+          <p><b>Medical Number:</b> {this.props.generalInfo.medicalNumber}</p>
           <p><b>UUID:</b> {this.props.generalInfo.patientUUID}</p>
-          <p><b>Age:</b> {this.props.generalInfo.age}</p>
+          <p><b>Age:</b> {this.props.generalInfo.dateOfBirth}</p>
 
       </div>
     );

@@ -26,7 +26,7 @@ var getTest = function(id){
 var patientSearch = function(id){
 	return new Promise(function(resolve, reject){
 		request
-		  .get(goServer+'/patients/search?patientuuid=2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
+		  .get(goServer+'/patients/patientuuid/2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
 		  .end(function(err, res){
 		    if(!err && res.ok){
 					resolve(res.body);
@@ -40,7 +40,7 @@ var patientSearch = function(id){
 var patientsByDocSearch = function(id){
 	return new Promise(function(resolve, reject){
 		request
-		  .get(goServer+'/patients/bydoctor?doctoruuid=4498720b-0491-424f-8e52-6e13bd33da71')
+		  .get(goServer+'/patients/doctoruuid/4498720b-0491-424f-8e52-6e13bd33da71')
 		  .end(function(err, res){
 		    if(!err && res.ok){
 					resolve(res.body);
@@ -51,8 +51,19 @@ var patientsByDocSearch = function(id){
 		});
 }
 
-
-
+var appointmentsByDocSearch = function(id){
+	return new Promise(function(resolve, reject){
+		request
+		  .get(goServer+'/appointments/doctoruuid/4498720b-0491-424f-8e52-6e13bd33da71')
+		  .end(function(err, res){
+		    if(!err && res.ok){
+					resolve(res.body);
+				}else {
+					reject();
+		    }
+			});
+		});
+}
 
 var authenticate = function(email, pass) {
     if (sessionStorage.token) {
@@ -101,5 +112,6 @@ export default {
 	testApi:getTest,
 	patientSearch:patientSearch,
 	patientsByDocSearch:patientsByDocSearch,
+	appointmentsByDocSearch:appointmentsByDocSearch,
 	updatePatient:updatePatient
 };

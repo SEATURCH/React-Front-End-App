@@ -12,19 +12,15 @@ class Appointments extends Component {
 		this.state = {
 			generalInfoList: {
 				"patientUUID": "",
-				"age": 0,
+				"address": "",
+				"bloodType": "",
+				"dateOfBirth": 0,
+				"emergencyContact": "",
 				"gender": "",
-				"insuranceNumber": "",
-				"name": ""
-				// userId: "1u4c5",
-				// medicalNumber: "12345678",
-				// firstName: "Steven",
-				// lastName: "Strange",
-				// gender: "Male",
-				// birthDate: "Feb-29-1700",
-				// contactInfo: "111-222-3333",
-				// address: "111 Mall Street, Vancouver, BC, Canada",
-				// primaryDoctor: "Dr. Popular"
+				"medicalNumber": "",
+				"name": "",
+				"notes": "",
+				"phoneNumber": ""
 			},
 			prescriptionList:[{
 					doctorName:"Doctor 1",
@@ -73,7 +69,7 @@ class Appointments extends Component {
 		<div className="moduleBody">
 	      	<div className="container-fluid">
 	      		<div className="row">
-	      			<div className="col col-md-4">	
+	      			<div className="col col-md-4">
 	      				<h3>Chief Complaint</h3>
 	      				<textarea></textarea>
 	      			</div>
