@@ -74,14 +74,15 @@ class Home_Doc extends Component {
     }
 
     return (
-      <div>
+      <div className="Home_Doc">
+        <h3 className="moduleHeader"> Doctor's Patients</h3>
         <form>
           <input type="text" name="search" placeholder="Search Patient ..."
           onChange={this.updateSearch.bind(this)}
           value={this.state.search}/>
         </form>
 
-        <table id="allPatientsTable">
+        <table className="table-striped table-hover" id="allPatientsTable">
            <thead>
                <tr>
                    <th>Name</th>

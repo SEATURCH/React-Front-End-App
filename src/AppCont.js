@@ -26,6 +26,9 @@ class AppCont extends Component {
 						<li>
 							<Link to="/Home_Doc" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Home_Doc</Link>
 						</li>
+						<li>
+							<Link to="/Schedule" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Schedule</Link>
+						</li>
 					</ul>
 				</div>
 				<div id="content-body">

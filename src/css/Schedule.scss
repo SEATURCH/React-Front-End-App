@@ -1,12 +1,11 @@
 $moduleWidth: 100%;
 
-.Home_Doc{
+.schedule{
 	display: inline-block;
 	vertical-align: top;
 	padding: 10px 10px;
 	width:$moduleWidth;
-
-  .moduleHeader{
+	.moduleHeader{
 		font-weight: 600;
     font-size: 26px;
 		margin:0px 0px;
@@ -14,32 +13,28 @@ $moduleWidth: 100%;
     background: #FFB647;
     text-align: center;
     font-style: italic;
-    margin-bottom: 3%;
 	}
+	// .moduleSubHeader{
+	// 	font-weight: 500;
+	// 	margin:0px 0px;
+	// }
 
   form{
-    margin-bottom: 2%;
+    text-align: center;
+    display: block;
+    margin-bottom: 3%;
 
-  }
+    #startDateText, #endDateText{
+      width: 15%;
+    }
 
-  input[type=text] {
-      width: 250px;
-      box-sizing: border-box;
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-      background-color: white;
-      background-position: 10px 10px;
-      background-repeat: no-repeat;
-      padding: 12px 20px 12px 40px;
-      -webkit-transition: width 0.4s ease-in-out;
-      transition: width 0.4s ease-in-out;
-      margin: 0 auto;
-      display: block;
-  }
-
-  input[type=text]:focus {
-      width: 45%;
+    p{
+      font-weight: 800;
+  		margin: 5px 5px;
+      font-style: italic;
+      font-size: 18px;
+      color: #FFB647;
+    }
   }
 
 	table{

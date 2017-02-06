@@ -8,7 +8,7 @@ class AppRow extends React.Component{
 		var appDate = moment.unix(this.props.date).format("MMM/DD/YYYY");
 		var startTime = moment.unix(this.props.date).format("LT");
 		var endTime = moment.unix(this.props.date).add("minutes", 30).format("LT");
-		var actionURL = this.props.action === 'Record' ? 
+		var actionURL = this.props.action === 'Record' ?
 			"/appointment/create":"/Appointments?appointmentUUID="+this.props.appointmentUUID;
 		return (
 			<tr>
@@ -27,14 +27,14 @@ var AppTable = React.createClass({
 		rows.push( <AppRow date={appt.date} key={index} action={this.props.action} /> );
 	}.bind(this));
     return (
-      <div>																																																																				
+      <div>
         <table className="table-striped table-hover">
 			<tbody>
 				{rows}
 			</tbody>
 		</table>
       </div>
-    );																				
+    );
   }
 });
 
@@ -52,9 +52,9 @@ class PatientAppointments extends Component {
 		return (
 			<div className="PatientAppointments module">
 				<h3 className="modeleHeader">Appointments</h3>
-				<h4 className="moduleSubHeader">Upcoming</h4> 
+				<h4 className="moduleSubHeader">Upcoming</h4>
 				<AppTable appts={current}  action="Record" />
-				<h4 className="moduleSubHeader">Past</h4> 
+				<h4 className="moduleSubHeader">Past</h4>
 				<AppTable appts={past} action="View" />
 			</div>
 		)
