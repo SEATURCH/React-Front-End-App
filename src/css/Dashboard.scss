@@ -46,9 +46,16 @@ $moduleWidth: 45%;
 }
 
 .GeneralList {
-	/*display: block;
-	text-align: center;
-	color: red;*/
+	display: block;
+	width: 100%;
+	div {
+		border: 1px solid black;
+		float: left;
+		width: 50%;
+	}
+	.Notes {
+		width: 100%;
+	}
 }
 
 .PatientAllergy{

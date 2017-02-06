@@ -29,7 +29,7 @@ var patientSearch = function(id){
 		  .get(goServer+'/patients/patientuuid/2779123f-f4c3-43ec-b20a-a6fcbb0eb418')
 		  .end(function(err, res){
 		    //if(!err && res.ok){
-				if(res.statusCode !== 400 || res.statusCode !== 404){
+				if(res.code !== 400 || res.code !== 404){
 					resolve(res.body);
 				}else {
 					reject();
