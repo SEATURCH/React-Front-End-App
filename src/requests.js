@@ -81,7 +81,7 @@ var authenticate = function(email, pass) {
 		   })
 		  .end(function(err, res){
 		    if(!err && res.ok){
-		    	sessionStorage.userUUID = res.body.UserUUID;
+		    	sessionStorage.userUUID = res.body.userUUID;
 		    	resolve(res.ok );
 		    } else {
 		    	reject();
