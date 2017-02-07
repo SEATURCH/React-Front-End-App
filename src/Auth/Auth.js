@@ -1,6 +1,6 @@
 import React, {Component } from 'react';
 import req from '../requests.js'
-
+import Comp from './CustomComp.js'
 //import sessionAuth from './sessionAuth.js'
 
 function requireAuth(nextState, replace) {
@@ -10,6 +10,7 @@ function requireAuth(nextState, replace) {
     })
   }
 }
+
 
 class Login extends Component {
 	constructor(props){
@@ -28,9 +29,9 @@ class Login extends Component {
 				sessionStorage.token = res;
 				this.props.router.replace('Dashboard');
 				this.props.upp(true);
-				
-			})
-			.catch(function(e){
+			}).catch((res) => {
+				this.setState({error:true});
+				this.refs.pass.value = '';
 				console.log("Could not mount")
 			});
     }
@@ -40,29 +41,33 @@ class Login extends Component {
 		<div id="Login">
 			<div className="signIn">
 				<h2>Sign In</h2>
-		        <form onSubmit={this.handleSubmit.bind(this)}>
+		        <form className="form-vertical" onSubmit={this.handleSubmit.bind(this)}>
 					<label><input ref="email" placeholder="email" /></label>
 					<label><input ref="pass" placeholder="password" /></label>
 					<br />
-					<button type="submit">login</button>
-						{this.state.error && (
-						<p>Bad login information</p>
+					<button type="submit" className="btn btn-primary">Login</button>
+					{this.state.error && (
+						<p>Incorrect username or password</p>
 					)}
 		        </form>
 	        </div>
 	        <div className="createUser">
 	        	<h2>Create Account</h2>
-	        	<form onSubmit={this.handleSubmit.bind(this)}>
-		          	<label><input ref="firstName" placeholder="First Name" /></label>
-		          	<label><input ref="lastName" placeholder="Last Name" /></label>
-					<label><input ref="careCardNumber" placeholder="12345678910" /></label>
-		          	<label><input ref="pass" placeholder="password" /></label>
-		          	<br />
-		          	<button type="submit">login</button>
-		          	{this.state.error && (
-		            	<p>Bad login information</p>
-		          	)}
-		        </form>
+	        	<form className="form-group" onSubmit={this.handleSubmit.bind(this)}>
+	    			<Comp.ValidatedInput validation="required" label="Name" name="name" type="text" 
+	    				errorHelp={{
+	    					required:"Name required"
+	    				}} />
+	    			<Comp.ValidatedInput validation="required" label="User Name" name="username" type="text" 
+	    				errorHelp={{
+	    					required:"Username required"
+	    				}} />
+	    			<Comp.ValidatedInput validation="required" label="Password" name="password" type="text" 
+	    				errorHelp={{
+	    					required:"Password required"
+	    				}} />
+	    			<button type="submit" className="btn btn-primary">Submit</button>
+	    		</form>
 	        </div>
         </div>
       );

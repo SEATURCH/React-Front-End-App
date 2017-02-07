@@ -40,7 +40,7 @@ var patientSearch = function(id){
 var patientsByDocSearch = function(id){
 	return new Promise(function(resolve, reject){
 		request
-		  .get(goServer+'/patients/doctoruuid/4498720b-0491-424f-8e52-6e13bd33da71')
+		  .get(goServer+'/patients/doctoruuid/'+sessionStorage.userUUID)
 		  .end(function(err, res){
 		    if(!err && res.ok){
 					resolve(res.body);
@@ -54,7 +54,7 @@ var patientsByDocSearch = function(id){
 var appointmentsByDocSearch = function(id){
 	return new Promise(function(resolve, reject){
 		request
-		  .get(goServer+'/appointments/doctoruuid/4498720b-0491-424f-8e52-6e13bd33da71')
+		  .get(goServer+'/appointments/doctoruuid/'+sessionStorage.userUUID)
 		  .end(function(err, res){
 		    if(!err && res.ok){
 					resolve(res.body);
@@ -75,13 +75,14 @@ var authenticate = function(email, pass) {
 		   .post(goServer + '/login')
 		   .type('form')
 		   .send({
-		   		name: email,
-		   		pass: pass
+		   		userName: email,
+		   		passWord: pass
 		   })
 		  .end(function(err, res){
 		    if(!err && res.ok){
+		    	sessionStorage.userUUID = res.body.UserUUID;
 		    	resolve(res.ok );
-		    }else {
+		    } else {
 		    	reject();
 		    }
 	  	});
