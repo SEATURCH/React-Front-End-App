@@ -53,6 +53,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "moment": "^2.17.1",
+    "pubsub-js": "^1.5.4",
     "pushstate-server": "^2.1.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",

@@ -68,7 +68,7 @@ class Conts extends Component {
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route component={Conts} >
-      <Redirect from="/" to="Dashboard"/>
+      <Redirect from="/" to="Schedule"/>
       <Route path="login" component={Auth.Login} />
       <Route path="logout" component={Auth.Logout} />
   		<Route onEnter={Auth.requireAuth}>

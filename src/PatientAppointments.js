@@ -24,7 +24,7 @@ var AppTable = React.createClass({
   render:function(){
   	var rows =[];
   	this.props.appts.forEach(function(appt, index){
-		rows.push( <AppRow date={appt.date} key={index} action={this.props.action} /> );
+		rows.push( <AppRow date={appt.dateScheduled} key={index} action={this.props.action} /> );
 	}.bind(this));
     return (
       <div>

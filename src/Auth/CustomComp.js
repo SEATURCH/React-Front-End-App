@@ -1,12 +1,15 @@
 import React from 'react';
 import classnames from 'classnames'
 /* props:
-	validation
-	label
-	label
-	name
-	type
-	errorHelp
+validation
+label
+name
+type
+value
+onFocus:funciton
+updateForm:function
+reset
+errorHelp
 */
 class ValidatedInput extends React.Component{
 	constructor(props){
@@ -14,17 +17,48 @@ class ValidatedInput extends React.Component{
 		this.state = {
 	        error: false,
 	        errorMsg: "",
+	        value:this.props.value
 
 	    }
 	}
+	componentWillReceiveProps(props){
+		if(props.reset){
+			this.setState({
+				value: props.value,
+				error: false,
+		        errorMsg: ""
+	        })
+		}
+	}
+
+	handleChange(event){
+		event.preventDefault();
+		this.setState({value:event.target.value})
+	}
+
+	onFocus(event) {
+		event.preventDefault();
+		if(this.props.onFocus)
+	 		this.props.onFocus(event);
+	}
+	onBlur(event){
+		this.validate(event);
+		
+		this.props.updateForm({
+			name: this.props.name,
+			value: this.state.value
+		});
+	}
+
 	validate(event) {
-	 	event.preventDefault();
+		if(event)
+	 		event.preventDefault();
 	 	var errorFound, errorMsg;
 	 	var validateBy = this.props.validation.split(',');
 	 	for(var i =0; i < validateBy.length; i++){
 	 		var validation = validateBy[i];
 		 	if(validation ==  'required'){
-		 		if(!this.refs[this.props.label].value){
+		 		if(!this.state.value){
 		 			errorFound = true;
 		 			if(this.props.errorHelp.hasOwnProperty(validation))
 		 				errorMsg = this.props.errorHelp[validation];
@@ -50,7 +84,7 @@ class ValidatedInput extends React.Component{
 		return (
 			<div className={holderClass} style={{"position":"relative"}}>
     			<label className="">{this.props.label}</label>
-    			<input className="form-control" ref={this.props.label} name={this.props.name} type={this.props.type} onBlur={this.validate.bind(this)}/>
+    			<input className="form-control" name={this.props.name} type={this.props.type} onBlur={this.onBlur.bind(this)} onFocus={this.onFocus.bind(this)} value={this.state.value} onChange={this.handleChange.bind(this)} />
 				{this.state.error && (
 					<div className="form-control-feedback" style={{"width":"initial"}}>{this.state.errorMsg}</div>
 				)}

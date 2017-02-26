@@ -1,8 +1,7 @@
-$moduleWidth: 45%;
+$moduleWidth: 100%;
 
 .Dashboard{
 		height: 100%;
-		overflow-y: scroll;
 }
 
 .module{
@@ -58,29 +57,58 @@ $moduleWidth: 45%;
 	}
 }
 
-.PatientAllergy{
+.PatientGeneral{
 	form {
+		margin:10px 0px;
+		label{
+			margin:0px 0px;
+		}
 		textarea{
+			margin-bottom:20px;
 			width:100%;
 			resize: none;
 		}
-		.btnHolder{
-			clear:both;
-			position: relative;
-			height: 0px;
+		input{
+			font-weight: normal;
+			border:0;
+			border-bottom: .5px solid #ccc;
 			overflow:hidden;
-			transition: height .25s;
-			-webkit-transition: height .25s;
-			&.show{
-				height:35px;
-			}
-			.btn-danger{
-				float:right;
-				margin: 0px 5px;
-			}
-			.btn-success{
-				float:right;
-			}
+			text-overflow:ellipsis;
+		}
+		.form-group{
+			margin-bottom:5px;
+		}
+		.col {
+			/*padding:0px 0px;*/
+		}
+	}
+	.modeleHeader{
+		display: inline-block;
+		vertical-align: top;
+	}
+	.moduleSubHeader{
+		margin-bottom: 10px;
+		margin-left:-15px;
+	}
+	.btnHolder{
+		clear:both;
+		position: relative;
+		height: 0px;
+		overflow:hidden;
+		display: inline-block !important;
+		line-height: 100%;
+		vertical-align: top;
+		margin-left: 15px;
+		transition: height .25s;
+		-webkit-transition: height .25s;
+		&.show{
+			height:26px;
+		}
+		.btn {
+			line-height: 100%;
+			height: 100%;
+			margin: 0px 5px;
+			/*vertical-align: top;*/
 		}
 	}
 }

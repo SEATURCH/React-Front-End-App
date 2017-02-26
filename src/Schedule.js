@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import moment from 'moment'
 import requests from './requests';
 import './css/Schedule.scss';
@@ -21,9 +22,13 @@ class AppointmentRow extends Component{
 
     return (
 			<tr>
-				<td>{appDate}</td>
+        <td>
+          <Link to={"Appointments?appointment="+this.props.patientUUID} ><span className="glyphicon glyphicon-search"></span>{appDate}</Link>
+        </td>
 				<td>{startTime} - {endTime}</td>
-        <td>{this.props.patientName}</td>
+        <td>
+          <Link to={"Dashboard?id="+this.props.patientUUID} >{this.props.patientName}</Link>
+        </td>
         <td>{this.props.notes}</td>
 				{/* <td><Link to={actionURL} >{this.props.action}</Link></td> */}
 			</tr>
@@ -125,30 +130,33 @@ class Schedule extends Component{
     var currentDate = moment();
     return (
       <div className="schedule">
-        <h3 className="moduleHeader"> Doctor's Appointments</h3>
+        <div className="pageHeader">
+            <h1 className="mainHeader">Doctor's Appointments</h1>
+        </div>
 
-        <form>
-          <div class="dateSelector">
-            <p> From: </p>
-            <input type="date" name="start" id="startDateText"
-              onChange={this.updateStartRange.bind(this)}
-              min="1000-01-01"/>
-          </div>
+        <div className="moduleBody">
+            <form>
+                <div class="dateSelector">
+                  <p> From: </p>
+                  <input type="date" name="start" id="startDateText"
+                    onChange={this.updateStartRange.bind(this)}
+                    min="1000-01-01"/>
+                </div>
 
-          <div class="dateSelector">
-            <p> To: </p>
-            <input type="date" name="end" id="endDateText"
-              onChange={this.updateEndRange.bind(this)}
-              max="5555-12-31"/>
-          </div>
-
-        </form>
-        {this.state.appointmentsList.length > 0 &&
-            <ScheduleTable appts={this.state.appointmentsList}
-              action="Record"
-              startDate={this.state.startDate}
-              endDate={this.state.endDate}/>
-        }
+                <div class="dateSelector">
+                  <p> To: </p>
+                  <input type="date" name="end" id="endDateText"
+                    onChange={this.updateEndRange.bind(this)}
+                    max="5555-12-31"/>
+                </div>
+            </form>
+            {this.state.appointmentsList.length > 0 &&
+                <ScheduleTable appts={this.state.appointmentsList}
+                  action="Record"
+                  startDate={this.state.startDate}
+                  endDate={this.state.endDate}/>
+            }
+        </div>
       </div>
     );
   }

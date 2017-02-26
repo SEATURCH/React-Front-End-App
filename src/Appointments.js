@@ -86,7 +86,10 @@ class Appointments extends Component {
 	      				<PatientPrescription prescriptionList={this.state.prescriptionList} />
 	      			</div>
 	      			<div className="col col-md-6">
-	      				<PatientAllergy allergyInfo={this.state.generalInfoList.notes} patientuuid={this.state.generalInfoList.patientuuid} />
+	      				<h3 className="modeleHeader">Patient Allergies</h3>
+						<textarea className="allergiesText" value={this.state.generalInfoList.notes} disabled></textarea>
+	      				{//<PatientAllergy allergyInfo={this.state.generalInfoList.notes} patientuuid={this.state.generalInfoList.patientuuid} />
+	      				}
 	      			</div>
 	      		</div>
 	      		<div className="row nextActions">

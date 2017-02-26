@@ -1,20 +1,15 @@
 .DetailedAppointments{
 	height:100%;
 	width:100%;
-	background: #FFB647;
-
-	.module{
-		width:100%;
-	}
+	
 	.moduleBody{
-		height: calc(100% - 72px);
-		overflow-y:scroll;
-		background: white;
-		padding:0px 25px;
-
-		.nextActions{
+		.nextActions {
 			background: aliceblue;
 			padding-bottom:20px;
+		}
+		.modeleHeader {
+			margin:0 0;
+			font-weight: 600;
 		}
 	}
 

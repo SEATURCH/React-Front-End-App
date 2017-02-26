@@ -1,4 +1,5 @@
 $headerMargin: 0px 0px;
+$listPadding: 8px 16px;
 $selectColor: #FFB647;
 #AppContainer {
 	height:100%;
@@ -13,8 +14,10 @@ $selectColor: #FFB647;
 	vertical-align: top;
 
 	.pageHeader {
-		padding: 0px 10px;
+		padding: 5px 10px;
 		color:white;
+		background: #FFB647;
+		background
 		.mainHeader{
 			padding:0px 10px;
 		}
@@ -24,6 +27,12 @@ $selectColor: #FFB647;
 		h1, h2, h3, h4 {
 			margin: $headerMargin;
 		}
+	}
+	.moduleBody{
+		height: calc(100% - 82px);
+		overflow-y:scroll;
+		background: white;
+		padding:10px 25px;
 	}
 }
 
@@ -44,7 +53,7 @@ $selectColor: #FFB647;
 	li a {
 	    display: block;
 	    color: #000;
-	    padding: 8px 16px;
+	    padding: $listPadding;
 	    text-decoration: none;
 	}
 
@@ -56,5 +65,22 @@ $selectColor: #FFB647;
 	li a:hover:not(.active) {
 	    background-color: #555;
 	    color: white;
+	}
+
+	.nestedHeaders{
+		.main{
+			padding:$listPadding;
+			background: beige;
+		}
+		.sub{
+			height: 0px;
+			overflow: hidden;
+			&.show{
+				height: auto;
+			}
+		}
+		.right-align{
+			text-align: right;
+		}
 	}
 }

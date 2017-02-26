@@ -1,6 +1,7 @@
 import React, {Component } from 'react';
 import req from '../requests.js'
 import Comp from './CustomComp.js'
+import { browserHistory } from 'react-router'
 //import sessionAuth from './sessionAuth.js'
 
 function requireAuth(nextState, replace) {
@@ -27,7 +28,7 @@ class Login extends Component {
 		req.authenticate(email, pass)
 			.then((res) => {
 				sessionStorage.token = res;
-				this.props.router.replace('Dashboard');
+				browserHistory.push('/Schedule');
 				this.props.upp(true);
 			}).catch((res) => {
 				this.setState({error:true});

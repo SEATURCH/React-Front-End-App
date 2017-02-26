@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import requests from './requests';
 import moment from 'moment'
 import './css/Home_Doc.scss';
@@ -9,7 +10,7 @@ var CustomRow = React.createClass({
       var patientAge = moment.unix(this.props.dateOfBirth).format("MM/DD/YYYY");
       return (
         <tr>
-          <td><a href="patientID">{this.props.name}</a></td>
+          <td><Link to={"Dashboard?id="+this.props.patientUUID} >{this.props.name}</Link></td>
           <td>{this.props.gender}</td>
           <td>{patientAge}</td>
           <td>{this.props.phoneNumber}</td>
@@ -37,7 +38,6 @@ class Home_Doc extends Component {
 			.then((result) => {
 				console.log("Patients List from server : " + result);
 				this.setState({ patientsList:result });
-				console.log(this.state)
 			})
 			.catch(function(e){
 				console.log("Could not mount request for patients List from Doc")
@@ -47,8 +47,6 @@ class Home_Doc extends Component {
   render() {
     // create rows with all the patient information if patientsList is not empty
     if (this.state.patientsList.length > 0){
-        console.log(this.state.patientsList.length);
-
         var rows = [];
         var filteredRows = this.state.patientsList.filter(
             //only return this item if you can find 'this.state.search' inside
@@ -65,35 +63,40 @@ class Home_Doc extends Component {
                 gender={item.gender}
                 dateOfBirth={item.dateOfBirth}
                 phoneNumber={item.phoneNumber}
-                key={item.name} />);
-            console.log(item);
+                patientUUID={item.patientUUID}
+                key={item.patientUUID} />);
         }.bind(this));
     }
 
     return (
       <div className="Home_Doc">
-        <h3 className="moduleHeader"> Doctor's Patients</h3>
-        <form>
-          <input type="text" name="search" placeholder="Search Patient ..."
-          onChange={this.updateSearch.bind(this)}
-          value={this.state.search}/>
-        </form>
+        <div className="pageHeader">
+            <h1 className="mainHeader">Doctor's Patients</h1>
+        </div>
 
-        <table className="table-striped table-hover" id="allPatientsTable">
-           <thead>
-               <tr>
-                   <th>Name</th>
-                   <th>Gender</th>
-                   <th>Date of Birth (M/D/Y)</th>
-                   <th>Phone Number</th>
-               </tr>
-           </thead>
-           {this.state.patientsList.length > 0 &&
-             <tbody>
-               {rows}
-             </tbody>
-           }
-        </table>
+        <div className="moduleBody">
+          <form>
+            <input type="text" name="search" placeholder="Search Patient ..."
+            onChange={this.updateSearch.bind(this)}
+            value={this.state.search}/>
+          </form>
+
+          <table className="table-striped table-hover" id="allPatientsTable">
+             <thead>
+                 <tr>
+                     <th>Name</th>
+                     <th>Gender</th>
+                     <th>Date of Birth (M/D/Y)</th>
+                     <th>Phone Number</th>
+                 </tr>
+             </thead>
+             {this.state.patientsList.length > 0 &&
+               <tbody>
+                 {rows}
+               </tbody>
+             }
+          </table>
+        </div>
       </div>
     );
   }
