@@ -9,7 +9,7 @@ class AppointmentRow extends Component{
   render(){
     // when the appointment is compelted (dateScheduled == 0)
     var date;
-    if (this.props.dateScheduled == 0){
+    if (this.props.dateScheduled === 0){
       date = this.props.dateVisited;
     }else{
       date = this.props.dateScheduled;
@@ -127,7 +127,7 @@ class Schedule extends Component{
 	}
 
   render(){
-    var currentDate = moment();
+    // var currentDate = moment();
     return (
       <div className="schedule">
         <div className="pageHeader">

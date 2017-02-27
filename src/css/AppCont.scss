@@ -22,6 +22,7 @@ $selectColor: #FFB647;
 			padding:0px 10px;
 		}
 		.subHeader{
+			height:33px;
 			padding:0px 20px;
 		}
 		h1, h2, h3, h4 {
@@ -75,8 +76,10 @@ $selectColor: #FFB647;
 		.sub{
 			height: 0px;
 			overflow: hidden;
+			transition: height .25s;
+			-webkit-transition: height .25s;
 			&.show{
-				height: auto;
+				height: 108px;
 			}
 		}
 		.right-align{

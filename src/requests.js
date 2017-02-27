@@ -14,7 +14,6 @@ var whoami = function(){
 		if(currentUser)
 			user = currentUser
 		if(!user){
-			console.log("NOUSER")
 			return new Promise(function(resolve, reject){
 				// request
 				//   .get(root+'/posts/'+id)
@@ -129,15 +128,12 @@ var authenticate = function(email, pass) {
 var updatePatient = function(patient){
 	return new Promise(function(resolve, reject){
 		request
-		   .post(goServer + '/update/patient')
-		   .type('form')
-		   .send({
-		   		patientuuid: patient.patientuuid,
-		   		notes: patient.notes
-		   })
-		  .end(function(err, res){
-		    if(!err && res.ok){
-		    	resolve(res.ok );
+		   .put(goServer + '/patients')
+		   .type('json')
+		   .send(patient)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.ok);
 		    }else {
 		    	reject();
 		    }
@@ -145,18 +141,81 @@ var updatePatient = function(patient){
 	});
 }
 
-var appointmentsByPatientSearch = function(patientId){
+// var appointmentsByPatientSearch = function(patientId){
+// 	return new Promise(function(resolve, reject){
+// 		request
+// 		  .get(goServer+'/appointments/patientuuid/' + patientId)
+// 		  .end(function(err, res){
+// 		    if(!err && res.ok){
+// 					resolve(res.body);
+// 				}else {
+// 					reject();
+// 		    }
+// 			});
+// 		});
+// }
+var getPatientAppointment = function(patientId) {
+	var promises = [
+		new Promise(function(resolve, reject){
+			request
+			  .get(goServer+'/appointments/patientuuid/'+patientId)
+			  .end(function(err, res){
+			    	if(!err && res.ok){
+						resolve({
+							name: "appointmentInfo",
+							value: res.body
+						});
+					}else {
+						reject();
+			    }
+				});
+			}),
+		new Promise(function(resolve, reject){
+			request
+			  .get(goServer+'/patients/patientuuid/'+patientId)
+			  .end(function(err, res){
+			    	if(!err && res.ok){
+						resolve({
+							name: "generalInfoList",
+							value: res.body
+						});
+					}else {
+						reject();
+			    }
+				});
+			}),
+		new Promise(function(resolve, reject){
+			request
+			  .get(goServer+'/prescriptions/patientuuid/' + patientId)
+			  .end(function(err, res){
+			    if(!err && res.ok){
+						resolve({
+							name: "prescriptionList",
+							value: res.body
+						});
+					}else {
+						reject();
+			    }
+				})
+		  	})
+	];
+
 	return new Promise(function(resolve, reject){
-		request
-		  .get(goServer+'/appointments/patientuuid/' + patientId)
-		  .end(function(err, res){
-		    if(!err && res.ok){
-					resolve(res.body);
-				}else {
-					reject();
-		    }
+		Promise.all(promises.map(function(promise) {
+			return promise.reflect();
+		})).then(function(res){
+			var resolved = {};
+			res.forEach(function(inspection){
+				var value = inspection.value();
+				if(inspection.isFulfilled()){
+					resolved[value.name] = value.value;
+				}else{
+					resolved[value.name] = "Error, Promise rejected";
+				}
 			});
+			resolve(resolved);
 		});
+	});
 }
 
 var getPatientDashboard = function(patientId){
@@ -165,7 +224,7 @@ var getPatientDashboard = function(patientId){
 			request
 			  .get(goServer+'/patients/patientuuid/'+patientId)
 			  .end(function(err, res){
-			    	if(res.code !== 400 || res.code !== 404){
+			    	if(!err && res.ok){
 						resolve({
 							name: "generalInfoList",
 							value: res.body
@@ -211,7 +270,6 @@ var getPatientDashboard = function(patientId){
 		})).then(function(res){
 			var resolved = {};
 			res.forEach(function(inspection){
-				console.log(inspection.value());
 				var value = inspection.value();
 				if(inspection.isFulfilled()){
 					resolved[value.name] = value.value;
@@ -233,5 +291,6 @@ export default {
 	patientsByDocSearch:patientsByDocSearch,
 	appointmentsByDocSearch:appointmentsByDocSearch,
 	updatePatient:updatePatient,
-	getPatientDashboard: getPatientDashboard
+	getPatientDashboard: getPatientDashboard,
+	getPatientAppointment: getPatientAppointment
 };

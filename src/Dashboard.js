@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import requests from './requests';
-import PatientGeneral from './PatientGeneral';
-import PatientProfile from './PatientAllergy';
+import PatientProfile from './PatientGeneral';
 import PatientPrescription from './PatientPrescription';
 import PatientAppointments from './PatientAppointments';
+import pubSub from 'pubsub-js'
 //import Nav from './Nav';
 //import WelcomeBanner from './WelcomeBanner';
 
@@ -14,16 +14,16 @@ class Dashboard extends Component {
 		super(props);
 		this.state = {
 			generalInfoList: {
-				"patientUUID": "",
-				"address": "",
-				"bloodType": "",
-				"dateOfBirth": 0,
-				"emergencyContact": "",
-				"gender": "",
-				"medicalNumber": "",
-				"name": "",
-				"notes": "",
-				"phoneNumber": ""
+				patientUUID: "",
+				address: "",
+				bloodType: "",
+				dateOfBirth: 0,
+				emergencyContact: "",
+				gender: "",
+				medicalNumber: "",
+				name: "",
+				notes: "",
+				phoneNumber: ""
 			},
 			prescriptionList:[{
 					doctorName:"",
@@ -42,6 +42,7 @@ class Dashboard extends Component {
 			.then((result) => {
 				// console.log(result)
 				this.setState(result);
+				pubSub.publish("PATI SEL", "Bayb") //this.state.generalInfoList.name)
 				// console.log(this.state);
 			})
 			.catch(function(e){
@@ -69,7 +70,7 @@ class Dashboard extends Component {
 		      			</div>
 		      			<div className="row">
 			      			<div className="col col-md-12">
-			  					<PatientProfile generalInfo={this.state.generalInfoList} patientuuid={this.state.generalInfoList.patientuuid} />
+			  					<PatientProfile generalInfo={this.state.generalInfoList} patientuuid={this.state.generalInfoList.patientUUID} />
 			      			</div>
 			      		</div>
 			      	</div>

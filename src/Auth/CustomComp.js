@@ -30,7 +30,9 @@ class ValidatedInput extends React.Component{
 	        })
 		}
 	}
-
+	getValue(){
+		return this.state.value;
+	}
 	handleChange(event){
 		event.preventDefault();
 		this.setState({value:event.target.value})
@@ -43,11 +45,6 @@ class ValidatedInput extends React.Component{
 	}
 	onBlur(event){
 		this.validate(event);
-		
-		this.props.updateForm({
-			name: this.props.name,
-			value: this.state.value
-		});
 	}
 
 	validate(event) {
@@ -57,7 +54,7 @@ class ValidatedInput extends React.Component{
 	 	var validateBy = this.props.validation.split(',');
 	 	for(var i =0; i < validateBy.length; i++){
 	 		var validation = validateBy[i];
-		 	if(validation ==  'required'){
+		 	if(validation ===  'required'){
 		 		if(!this.state.value){
 		 			errorFound = true;
 		 			if(this.props.errorHelp.hasOwnProperty(validation))
@@ -84,7 +81,11 @@ class ValidatedInput extends React.Component{
 		return (
 			<div className={holderClass} style={{"position":"relative"}}>
     			<label className="">{this.props.label}</label>
-    			<input className="form-control" name={this.props.name} type={this.props.type} onBlur={this.onBlur.bind(this)} onFocus={this.onFocus.bind(this)} value={this.state.value} onChange={this.handleChange.bind(this)} />
+    			<input className="form-control" 
+    				name={this.props.name} type={this.props.type} value={this.state.value}
+    				onBlur={this.onBlur.bind(this)} 
+    				onFocus={this.onFocus.bind(this)} 
+    				onChange={this.handleChange.bind(this)} />
 				{this.state.error && (
 					<div className="form-control-feedback" style={{"width":"initial"}}>{this.state.errorMsg}</div>
 				)}

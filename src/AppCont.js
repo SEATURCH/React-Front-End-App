@@ -2,22 +2,33 @@ import React, { Component } from 'react';
 import './css/AppCont.scss';
 import { IndexLink, Link } from 'react-router';
 import requests from './requests';
-import PubSub from 'pubsub-js'
+import pubSub from 'pubsub-js'
+import classnames from 'classnames';
 
 class AppCont extends Component {
-	componentDidMount: function(){
-		this.token = pubSub.subscribe('currentPatient')
-	}
-	componentWillUnmount: function(){
+	constructor(props){
+			super(props);
+			requests.whoami();
+			this.state = { 
+				patientBroadCast: pubSub.subscribe("PATI SEL", function(msg, data) {
+				 	this.setState({ selectedPatient: data });
+				}.bind(this)),
+				selectedPatient:""
+			};
 
+		}
+
+	componentWillUnmount() {
+		pubSub.unsubscribe(this.state.patientBroadCast);
 	}
 	render() {
-		requests.whoami();
+		var listShow = classnames({"show":this.state.selectedPatient });
+		
 		return (
 			<div id="AppContainer">
 				<div id="navMenu">
 					<ul id="menuList">
-						{ requests.whoami().role == "Doctor" && (
+						{ requests.whoami().role === "Doctor" && (
 							<ul id="menuList">
 								<li>
 									<IndexLink to="/Schedule" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Schedule</IndexLink>
@@ -29,7 +40,7 @@ class AppCont extends Component {
 									<li className="main">
 										Patient:
 									</li>
-									<li className="sub right-align">
+									<li className={"sub right-align " + listShow}>
 										<li>
 											<Link to="/Dashboard" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
 										</li>
@@ -43,7 +54,7 @@ class AppCont extends Component {
 								</li>
 							</ul>
 						)}
-						{ requests.whoami().role == "Patient" && (
+						{ requests.whoami().role === "Patient" && (
 							<ul id="menuList">
 								<li>
 									<Link to="/Dashboard" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>

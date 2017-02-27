@@ -65,7 +65,7 @@ class Home_Doc extends Component {
                 phoneNumber={item.phoneNumber}
                 patientUUID={item.patientUUID}
                 key={item.patientUUID} />);
-        }.bind(this));
+        });
     }
 
     return (

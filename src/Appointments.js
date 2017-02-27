@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import requests from './requests';
-import PatientAllergy from './PatientAllergy';
 import PatientPrescription from './PatientPrescription';
-import PatientAppointments from './PatientAppointments';
 
 import './css/DetailedAppt.scss';
 
@@ -46,7 +44,6 @@ class Appointments extends Component {
 	}
 
 	componentDidMount(){
-			console.log(this.props.location)
 			requests.patientSearch("dummy")
 				.then((result) => {
 					console.log("JSON from server : " + result);
