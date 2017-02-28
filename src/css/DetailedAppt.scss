@@ -12,10 +12,19 @@
 			font-weight: 600;
 		}
 	}
+	table {
+		width: 100%;
+		div {
+			padding:0px 0px 0px 5px;
+		}
+		.subheader{
+			padding-left:5%;
+		}
+	}
 
 	textarea{
 		width:100%;
-		min-height: 100px;
+		min-height: 75px;
 		resize: none;
 	}
 

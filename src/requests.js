@@ -154,20 +154,21 @@ var updatePatient = function(patient){
 // 			});
 // 		});
 // }
-var getPatientAppointment = function(patientId) {
+
+var getPatientAppointment = function(appointmentuuid, patientId) {
 	var promises = [
 		new Promise(function(resolve, reject){
 			request
-			  .get(goServer+'/appointments/patientuuid/'+patientId)
+			  .get(goServer+'/completedappointments/appointmentuuid/'+appointmentuuid)
 			  .end(function(err, res){
-			    	if(!err && res.ok){
-						resolve({
-							name: "appointmentInfo",
-							value: res.body
-						});
-					}else {
-						reject();
-			    }
+			  		var apptObj = {
+			  			name: "appointmentDetail",
+			  			value: {}
+			  		};
+			  		if(!err && res.ok){
+						apptObj.value = res.body;
+					}
+					resolve(apptObj);
 				});
 			}),
 		new Promise(function(resolve, reject){
@@ -181,7 +182,7 @@ var getPatientAppointment = function(patientId) {
 						});
 					}else {
 						reject();
-			    }
+			    	}
 				});
 			}),
 		new Promise(function(resolve, reject){
@@ -189,10 +190,10 @@ var getPatientAppointment = function(patientId) {
 			  .get(goServer+'/prescriptions/patientuuid/' + patientId)
 			  .end(function(err, res){
 			    if(!err && res.ok){
-						resolve({
-							name: "prescriptionList",
-							value: res.body
-						});
+					resolve({
+						name: "prescriptionList",
+						value: res.body
+					});
 					}else {
 						reject();
 			    }
@@ -229,9 +230,9 @@ var getPatientDashboard = function(patientId){
 							name: "generalInfoList",
 							value: res.body
 						});
-					}else {
+					} else {
 						reject();
-			    }
+			    	}
 				});
 			}),
 		new Promise(function(resolve, reject){

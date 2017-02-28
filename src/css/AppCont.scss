@@ -12,7 +12,9 @@ $selectColor: #FFB647;
 	padding: 0% 0%;
 	display:inline-block;
 	vertical-align: top;
-
+	> div{
+		height:100%;
+	}
 	.pageHeader {
 		padding: 5px 10px;
 		color:white;
@@ -27,6 +29,9 @@ $selectColor: #FFB647;
 		}
 		h1, h2, h3, h4 {
 			margin: $headerMargin;
+		}
+		.inlineBlock{
+			display: inline-block;
 		}
 	}
 	.moduleBody{

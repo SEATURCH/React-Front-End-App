@@ -23,7 +23,8 @@ class AppointmentRow extends Component{
     return (
 			<tr>
         <td>
-          <Link to={"Appointments?appointment="+this.props.patientUUID} ><span className="glyphicon glyphicon-search"></span>{appDate}</Link>
+          <Link to={"Appointments?appt="+this.props.appointmentUUID+"&id="+this.props.patientUUID}>
+          <span className="glyphicon glyphicon-search"></span>{appDate}</Link>
         </td>
 				<td>{startTime} - {endTime}</td>
         <td>
@@ -136,14 +137,14 @@ class Schedule extends Component{
 
         <div className="moduleBody">
             <form>
-                <div class="dateSelector">
+                <div className="dateSelector">
                   <p> From: </p>
                   <input type="date" name="start" id="startDateText"
                     onChange={this.updateStartRange.bind(this)}
                     min="1000-01-01"/>
                 </div>
 
-                <div class="dateSelector">
+                <div className="dateSelector">
                   <p> To: </p>
                   <input type="date" name="end" id="endDateText"
                     onChange={this.updateEndRange.bind(this)}

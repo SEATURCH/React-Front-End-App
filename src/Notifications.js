@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import requests from './requests';
 import './css/Notifications.scss'
-import ReactDOM from 'react-dom';
 import classnames from 'classnames';
 
 class NotificationRow extends Component{
@@ -26,7 +25,7 @@ var NotifcationsTable = React.createClass({
           receiverUUID={notifcation.receiverUUID}
           senderName={notifcation.senderName}
           key={index}/> );
-    }.bind(this));
+    });
 
     return (
       <div>
@@ -74,7 +73,7 @@ class NewNotifcationForm extends Component{
   findDocIndex(name, list){
       var doc = {};
       list.forEach(function(elem) {
-        if(elem.name == name){
+        if(elem.name === name){
             doc = {
               doctorUUID: elem.doctorUUID,
               name: elem.name,
@@ -91,9 +90,9 @@ class NewNotifcationForm extends Component{
   sendNotification(event) {
     event.preventDefault()
     const name = this.refs.doctor.value;
-    if(name != "Chose one"){
+    if(name !== "Chose one"){
       const message = this.refs.message.value;
-      if(message != ""){
+      if(message !== ""){
         var doc = this.findDocIndex(name, this.props.docs);
 
         console.log(name);
@@ -113,7 +112,7 @@ class NewNotifcationForm extends Component{
 
   	this.props.docs.forEach(function(doc, index){
 		    docOptions.push(<option>{doc.name}</option>);
-    }.bind(this));
+    });
 
     var holderClass = classnames("formContent", {"show":this.state.showForm});
 

@@ -95,3 +95,27 @@ body {
     border-left: 1px solid $baseColor;
   }
 }
+
+.btnHolder{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 0px;
+    overflow:hidden;
+    display: inline-block !important;
+    line-height: 100%;
+    vertical-align: top;
+    margin-left: 15px;
+    transition: height .25s;
+    -webkit-transition: height .25s;
+    &.reveal{
+      height:26px;
+    }
+    .btn {
+      line-height: 100%;
+      height: 100%;
+      margin: 0px 5px;
+      /*vertical-align: top;*/
+    }
+  }

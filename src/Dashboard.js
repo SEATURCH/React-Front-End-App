@@ -65,7 +65,7 @@ class Dashboard extends Component {
 			      				<PatientAppointments appointmentList={this.state.appointmentList} />
 			      			</div>
 			      			<div className="col col-md-6">
-			  					<PatientPrescription prescriptionList={this.state.prescriptionList} />
+			  					<PatientPrescription.PatientPrescription prescriptionList={this.state.prescriptionList} />
 			      			</div>
 		      			</div>
 		      			<div className="row">

@@ -8,13 +8,13 @@ class MediRow extends React.Component{
 		return (
 			<tr>
 				<td>
-					<div>{this.props.prescript.name}</div>
+					<div>{this.props.prescript.drug}</div>
 					<div className="subheader">
 						{startDate} - {endDate}
 					</div>
 				</td>
-				<td>{this.props.prescript.notes}</td>
-				<td>{this.props.prescript.doctorName}</td>
+				<td>{this.props.prescript.instructions}</td>
+				<td>{this.props.prescript.doctor}</td>
 			</tr>
 		);
 	}
@@ -66,4 +66,29 @@ class PatientPrescription extends Component {
 	}
 }
 
-export default PatientPrescription;
+class AddPrescription extends Component {
+	render() {
+		var current = [];
+		var past = [];
+		var currentTime = new Date().getTime()/1000;
+		this.props.prescriptionList.forEach(function(prescript){
+			if(prescript.endDate < currentTime)
+				past.push(prescript);
+			else
+				current.push(prescript);
+		});
+		return (
+			<div className="PatientPrescription module">
+				<h3 className="modeleHeader">Prescriptions</h3>
+				<h4 className="moduleSubHeader">Current</h4> 
+				<MediTable prescripts={current} />
+				<h4 className="moduleSubHeader">Past</h4> 
+				<MediTable prescripts={past} />
+			</div>
+		)
+	}
+}
+export default {
+	PatientPrescription:PatientPrescription,
+	AddPrescription:AddPrescription
+};
