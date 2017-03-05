@@ -10,6 +10,7 @@ import RealtimeDisplay from './RealtimeDisplay';
 import Auth from './Auth/Auth.js';
 import Home_Doc from './Home_Doc';
 import Schedule from './Schedule';
+import Notifications from './Notifications'
 
 import './css/index.scss';
 import './css/bootstrap.min.css'
@@ -79,6 +80,7 @@ ReactDOM.render(
           <Route path="RealtimeDisplay" component={RealtimeDisplay} />
           <Route path="Home_Doc" component={Home_Doc} />
           <Route path="Schedule" component={Schedule} />
+          <Route path="Notifications" component={Notifications} />
         </Route>
         <Route path="*" component={NotFound} />
       </Route>

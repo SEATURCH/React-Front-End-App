@@ -34,6 +34,9 @@ class AppCont extends Component {
 									<IndexLink to="/Schedule" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Schedule</IndexLink>
 								</li>
 								<li>
+									<Link to="/Notifications" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Notifications</Link>
+								</li>
+								<li>
 									<Link to="/Home_Doc" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Home_Doc</Link>
 								</li>
 								<li className="nestedHeaders">
