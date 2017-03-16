@@ -1,6 +1,7 @@
 //var nocache = require('superagent-no-cache');
 import request from  'superagent';
 import Promise from 'bluebird';
+import PDFJS from 'pdfjs-dist'
 
 //var prefix = require('superagent-prefix')('/static');
 var root = 'https://jsonplaceholder.typicode.com';
@@ -284,6 +285,42 @@ var getPatientDashboard = function(patientId){
 	});
 }
 
+var uploadDocument = function(file, patientuuid, dateUploaded){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/documents')
+		   .field("dateUploaded", dateUploaded )
+		   .field("filename", file.name)
+		   .field("patientUUID", patientuuid)
+		   .attach("file",file)
+		   .end(function(err, res){
+		   	if(!err){
+		    	resolve(res.body)
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var documentList = function(patientuuid){
+	return new Promise(function(resolve, reject){
+		request
+		   .get(goServer + '/documents/patientuuid/'+patientuuid)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.body);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var getDocument = function(documentuuid){
+	return PDFJS.getDocument(goServer + '/documents/documentuuid/'+documentuuid)
+}
+
 export default {
 	whoami: whoami,
 	authenticate:authenticate,
@@ -293,5 +330,8 @@ export default {
 	appointmentsByDocSearch:appointmentsByDocSearch,
 	updatePatient:updatePatient,
 	getPatientDashboard: getPatientDashboard,
-	getPatientAppointment: getPatientAppointment
+	getPatientAppointment: getPatientAppointment,
+	uploadDocument:uploadDocument,
+	documentList:documentList,
+	getDocument:getDocument
 };

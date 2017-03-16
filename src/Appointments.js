@@ -139,7 +139,7 @@ class Appointments extends Component {
 	      				<h3>Patient Info</h3>
 	      			</div>
 	      			<div className="col col-md-6">
-	      				<PatientPrescription prescriptionList={this.state.prescriptionList} />
+	      				<PatientPrescription.PatientPrescription prescriptionList={this.state.prescriptionList} />
 	      			</div>
 	      			<div className="col col-md-6">
 	      				<h3 className="modeleHeader">Patient Allergies</h3>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment'
+import Comp from './Auth/CustomComp.js'
 
 class MediRow extends React.Component{
 	render(){
@@ -68,22 +69,20 @@ class PatientPrescription extends Component {
 
 class AddPrescription extends Component {
 	render() {
-		var current = [];
-		var past = [];
-		var currentTime = new Date().getTime()/1000;
-		this.props.prescriptionList.forEach(function(prescript){
-			if(prescript.endDate < currentTime)
-				past.push(prescript);
-			else
-				current.push(prescript);
-		});
+		// this.props.prescriptionList.forEach(function(prescript){
+		// 	if(prescript.endDate < currentTime)
+		// 		past.push(prescript);
+		// 	else
+		// 		current.push(prescript);
+		// });
 		return (
 			<div className="PatientPrescription module">
-				<h3 className="modeleHeader">Prescriptions</h3>
-				<h4 className="moduleSubHeader">Current</h4> 
-				<MediTable prescripts={current} />
-				<h4 className="moduleSubHeader">Past</h4> 
-				<MediTable prescripts={past} />
+				{// <h3 className="modeleHeader">Prescriptions</h3>
+				// <h4 className="moduleSubHeader">Current</h4> 
+				// <MediTable prescripts={current} />
+				// <h4 className="moduleSubHeader">Past</h4> 
+				// <MediTable prescripts={past} />
+			}
 			</div>
 		)
 	}

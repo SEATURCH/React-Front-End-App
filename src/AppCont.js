@@ -45,13 +45,10 @@ class AppCont extends Component {
 									</li>
 									<li className={"sub right-align " + listShow}>
 										<li>
-											<Link to="/Dashboard" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
+											<Link to={"/Dashboard?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
 										</li>
 										<li>
-											<Link to="/Appointments" activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Appointments</Link>
-										</li>
-										<li>
-											<Link to="/RealtimeDisplay" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Real-Time Display</Link>
+											<Link to={"/Documents?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Documents</Link>
 										</li>
 									</li>
 								</li>
