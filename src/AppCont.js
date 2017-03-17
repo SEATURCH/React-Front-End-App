@@ -20,9 +20,13 @@ class AppCont extends Component {
 
 		}
 	componentDidMount() {
-		requests.whoami().then((res) => {
-			this.setState(res)
-		})
+		if(requests.whoami().then){
+			requests.whoami().then((res) => {
+				this.setState(res)
+			})
+		} else {
+			this.setState(requests.whoami())
+		}
 	}
 	componentWillUnmount() {
 		pubSub.unsubscribe(this.state.patientBroadCast);
