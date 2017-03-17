@@ -14,24 +14,24 @@ var whoami = function(){
 	return function(currentUser){
 		if(currentUser)
 			user = currentUser
+
 		if(!user){
 			return new Promise(function(resolve, reject){
-				// request
-				//   .get(root+'/posts/'+id)
-				//   .withCredentials()
-				//   .end(function(err, res){
-				//     if(!err && res.ok){
-				//     	resolve(res.body);
-				//     }else {
-				//     	reject();
-				//     }
+				request
+				  .get(goServer+'/users/useruuid/'+userUUID)
+				  .end(function(err, res){
+				    if(!err && res.ok){
+				    	user = {
+				    		name: res.body.name,
+							role: res.body.role,
+							uuid: res.body.userUUID
+						}
+						resolve(user);
+				    }else {
+				    	reject();
+				    }
 
-			 //  	});
-				user = {
-					role: "Doctor",
-					uuid: userUUID
-				}
-				resolve(user);
+			  	});
 			}); 
 		} else{
 			return user;
@@ -115,7 +115,8 @@ var authenticate = function(email, pass) {
 		    if(!err && res.ok){
 		    	sessionStorage.userUUID = res.body.userUUID;
 		    	whoami({
-					role: "Doctor",
+		    		name: res.body.name,
+					role: res.body.role,
 					uuid: res.body.userUUID
 				});
 		    	resolve(res.ok );
