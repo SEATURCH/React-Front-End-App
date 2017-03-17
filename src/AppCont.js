@@ -47,7 +47,7 @@ class AppCont extends Component {
 										<Link to="/Notifications" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Notifications</Link>
 									</li>
 									<li>
-										<Link to="/Home_Doc" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Home_Doc</Link>
+										<Link to="/Home_Doc" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Patients</Link>
 									</li>
 									<li className="nestedHeaders">
 										<li className="main right-align">
