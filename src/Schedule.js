@@ -57,6 +57,15 @@ var ScheduleTable = React.createClass({
     );
 
   	filteredRows.forEach(function(appt, index){
+        var parsedNotes;
+        try {
+          parsedNotes = JSON.parse(appt.notes).chiefComplaints.map(function(elem){
+            return elem.value
+          }).join("\n")
+        } catch (e) {
+          parsedNotes = appt.notes
+        }
+
 		    rows.push( <AppointmentRow
           appointmentUUID={appt.appointmentUUID}
           patientUUID={appt.patientUUID}
@@ -65,7 +74,7 @@ var ScheduleTable = React.createClass({
           dateScheduled={appt.dateScheduled}
           dateVisited={appt.dateVisited}
           key={appt.appointmentUUID}
-          notes={appt.notes}
+          notes={parsedNotes}
           action={this.props.action} /> );
     }.bind(this));
 
@@ -118,9 +127,7 @@ class Schedule extends Component{
   componentDidMount(){
   	requests.appointmentsByDocSearch("dummy")
   		.then((result) => {
-  			console.log("Appointments List from server : " + result);
   			this.setState({ appointmentsList:result });
-  			console.log(this.state)
   		})
   		.catch(function(e){
   			console.log("Could not mount request for appointments List from Doc")

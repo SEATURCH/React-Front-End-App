@@ -8,7 +8,6 @@ import PDFJS from 'pdfjs-dist'
 class DocumentRow extends Component{
   render(){
     var docDate = moment.unix(this.props.date).format("MM/DD/YYYY");
-    console.log(this.props.date)
     var actionURL = "/document?document=" + this.props.docUUID +"&name="+this.props.fname;
     return (
 			<tr>

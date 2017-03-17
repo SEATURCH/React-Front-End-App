@@ -36,7 +36,6 @@ class Home_Doc extends Component {
   componentDidMount(){
 		requests.patientsByDocSearch("dummy")
 			.then((result) => {
-				console.log("Patients List from server : " + result);
 				this.setState({ patientsList:result });
 			})
 			.catch(function(e){
