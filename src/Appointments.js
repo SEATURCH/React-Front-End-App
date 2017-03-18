@@ -61,6 +61,8 @@ class Appointments extends Component {
 					doctorNotes:[]
 				}
 			},
+			chiefComp:"",
+			doctorNotes:"",
 			addedPrescript: []
 		}
 	}
@@ -72,11 +74,11 @@ class Appointments extends Component {
 				var newState = result;
 				if(newState.appointmentDetail.hasOwnProperty("appointmentUUID")){
 					try {
-	          newState.appointmentDetail.notes = JSON.parse(newState.appointmentDetail.notes);
-	        } catch (e) {
+			         	newState.appointmentDetail.notes = JSON.parse(newState.appointmentDetail.notes);
+			        } catch (e) {
 						console.log(e)
 						newState.appointmentDetail.notes = this.state.appointmentDetail.notes;
-	        }
+			        }
 				}else{
 					newState.appointmentDetail = this.state.appointmentDetail
 				}
@@ -87,11 +89,8 @@ class Appointments extends Component {
 				console.log(e)
 			});
 	}
-	submiteUpdate(event) {
+	submitUpdate(event) {
 	 	event.preventDefault()
-	 	this.state.addedPrescript.forEach((item, index) => {
-
-	 	});
 	 	var appointment = this.state.appointmentDetail;
 		if(!this.state.appointmentDetail.dateVisited)
 			appointment.dateVisited = moment().unix()
@@ -119,10 +118,12 @@ class Appointments extends Component {
 				instructions: this.refs["notes"+index].getValue()
 			})
 	 	})
+
 	 	appointment.notes = JSON.stringify(appointment.notes)
 	 	requests.updateAppointment(this.props.location.query.appt, appointment, prescriptions)
 	 		.then((result) => {
-
+	 			// this.setState(newState);
+	 			location.reload()
 	 	})
 
     }
@@ -134,7 +135,7 @@ class Appointments extends Component {
 
    	cancelChanges(event) {
 	 	this.setState({
-			patientInfo: this.state.patientInfo,
+			appointmentDetail: this.state.appointmentDetail,
 			addedPrescript: []
 		});
     }
@@ -146,14 +147,18 @@ class Appointments extends Component {
     		notes:""
     	})
 	 	this.setState({
+	 		chiefComp:this.refs.chiefComplaints.getValue(),
+	 		doctorNotes:this.refs.doctorNotes.getValue(),
 	 		addedPrescript:temp
 	 	});
     }
-
+	
     clickRm(event) {
     	var temp = this.state.addedPrescript
     	temp.splice(event.target.id, 1)
 	 	this.setState({
+	 		chiefComp:this.refs.chiefComplaints.getValue(),
+	 		doctorNotes:this.refs.doctorNotes.getValue(),
 	 		addedPrescript:temp
 	 	});
     }
@@ -173,7 +178,7 @@ class Appointments extends Component {
 					errorHelp={{
 						required:"Required"
 				}} />
-				<Comp.ValidatedInput ref={"endDate" + index}
+				<Comp.ValidatedInput ref={"endDate" + index} max="5555-12-31"
 					validation="required" label="End Date" name="endDate" type="date"
 					value={moment.unix(item.endDate).format("YYYY-MM-DD")} onFocus={this.buttonTrigger.bind(this)}
     				errorHelp={{
@@ -193,7 +198,7 @@ class Appointments extends Component {
 		      	<h1 className="mainHeader">Appointment {dateVisited}</h1>
 		      	<h2 className="subHeader">{this.state.generalInfoList.name}</h2>
 	      	</div>
-	      	<Comp.SaveButtons ref="save" init={false} saveButton={this.submiteUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} />
+	      	<Comp.SaveButtons ref="save" init={false} saveButton={this.submitUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} />
 	    </div>
 
 		<div className="moduleBody">
@@ -204,7 +209,7 @@ class Appointments extends Component {
 	      				<TextTable list={this.state.appointmentDetail.notes.chiefComplaints || []} />
 	      				<div style={{marginTop:"10px"}}><b>Add: {today}</b></div>
 	      				<Comp.TextInput ref="chiefComplaints" onFocus={this.buttonTrigger.bind(this)}
-			        		value="" reset={!this.state.showBtn} />
+			        		value={this.state.chiefComp} reset={!this.state.showBtn} />
 	      			</div>
 	      			<div className="col col-md-8">
 	  					<h3>Vitals</h3>
@@ -221,8 +226,6 @@ class Appointments extends Component {
 	      			<div className="col col-md-6">
 	      				<h3 className="modeleHeader">Patient Allergies</h3>
 						<textarea className="allergiesText" value={this.state.generalInfoList.notes} disabled></textarea>
-	      				{//<PatientAllergy allergyInfo={this.state.generalInfoList.notes} patientuuid={this.state.generalInfoList.patientuuid} />
-	      				}
 	      			</div>
 	      		</div>
 	      		<div className="row nextActions">
@@ -231,7 +234,7 @@ class Appointments extends Component {
 	      				<TextTable list={this.state.appointmentDetail.notes.doctorNotes || []} />
 	      				<div style={{marginTop:"10px"}}><b>Add: {today}</b></div>
 	      				<Comp.TextInput ref="doctorNotes" onFocus={this.buttonTrigger.bind(this)}
-			        		value="" reset={!this.state.showBtn} />
+			        		value={this.state.doctorNotes} reset={!this.state.showBtn} />
 	  				</div>
 	  				<div className="AddPrescriptions col col-md-6">
 	      				<div>
