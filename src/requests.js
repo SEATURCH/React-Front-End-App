@@ -189,8 +189,8 @@ var authenticate = function(email, pass) {
 		   .post(goServer + '/login')
 		   .type('form')
 		   .send({
-		   		userName: email,
-		   		passWord: pass
+		   		username: email,
+		   		password: pass
 		   })
 		  .end(function(err, res){
 		    if(!err && res.ok){
@@ -441,9 +441,76 @@ var getDocument = function(documentuuid){
 	return PDFJS.getDocument(goServer + '/documents/documentuuid/'+documentuuid)
 }
 
+var createPatientProfile = function(userProfile){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/users')
+		   .send(userProfile)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		   		whoami({
+		    		name: res.body.name,
+					role: res.body.role,
+					uuid: res.body.userUUID
+				});
+		    	resolve(res.ok);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var createDoctorProfile = function(userProfile, doctorProfile){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/users')
+		   .send(userProfile)
+		   .end(function(err, res){
+		   		if(!err && res.ok){
+		   			return new Promise(function(resolve, reject){
+						request
+						   .post(goServer + '/doctors')
+						   .send(doctorProfile)
+						   .end(function(err, res){
+						   		if(!err && res.ok){
+									whoami({
+							    		name: res.body.name,
+										role: res.body.role,
+										uuid: res.body.userUUID
+									});
+									resolve(res.ok);
+								} else {
+									reject();
+								}
+							});
+				    });
+		    } else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+
+var usedNames = function(){
+	return new Promise(function(resolve, reject){
+		request
+		    .get(goServer+'/users')
+		    .end(function(err, res){
+			    if(!err && res.ok){
+					resolve(res.body);
+				}else {
+						reject();
+			    }
+			})
+	  	});
+}
+
 export default {
 	whoami: whoami,
 	authenticate:authenticate,
+	usedNames:usedNames
 	testApi:getTest,
 	patientSearch:patientSearch,
 	patientsByDocSearch:patientsByDocSearch,
@@ -457,5 +524,7 @@ export default {
 	uploadDocument:uploadDocument,
 	documentList:documentList,
 	getDocument:getDocument,
-	updateAppointment:updateAppointment
+	updateAppointment:updateAppointment,
+	createDoctorProfile:createDoctorProfile,
+	createPatientProfile:createPatientProfile
 };
