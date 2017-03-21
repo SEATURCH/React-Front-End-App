@@ -4,10 +4,11 @@ $moduleWidth: 100%;
 	display: inline-block;
 	vertical-align: top;
 	width:$moduleWidth;
+	height:100%;
+	overflow-y: scroll;
 
-  form{
+	form{
     margin-bottom: 2%;
-
   }
 
   input[type=text] {

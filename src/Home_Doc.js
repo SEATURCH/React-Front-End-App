@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import requests from './requests';
-import moment from 'moment'
+import moment from 'moment';
+import classnames from 'classnames';
+import Comp from './Auth/CustomComp.js';
 import './css/Home_Doc.scss';
 
 // The Custom Row format that will be displayed in the Patients Table
@@ -24,7 +26,19 @@ class Home_Doc extends Component {
 		super(props);
 		this.state = {
 			patientsList: [],
-      search: ''
+      search: '',
+      showBtn: false,
+      newPatientInfo: {
+        address: "",
+				bloodType: "",
+				dateOfBirth: 0,
+				emergencyContact: "",
+				gender: "",
+				medicalNumber: "",
+				name: "",
+				notes: "",
+				phoneNumber: ""
+      }
 		}
 	}
 
@@ -43,6 +57,47 @@ class Home_Doc extends Component {
 				console.log("Could not mount request for patients List from Doc")
 			});
 	}
+
+  submitCreate(event) {
+    event.preventDefault()
+    var patient = {
+      notes: this.refs.allergies.value,
+      name: this.refs.name.getValue(),
+      gender: this.refs.gender.getValue(),
+      dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
+      bloodType: this.refs.bloodType.getValue(),
+      medicalNumber: this.refs.medicalNumber.getValue(),
+      phoneNumber: this.refs.phoneNumber.getValue(),
+      emergencyContact: this.refs.emergencyContact.getValue(),
+      address: this.refs.address.getValue()
+    }
+
+    requests.createPatient(patient)
+      .then((res) => {
+        this.setState({
+          showBtn:false
+        });
+      })
+      .catch(function(e){
+        this.setState({
+          showBtn:false
+        });
+      });
+  }
+
+  showButtons(event) {
+    event.preventDefault()
+    this.setState({
+      showBtn:true
+    });
+  }
+
+  hideButtons(event) {
+    event.preventDefault()
+    this.setState({
+      showBtn:false
+    });
+  }
 
   render() {
     // create rows with all the patient information if patientsList is not empty
@@ -68,6 +123,7 @@ class Home_Doc extends Component {
         });
     }
 
+    var holderClass = classnames("btnHolder", {"show":this.state.showBtn});
     return (
       <div className="Home_Doc">
         <div className="pageHeader">
@@ -97,8 +153,82 @@ class Home_Doc extends Component {
              }
           </table>
         </div>
+
+        <div className="PatientGeneral module">
+          <h3 className="modeleHeader">Create New Patient</h3>
+          <div className={holderClass}>
+            <button type="button" className="btn btn-success" onClick={this.submitCreate.bind(this)}>Create</button>
+            <button type="button" className="btn btn-danger" onClick={this.hideButtons.bind(this)}>Cancel</button>
+          </div>
+
+            <form>
+              <div className="container-fluid">
+                  <div className="row">
+                    <div className="col col-md-6">
+                      <Comp.ValidatedInput ref="name"
+                        validation="required" label="Name" name="name" type="text"
+                        value={this.state.newPatientInfo.name} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+                    <Comp.ValidatedInput ref="gender"
+                      validation="required" label="Gender" name="gender" type="text"
+                      value={this.state.newPatientInfo.gender} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+                  <Comp.ValidatedInput ref="dateOfBirth"
+                    validation="required" label="Date of Birth" name="dateOfBirth" type="date"
+                    value={moment.unix(this.state.newPatientInfo.dateOfBirth).format("YYYY-MM-DD")} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+                      <Comp.ValidatedInput ref="bloodType"
+                        validation="required" label="Blood Type" name="bloodType" type="text"
+                        value={this.state.newPatientInfo.bloodType} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+                      <Comp.ValidatedInput ref="medicalNumber"
+                        validation="required" label="Medical Number" name="medicalNumber" type="text"
+                        value={this.state.newPatientInfo.medicalNumber} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+                      <label htmlFor="allergeisText"><b>Allergies: </b></label>
+                      <textarea ref="allergies" id="allergeisText" onFocus={this.showButtons.bind(this)}>
+                          {this.state.newPatientInfo.notes}
+                      </textarea>
+                    </div>
+                    <div className="col col-md-6">
+                      <h4 className="moduleSubHeader">Patient Contacts</h4>
+                        <Comp.ValidatedInput ref="phoneNumber"
+                          validation="required" label="Phone Number" name="phoneNumber" type="text"
+                          value={this.state.newPatientInfo.phoneNumber} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+                      <Comp.ValidatedInput ref="emergencyContact"
+                        validation="required" label="Emergency Contact" name="emergencyContact" type="text"
+                        value={this.state.newPatientInfo.emergencyContact} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+                    <Comp.ValidatedInput ref="address"
+                      validation="required" label="Address" name="address" type="text"
+                      value={this.state.newPatientInfo.address} onFocus={this.showButtons.bind(this)} reset={!this.state.showBtn}
+                      errorHelp={{
+                        required:"Required"
+                      }} />
+
+                    </div>
+                  </div>
+                </div>
+          </form>
+        </div>
       </div>
     );
+
   }
 }
 

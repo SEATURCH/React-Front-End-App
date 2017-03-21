@@ -31,7 +31,7 @@ var whoami = function(){
 					uuid: userUUID
 				}
 				resolve(user);
-			}); 
+			});
 		} else{
 			return user;
 		}
@@ -129,6 +129,22 @@ var updatePatient = function(patient){
 	return new Promise(function(resolve, reject){
 		request
 		   .put(goServer + '/patients')
+		   .type('json')
+		   .send(patient)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.ok);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var createPatient = function(patient){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/patients')
 		   .type('json')
 		   .send(patient)
 		   .end(function(err, res){
@@ -291,6 +307,7 @@ export default {
 	patientsByDocSearch:patientsByDocSearch,
 	appointmentsByDocSearch:appointmentsByDocSearch,
 	updatePatient:updatePatient,
+	createPatient:createPatient,
 	getPatientDashboard: getPatientDashboard,
 	getPatientAppointment: getPatientAppointment
 };
