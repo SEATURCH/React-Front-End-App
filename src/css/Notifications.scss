@@ -5,6 +5,7 @@ $moduleWidth: 100%;
 	vertical-align: top;
 	padding: 10px 10px;
 	width:$moduleWidth;
+	overflow-y: auto;
 	.moduleHeader{
 		font-weight: 600;
     font-size: 26px;

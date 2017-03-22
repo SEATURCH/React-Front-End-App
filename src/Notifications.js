@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import requests from './requests';
 import './css/Notifications.scss'
 import classnames from 'classnames';
+import moment from 'moment'
 
 class NotificationRow extends Component{
   render(){
@@ -58,7 +59,6 @@ class NewNotifcationForm extends Component{
     this.setState({
       showForm:true
     });
-    console.log("Form should be visible: " + this.state.showForm);
   }
 
   hideForm(event) {
@@ -66,7 +66,6 @@ class NewNotifcationForm extends Component{
     this.setState({
       showForm:false
     });
-    console.log("Form should be visible: " + this.state.showForm);
   }
 
   //searches the list to find the object based on the given name
@@ -94,10 +93,31 @@ class NewNotifcationForm extends Component{
       const message = this.refs.message.value;
       if(message !== ""){
         var doc = this.findDocIndex(name, this.props.docs);
+        var currDate = moment().unix();
 
         console.log(name);
         console.log(message);
         console.log(doc);
+        console.log(doc.doctorUUID);
+        // console.log("date is : " + currDate);
+
+        var notif = {
+          date : currDate,
+          message : message,
+          receiverUUID : doc.doctorUUID,
+          senderName : "Wolverine",
+          senderUUID : sessionStorage.userUUID
+        }
+        console.log(notif);
+
+        requests.postNotification(notif)
+  				.then((res) => {
+            console.log("posted notifcation sucessfully");
+  				})
+  				.catch(function(e){
+  					console.log("Could not mount")
+  				});
+
       }else{
         alert("Please write a message and try again!");
       }
@@ -146,34 +166,34 @@ class Notifications extends Component {
 		super(props);
 		this.state = {
 			notifcationsList:  [
-                            {
-                              "senderUUID": "576bd460-7b4d-432d-ba56-5a57553cb30b",
-                              "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
-                              "senderName": "Bruce Banner",
-                              "message": "Blood Reports are available."
-                            },
-                            {
-                              "senderUUID": "8bbd9f18-829b-4011-a451-df571b369796",
-                              "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
-                              "senderName": "S. Strange",
-                              "message": "I have uploaded the reports."
-                            },
-                            {
-                              "senderUUID": "45b2bf07-0ef4-478f-ae91-a9229332c17a",
-                              "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
-                              "senderName": "Thor",
-                              "message": "Please analyze the MRI report for Iron Man"
-                            },
-                            {
-                              "senderUUID": "0636a4f0-b6d4-452a-88d9-574dc6ffca81",
-                              "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
-                              "senderName": "Steve Rogers",
-                              "message": "Doc, I need your suggestions. Please contract me."
-                            }
+                            // {
+                            //   "senderUUID": "576bd460-7b4d-432d-ba56-5a57553cb30b",
+                            //   "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
+                            //   "senderName": "Bruce Banner",
+                            //   "message": "Blood Reports are available."
+                            // },
+                            // {
+                            //   "senderUUID": "8bbd9f18-829b-4011-a451-df571b369796",
+                            //   "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
+                            //   "senderName": "S. Strange",
+                            //   "message": "I have uploaded the reports."
+                            // },
+                            // {
+                            //   "senderUUID": "45b2bf07-0ef4-478f-ae91-a9229332c17a",
+                            //   "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
+                            //   "senderName": "Thor",
+                            //   "message": "Please analyze the MRI report for Iron Man"
+                            // },
+                            // {
+                            //   "senderUUID": "0636a4f0-b6d4-452a-88d9-574dc6ffca81",
+                            //   "receiverUUID": "36b95ee0-3742-42a1-a521-ecbb2528e2a4",
+                            //   "senderName": "Steve Rogers",
+                            //   "message": "Doc, I need your suggestions. Please contract me."
+                            // }
                           ],
       doctorsList: [
                       {
-                        "doctorUUID": "556d9f18-829b-4011-a451-df571b369111",
+                        "doctorUUID": "4498720b-0491-424f-8e52-6e13bd33da71",
                         "name": "S. Strange",
                         "phoneNumber": "555-222-1111",
                         "primaryFacility": "address",
@@ -207,6 +227,17 @@ class Notifications extends Component {
                     ]
 		}
 	}
+
+  componentDidMount(){
+    requests.getNotifications("dummy")
+      .then((result) => {
+        console.log("Sucessfully got notifications list from server");
+        this.setState({ notifcationsList:result });
+      })
+      .catch(function(e){
+        console.log("Could not mount request for patients List from Doc")
+      });
+  }
 
   render() {
     return (

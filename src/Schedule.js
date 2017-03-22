@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import moment from 'moment'
 import requests from './requests';
 import './css/Schedule.scss';
+import classnames from 'classnames';
 
 // The custom row that shows appoinment related info, for the list of appointments table
 class AppointmentRow extends Component{
@@ -157,10 +158,110 @@ class Schedule extends Component{
                   startDate={this.state.startDate}
                   endDate={this.state.endDate}/>
             }
+            <NewAppointmentForm/>
         </div>
       </div>
     );
   }
+}
+
+class NewAppointmentForm extends Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      showForm:false,
+      patientsList:[]
+    }
+  }
+
+  componentDidMount(){
+    requests.patientsByDocSearch("dummy")
+      .then((result) => {
+        console.log("Patients List from server : " + result);
+        this.setState({ patientsList:result });
+      })
+      .catch(function(e){
+        console.log("Could not mount request for patients List from Doc")
+      });
+  }
+
+  showForm(event) {
+    event.preventDefault()
+    this.setState({
+      showForm:true
+    });
+  }
+
+  hideForm(event) {
+    event.preventDefault()
+    this.setState({
+      showForm:false
+    });
+  }
+
+
+  //Posts the notification to the appropriate doctor.
+  createAppointment(event) {
+    event.preventDefault()
+
+  }
+
+  render(){
+    var patientOptions =[];
+    var timeOptions =[];
+
+    for(var k=0; k<11; k++){
+      var t;
+      if (k < 4){
+        t = k+8 + " AM";
+      }else if (k == 4) {
+        t = k+8 + " PM";
+      }
+      else{
+        t = k-4 + " PM";
+      }
+      timeOptions.push(<option>{t}</option>);
+    }
+
+    this.state.patientsList.forEach(function(patient, index){
+        patientOptions.push(<option value={patient.name}></option>);
+    });
+
+    var holderClass = classnames("formContent", {"show":this.state.showForm});
+
+    return (
+      <div className="scheduleForm">
+
+        <button type="button" className="btn btn-success btn-lg btn-block" onClick={this.showForm.bind(this)}>New Appointment</button>
+        <div>
+          <form className={holderClass}>
+            <label for="sel1">Select a Patient:</label>
+
+            <datalist id="patientsData">
+              {patientOptions}
+            </datalist>
+            <input ref="selectedPatient" className="form-control" type="text" list="patientsData" placeholder="Type or select patient name from dropdown"></input>
+
+            <label>Select a date:</label>
+            <input ref="selectedDate" type="date" id="newAppointmentDate" className="form-control"/>
+
+            <label>Select a time</label>
+            <select ref="selectedTime" className="form-control">
+              <option selected disabled hidden>Chose Start Time</option>
+              {timeOptions}
+            </select>
+
+            <label for="note">Note:</label>
+            <textarea ref="note" className="form-control" rows="2" id="note" placeholder="Type your notes here..."></textarea>
+
+            <button type="button" className="btn btn-danger" onClick={this.hideForm.bind(this)}>Cancel</button>
+            <button type="button" className="btn btn-success" onClick={this.createAppointment.bind(this)}>Create Appointment</button>
+          </form>
+        </div>
+
+      </div>
+		);
+	}
 }
 
 export default Schedule;

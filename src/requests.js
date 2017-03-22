@@ -31,7 +31,7 @@ var whoami = function(){
 					uuid: userUUID
 				}
 				resolve(user);
-			}); 
+			});
 		} else{
 			return user;
 		}
@@ -95,6 +95,36 @@ var appointmentsByDocSearch = function(id){
 		    }
 			});
 		});
+}
+
+var getNotifications = function(id){
+	return new Promise(function(resolve, reject){
+		request
+		  .get(goServer+'/notifications/doctoruuid/'+sessionStorage.userUUID)
+		  .end(function(err, res){
+		    if(!err && res.ok){
+					resolve(res.body);
+				}else {
+					reject();
+		    }
+			});
+		});
+}
+
+var postNotification = function(notification){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/notifications')
+		   .type('json')
+		   .send(notification)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.ok);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
 }
 
 var authenticate = function(email, pass) {
@@ -291,6 +321,8 @@ export default {
 	patientSearch:patientSearch,
 	patientsByDocSearch:patientsByDocSearch,
 	appointmentsByDocSearch:appointmentsByDocSearch,
+	getNotifications:getNotifications,
+	postNotification:postNotification,
 	updatePatient:updatePatient,
 	getPatientDashboard: getPatientDashboard,
 	getPatientAppointment: getPatientAppointment
