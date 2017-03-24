@@ -17,9 +17,7 @@ class AppointmentRow extends Component{
     }
     var appDate = moment.unix(date).format("MM/DD/YYYY");
 		var startTime = moment.unix(date).format("LT");
-		var endTime = moment.unix(date).add("minutes", 30).format("LT");
-		// var actionURL = this.props.action === 'Record' ?
-		// 	"/appointment/create":"/Appointments?appointmentUUID="+this.props.appointmentUUID;
+		var endTime = moment.unix(date).add("minutes", 60).format("LT");
 
     return (
 			<tr>
@@ -32,7 +30,6 @@ class AppointmentRow extends Component{
           <Link to={"Dashboard?id="+this.props.patientUUID} >{this.props.patientName}</Link>
         </td>
         <td>{this.props.notes}</td>
-				{/* <td><Link to={actionURL} >{this.props.action}</Link></td> */}
 			</tr>
 		);
 	}
@@ -199,10 +196,51 @@ class NewAppointmentForm extends Component{
     });
   }
 
+  findPatientIndex(query, list){
+    var patient = {};
+    //parse query string to extract name and DOB
+    var name = query.substring(0, query.indexOf('(')).trim();
+    var dob = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
+    list.forEach(function(elem){
+      if(elem.name == name &&
+        moment.unix(elem.dateOfBirth).format("MM/DD/YYYY") === dob){
+        patient = elem;
+      }
+    });
+    return patient;
+  }
 
   //Posts the notification to the appropriate doctor.
   createAppointment(event) {
     event.preventDefault()
+    const note = this.refs.note.value;
+    const selectedDate = this.refs.selectedDate.value;
+    const selectedTime = this.refs.selectedTime.value;
+    var patientDescription = this.refs.selectedPatient.value;
+    var patient = this.findPatientIndex(patientDescription, this.state.patientsList);
+
+    console.log(patient);
+
+    var fullTime = selectedDate + " " + selectedTime;
+    var finalTime = moment(fullTime, "YYYY-MM-DD hh:mm A").unix();
+    console.log(moment.unix(finalTime).format("MM/DD/YYYY"));
+    console.log(moment.unix(finalTime).format("LT"));
+
+    var appt = {
+      patientUuid: patient.patientUUID,
+      doctorUuid: sessionStorage.userUUID,
+      dateScheduled: finalTime,
+      notes: note
+    }
+    console.log(appt);
+
+    requests.postFutureAppointment(appt)
+      .then((res) => {
+        console.log("created future appointment sucessfully");
+      })
+      .catch(function(e){
+        console.log("Could not create future appointment");
+      });
 
   }
 
@@ -224,7 +262,9 @@ class NewAppointmentForm extends Component{
     }
 
     this.state.patientsList.forEach(function(patient, index){
-        patientOptions.push(<option value={patient.name}></option>);
+      var pDob = moment.unix(patient.dateOfBirth).format("MM/DD/YYYY");
+      var patientDescip = patient.name + " (DOB: " + pDob + ")";
+      patientOptions.push(<option value={patientDescip}></option>);
     });
 
     var holderClass = classnames("formContent", {"show":this.state.showForm});

@@ -127,6 +127,22 @@ var postNotification = function(notification){
 	});
 }
 
+var postFutureAppointment = function(appointment){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/futureappointments')
+		   .type('json')
+		   .send(appointment)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.ok);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
 var authenticate = function(email, pass) {
     if (sessionStorage.token) {
       	delete sessionStorage.token;
@@ -323,6 +339,7 @@ export default {
 	appointmentsByDocSearch:appointmentsByDocSearch,
 	getNotifications:getNotifications,
 	postNotification:postNotification,
+	postFutureAppointment:postFutureAppointment,
 	updatePatient:updatePatient,
 	getPatientDashboard: getPatientDashboard,
 	getPatientAppointment: getPatientAppointment
