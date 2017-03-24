@@ -39,7 +39,6 @@ class UserInput extends React.Component{
 
 	onFocus(event) {
 		event.preventDefault();
-		console.log("CLAPPED")
 		if(this.props.onFocus)
 	 		this.props.onFocus(event);
 	}
@@ -138,7 +137,7 @@ class SaveButtons extends React.Component {
 		var holderClass = classnames("btnHolder", {"reveal":this.state.show});
 		return (
 			<div className={holderClass}>
-				<button type="button" className="btn btn-success" onClick={this.saveClick.bind(this)}>Update</button>
+				<button type="button" className="btn btn-success" onClick={this.saveClick.bind(this)}>Submit</button>
 				<button type="button" className="btn btn-danger" onClick={this.cancelClick.bind(this)}>Cancel</button>
 			</div>
 		);

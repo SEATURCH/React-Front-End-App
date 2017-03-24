@@ -95,7 +95,12 @@ $moduleWidth: 100%;
 
 
 .PatientPrescription {
-
+	.past {
+		opacity: 0.5;
+		&:hover{
+			opacity: 1;
+		}
+	}
 }
 
 .PatientAppointments {
@@ -103,5 +108,11 @@ $moduleWidth: 100%;
 		padding-left: 0px !important;
 		text-align: center !important;
 		white-space: nowrap;
+	}
+	.past {
+		opacity: 0.5;
+		&:hover{
+			opacity: 1;
+		}
 	}
 }

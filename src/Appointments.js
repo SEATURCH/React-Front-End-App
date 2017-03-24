@@ -40,7 +40,6 @@ var TextTable = React.createClass({
   }
 });
 
-
 class Appointments extends Component {
 	constructor(props){
 		super(props);
@@ -49,8 +48,20 @@ class Appointments extends Component {
 			generalInfoList: {},
 			prescriptionList:[],
 			appointmentDetail: {
-				notes:{}
-			}
+				appointmentUUID: this.props.location.query.appt,
+				patientUUID: this.props.location.query.id,
+				doctorUUID: requests.whoami().uuid,
+				dateVisited: 0,
+				breathingRate: 0,
+				heartRate: 0,
+				bloodOxygenLevel: 0,
+				bloodPressure: 0,
+				notes: {
+					chiefComplaints:[],
+					doctorNotes:[]
+				}
+			},
+			addedPrescript: []
 		}
 	}
 
@@ -58,42 +69,60 @@ class Appointments extends Component {
 		requests.getPatientAppointment(
 			this.props.location.query.appt, this.props.location.query.id)
 			.then((result) => {
-				result.appointmentDetail.notes = JSON.stringify({
-					chiefComplaints:[
-						{date: 1488246759,
-							value: "OKOKOK"},
-						{date: 1488246759,
-							value: "DOKOKOK"}
-					],
-					doctorNotes:[
-						{date: 1488246759,
-							value: "DKDKDKD"},
-						{date: 1488246759,
-							value: "MKMKMKMK"}
-					]
-				})
-				result.appointmentDetail.notes = JSON.parse(result.appointmentDetail.notes)
-				this.setState(result);
+				var newState = result;
+				if(newState.hasOwnProperty("appointmentUUID")){
+					try {
+			          newState.notes = JSON.parse(newState.notes)
+			        } catch (e) {
+			          newState.notes = newState.notes
+			        }
+					
+				}else{
+					newState.appointmentDetail = this.state.appointmentDetail
+				}
+				this.setState(newState)
 			})
 			.catch(function(e){
 				console.log("Could not mount")
+				console.log(e)
 			});
 	}
 	submiteUpdate(event) {
 	 	event.preventDefault()
-	 	// req.updatePatient(patient)
-			// .then((res) => {
-			// 	this.setState({ 
-			// 		showBtn:false,
-			// 		patientInfo: patient
-			// 	});					
-			// })
-			// .catch(function(e){
-			// 	this.setState({ 
-			// 		showBtn:false,
-			// 		patientInfo: patient
-			// 	});
-			// });
+	 	this.state.addedPrescript.forEach((item, index) => {
+
+	 	});
+	 	var appointment = this.state.appointmentDetail;
+	 	if(this.refs.chiefComplaints.getValue()){
+		 	appointment.notes.chiefComplaints.push({
+		 		date: moment().unix(),
+		 		value:this.refs.chiefComplaints.getValue()
+		 	});
+		}
+		if(this.refs.doctorNotes.getValue()){
+		 	appointment.notes.doctorNotes.push({
+		 		date: moment().unix(),
+		 		value:this.refs.doctorNotes.getValue()
+		 	})
+	 	}
+	 	var prescriptions = [];
+	 	this.state.addedPrescript.forEach((item, index) => {
+			prescriptions.push({
+		 		patientUUID: this.props.location.query.id,
+				doctorUUID: requests.whoami().uuid,
+				doctor:requests.whoami().name,
+				drug: this.refs["drugName"+index].getValue(),
+				startDate:item.endDate<moment().unix()? item.endDate: moment().unix(),
+				endDate: moment(this.refs["endDate"+index].getValue()).unix(),
+				instructions: this.refs["notes"+index].getValue()
+			})
+	 	})
+	 	appointment.notes = JSON.stringify(appointment.notes)
+	 	requests.updateAppointment(this.props.location.query.appt, appointment, prescriptions)
+	 		.then((result) => {
+
+	 	})
+		
     }
 
 	buttonTrigger(event) {
@@ -103,17 +132,64 @@ class Appointments extends Component {
 
    	cancelChanges(event) {
 	 	this.setState({ 
-			patientInfo: this.state.patientInfo
+			patientInfo: this.state.patientInfo,
+			addedPrescript: []
 		});
+    }
+    clickAdd(event) {
+    	var temp = this.state.addedPrescript
+    	temp.push({
+    		name:"",
+    		endDate:Math.floor(new Date().getTime()/1000),
+    		notes:""
+    	})
+	 	this.setState({
+	 		addedPrescript:temp
+	 	});
+    }
+
+    clickRm(event) {
+    	var temp = this.state.addedPrescript
+    	temp.splice(event.target.id, 1)
+	 	this.setState({
+	 		addedPrescript:temp
+	 	});
     }
 
   render() {
   	var today = moment().format("MMM/DD/YYYY");
+  	var dateVisited = (this.state.appointmentDetail.dateVisited)? 
+  		moment(this.state.appointmentDetail.dateVisited).format("MMM/DD/YYYY") : "New";
+
+  	var rows = [];
+  	this.state.addedPrescript.forEach((item, index) => {
+		rows.push( 
+			<div className="newPrescript" key={index} >
+				<span id={index} onClick={this.clickRm.bind(this)} className="glyphicon glyphicon-remove"></span>
+				<Comp.ValidatedInput ref={"drugName" + index}
+						validation="required" label="Add Drug" name="name" type="text" 
+						value={item.name} onFocus={this.buttonTrigger.bind(this)}
+					errorHelp={{
+						required:"Required"
+				}} />
+				<Comp.ValidatedInput ref={"endDate" + index}
+					validation="required" label="End Date" name="endDate" type="date"
+					value={moment.unix(item.endDate).format("YYYY-MM-DD")} onFocus={this.buttonTrigger.bind(this)}
+    				errorHelp={{
+    					required:"Required"
+				}} />
+				Instructions
+				<Comp.TextInput ref={"notes"+ index} onFocus={this.buttonTrigger.bind(this)}
+		        		value={item.notes} />
+			</div>
+		);
+	});
+
   	return (
       <div className="DetailedAppointments">
       	<div className="pageHeader" style={{position: "relative"}}>
       		<div className="inlineBlock">
-		      	<h1 className="mainHeader">Appointment {this.state.appointmentDetail.dateVisited}</h1>
+		      	<h1 className="mainHeader">Appointment {dateVisited}</h1>
 		      	<h2 className="subHeader">{this.state.generalInfoList.name}</h2>
 	      	</div>
 	      	<Comp.SaveButtons ref="save" init={false} saveButton={this.submiteUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} /> 
@@ -126,7 +202,7 @@ class Appointments extends Component {
 	      				<h3>Chief Complaint</h3>
 	      				<TextTable list={this.state.appointmentDetail.notes.chiefComplaints || []} />
 	      				<div style={{marginTop:"10px"}}><b>Add: {today}</b></div>
-	      				<Comp.TextInput ref="allergies" onFocus={this.buttonTrigger.bind(this)}
+	      				<Comp.TextInput ref="chiefComplaints" onFocus={this.buttonTrigger.bind(this)}
 			        		value="" reset={!this.state.showBtn} />
 	      			</div>
 	      			<div className="col col-md-8">
@@ -153,12 +229,22 @@ class Appointments extends Component {
 	      				<h3>Doctor Notes</h3>
 	      				<TextTable list={this.state.appointmentDetail.notes.doctorNotes || []} />
 	      				<div style={{marginTop:"10px"}}><b>Add: {today}</b></div>
-	      				<Comp.TextInput ref="allergies" onFocus={this.buttonTrigger.bind(this)}
+	      				<Comp.TextInput ref="doctorNotes" onFocus={this.buttonTrigger.bind(this)}
 			        		value="" reset={!this.state.showBtn} />
 	  				</div>
-	  				<div className="col col-md-6">
-	      				<h3>Add Prescription</h3>
-	      				<textarea></textarea>
+	  				<div className="AddPrescriptions col col-md-6">
+	      				<div>
+	      					<h3>Add Prescription</h3>
+	      					<button className="addNewBtn btn btn-default" onClick={this.clickAdd.bind(this)}>+</button>
+	      				</div>
+	      				<div>
+	      					{rows}
+					        <table className="table-striped">
+								<tbody>
+									
+								</tbody>
+							</table>
+					    </div>
 	      			</div>
 	      		</div>
 	      	</div>

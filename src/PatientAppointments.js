@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import moment from 'moment'
 import { Link } from 'react-router';
+import classnames from 'classnames'
 
 
 class AppRow extends React.Component{
 	render(){
+		var currentTime = moment().unix();
+		var fadeOut = classnames({"past":currentTime > this.props.date });
+		
 		var appDate = moment.unix(this.props.date).format("MMM/DD/YYYY");
 		var startTime = moment.unix(this.props.date).format("LT");
 		var endTime = moment.unix(this.props.date).add("minutes", 30).format("LT");
 		return (
-			<tr>
+			<tr className={fadeOut}>
 				<td>{appDate}</td>
 				<td>{startTime} - {endTime}</td>
 				<td>
@@ -44,22 +48,14 @@ var AppTable = React.createClass({
 
 class PatientAppointments extends Component {
 	render() {
-		var current = [];
-		var past = [];
-		var currentTime = new Date().getTime()/1000;
-		this.props.appointmentList.forEach(function(appt){
-			if(appt.date < currentTime)
-				past.push(appt);
-			else
-				current.push(appt);
-		});
+		var apptList = this.props.appointmentList;
+		apptList.sort(function(a, b){
+			return b.date - a.date; 
+		})
 		return (
 			<div className="PatientAppointments module">
 				<h3 className="modeleHeader">Appointments</h3>
-				<h4 className="moduleSubHeader">Upcoming</h4>
-				<AppTable appts={current} />
-				<h4 className="moduleSubHeader">Past</h4>
-				<AppTable appts={past} />
+				<AppTable appts={apptList} />
 			</div>
 		)
 	}
