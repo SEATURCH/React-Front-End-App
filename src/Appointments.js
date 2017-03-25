@@ -25,7 +25,7 @@ var TextTable = React.createClass({
   render:function(){
   	var rows =[];
   	this.props.list.forEach(function(item, index){
-		rows.push( 
+		rows.push(
 			<TextRow date={item.date} key={index} value={item.value} /> );
 	});
     return (
@@ -70,20 +70,20 @@ class Appointments extends Component {
 			this.props.location.query.appt, this.props.location.query.id)
 			.then((result) => {
 				var newState = result;
-				if(newState.hasOwnProperty("appointmentUUID")){
+				if(newState.appointmentDetail.hasOwnProperty("appointmentUUID")){
 					try {
-			          newState.notes = JSON.parse(newState.notes)
-			        } catch (e) {
-			          newState.notes = newState.notes
-			        }
-					
+	          newState.appointmentDetail.notes = JSON.parse(newState.appointmentDetail.notes);
+	        } catch (e) {
+						console.log(e)
+						newState.appointmentDetail.notes = this.state.appointmentDetail.notes;
+	        }
 				}else{
 					newState.appointmentDetail = this.state.appointmentDetail
 				}
 				this.setState(newState)
 			})
 			.catch(function(e){
-				console.log("Could not mount")
+				console.log("Could not get patient completedAppointment or patient prescription")
 				console.log(e)
 			});
 	}
@@ -93,6 +93,8 @@ class Appointments extends Component {
 
 	 	});
 	 	var appointment = this.state.appointmentDetail;
+		if(!this.state.appointmentDetail.dateVisited)
+			appointment.dateVisited = moment().unix()
 	 	if(this.refs.chiefComplaints.getValue()){
 		 	appointment.notes.chiefComplaints.push({
 		 		date: moment().unix(),
@@ -122,7 +124,7 @@ class Appointments extends Component {
 	 		.then((result) => {
 
 	 	})
-		
+
     }
 
 	buttonTrigger(event) {
@@ -131,7 +133,7 @@ class Appointments extends Component {
     }
 
    	cancelChanges(event) {
-	 	this.setState({ 
+	 	this.setState({
 			patientInfo: this.state.patientInfo,
 			addedPrescript: []
 		});
@@ -158,16 +160,15 @@ class Appointments extends Component {
 
   render() {
   	var today = moment().format("MMM/DD/YYYY");
-  	var dateVisited = (this.state.appointmentDetail.dateVisited)? 
-  		moment(this.state.appointmentDetail.dateVisited).format("MMM/DD/YYYY") : "New";
-
+  	var dateVisited = (this.state.appointmentDetail.dateVisited)?
+  		moment.unix(this.state.appointmentDetail.dateVisited).format("MMM/DD/YYYY") : "New";
   	var rows = [];
   	this.state.addedPrescript.forEach((item, index) => {
-		rows.push( 
+		rows.push(
 			<div className="newPrescript" key={index} >
 				<span id={index} onClick={this.clickRm.bind(this)} className="glyphicon glyphicon-remove"></span>
 				<Comp.ValidatedInput ref={"drugName" + index}
-						validation="required" label="Add Drug" name="name" type="text" 
+						validation="required" label="Add Drug" name="name" type="text"
 						value={item.name} onFocus={this.buttonTrigger.bind(this)}
 					errorHelp={{
 						required:"Required"
@@ -192,7 +193,7 @@ class Appointments extends Component {
 		      	<h1 className="mainHeader">Appointment {dateVisited}</h1>
 		      	<h2 className="subHeader">{this.state.generalInfoList.name}</h2>
 	      	</div>
-	      	<Comp.SaveButtons ref="save" init={false} saveButton={this.submiteUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} /> 
+	      	<Comp.SaveButtons ref="save" init={false} saveButton={this.submiteUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} />
 	    </div>
 
 		<div className="moduleBody">
@@ -241,7 +242,7 @@ class Appointments extends Component {
 	      					{rows}
 					        <table className="table-striped">
 								<tbody>
-									
+
 								</tbody>
 							</table>
 					    </div>

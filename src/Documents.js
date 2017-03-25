@@ -123,7 +123,7 @@ class Documents extends Component {
           <input type='file' style={{display:"none"}} ref="file" onChange={this.onSelected.bind(this)} />
           <button type="upload" className="btn btn-default" onClick={this.clickAdd.bind(this)}>+</button>
         </label>
-          
+
         {this.state.documentsList.length > 0 &&
             <DocumentsTable docs={this.state.documentsList}/>
         }
@@ -185,7 +185,7 @@ class DocumentView extends Component {
     this.state.pageNum--;
     this.queueRenderPage(this.state.pageNum);
   }
-  
+
   onNextPage() {
     if (this.state.pageNum >= this.state.pdfDoc.numPages) {
       return;
@@ -214,7 +214,7 @@ class DocumentView extends Component {
         this.state.numPages = pdfDoc_.numPages
         // Initial/first page rendering
         this.state.pageNum  = 1
-        this
+        // this
         this.renderPage(this.state.pageNum);
     });
   }
