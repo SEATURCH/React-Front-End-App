@@ -97,18 +97,54 @@ var appointmentsByDocSearch = function(id){
 		});
 }
 
-var getNotifications = function(id){
+var getNotificationPageLists = function() {
+	var promises = [
+		new Promise(function(resolve, reject){
+			request
+			  .get(goServer + '/notifications/doctoruuid/' + sessionStorage.userUUID)
+			  .end(function(err, res){
+			    	if(!err && res.ok){
+						resolve({
+							name: "notificationsList",
+							value: res.body
+						});
+					}else {
+						reject();
+			    	}
+				});
+			}),
+			new Promise(function(resolve, reject){
+				request
+				  .get(goServer + '/doctors')
+				  .end(function(err, res){
+				    if(!err && res.ok){
+						resolve({
+							name: "doctorsList",
+							value: res.body
+						});
+						}else {
+							reject();
+				    }
+				})
+	  	})
+	];
+
 	return new Promise(function(resolve, reject){
-		request
-		  .get(goServer+'/notifications/doctoruuid/'+sessionStorage.userUUID)
-		  .end(function(err, res){
-		    if(!err && res.ok){
-					resolve(res.body);
-				}else {
-					reject();
-		    }
+		Promise.all(promises.map(function(promise) {
+			return promise.reflect();
+		})).then(function(res){
+			var resolved = {};
+			res.forEach(function(inspection){
+				var value = inspection.value();
+				if(inspection.isFulfilled()){
+					resolved[value.name] = value.value;
+				}else{
+					resolved[value.name] = "Error, Promise rejected";
+				}
 			});
+			resolve(resolved);
 		});
+	});
 }
 
 var postNotification = function(notification){
@@ -412,7 +448,7 @@ export default {
 	patientSearch:patientSearch,
 	patientsByDocSearch:patientsByDocSearch,
 	appointmentsByDocSearch:appointmentsByDocSearch,
-	getNotifications:getNotifications,
+	getNotificationPageLists:getNotificationPageLists,
 	postNotification:postNotification,
 	postFutureAppointment:postFutureAppointment,
 	updatePatient:updatePatient,

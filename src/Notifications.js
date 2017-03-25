@@ -6,8 +6,10 @@ import moment from 'moment'
 
 class NotificationRow extends Component{
   render(){
+    var notifDate = moment.unix(this.props.date).format("MM/DD/YYYY");
     return (
 			<tr>
+        <td>{notifDate}</td>
         <td>{this.props.senderName}</td>
         <td>{this.props.message}</td>
 			</tr>
@@ -15,16 +17,17 @@ class NotificationRow extends Component{
 	}
 }
 
-var NotifcationsTable = React.createClass({
+var NotificationsTable = React.createClass({
   render:function(){
   	var rows =[];
     // create a custome row for each notificaiton
-  	this.props.notifcations.forEach(function(notifcation, index){
+  	this.props.notifications.forEach(function(notification, index){
 		    rows.push( <NotificationRow
-          message={notifcation.message}
-          senderUUID={notifcation.senderUUID}
-          receiverUUID={notifcation.receiverUUID}
-          senderName={notifcation.senderName}
+          message={notification.message}
+          senderUUID={notification.senderUUID}
+          receiverUUID={notification.receiverUUID}
+          senderName={notification.senderName}
+          date={notification.date}
           key={index}/> );
     });
 
@@ -33,6 +36,7 @@ var NotifcationsTable = React.createClass({
         <table className="table-striped table-hover">
           <thead>
             <tr>
+              <th>Date (M/D/Y)</th>
               <th>From</th>
               <th>Message</th>
             </tr>
@@ -46,7 +50,7 @@ var NotifcationsTable = React.createClass({
   }
 });
 
-class NewNotifcationForm extends Component{
+class NewNotificationForm extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -71,12 +75,12 @@ class NewNotifcationForm extends Component{
   //searches and returns the list to find the object based on the given query
   findDocIndex(query, list){
       var doc = {};
-      // parse query string to extract name and speciality of doctor
+      // parse query string to extract name and specialty of doctor
       var name = query.substring(0, query.indexOf('(')).trim();
-      var speciality = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
+      var specialty = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
 
       list.forEach(function(elem) {
-        if(elem.name === name && elem.primarySpeciality === speciality){
+        if(elem.name === name && elem.primarySpecialty === specialty){
             doc = elem;
         }
       });
@@ -92,30 +96,26 @@ class NewNotifcationForm extends Component{
         var doc = this.findDocIndex(docDescription, this.props.docs);
         var currDate = moment().unix();
 
-        console.log(docDescription);
-        console.log(doc);
-
         var notif = {
           date : currDate,
           message : message,
           receiverUUID : doc.doctorUUID,
-          senderName : "Wolverine",
+          senderName : requests.whoami().name,
           senderUUID : sessionStorage.userUUID
         }
         console.log(notif);
 
         requests.postNotification(notif)
   				.then((res) => {
-            console.log("posted notifcation sucessfully");
+            console.log("posted notification sucessfully");
   				})
   				.catch(function(e){
-  					console.log("Could not mount")
+  					console.log("Couldn't post notification");
   				});
 
       }else{
         alert("Please write a message and try again!");
       }
-
     }else{
       alert("Please select a recipient and try again!");
     }
@@ -125,7 +125,7 @@ class NewNotifcationForm extends Component{
     var docOptions =[];
 
   	this.props.docs.forEach(function(doc){
-        var docDescrip = doc.name + " (Speciality: " + doc.primarySpeciality + ")";
+        var docDescrip = doc.name + " (Specialty: " + doc.primarySpecialty + ")";
 		    docOptions.push(<option value={docDescrip}></option>);
     });
 
@@ -149,7 +149,7 @@ class NewNotifcationForm extends Component{
             <textarea ref="message" className="form-control" rows="4" id="message" placeholder="Type your message here..."></textarea>
 
             <button type="button" className="btn btn-danger" onClick={this.hideForm.bind(this)}>Cancel</button>
-            <button type="button" className="btn btn-success" onClick={this.sendNotification.bind(this)}>Send Notifcation</button>
+            <button type="button" className="btn btn-success" onClick={this.sendNotification.bind(this)}>Send Notification</button>
           </form>
         </div>
 
@@ -162,53 +162,24 @@ class Notifications extends Component {
   constructor(props){
 		super(props);
 		this.state = {
-			notifcationsList: [],
-      doctorsList: [
-                      {
-                        "doctorUUID": "4498720b-0491-424f-8e52-6e13bd33da71",
-                        "name": "S. Strange",
-                        "phoneNumber": "555-222-1111",
-                        "primaryFacility": "address",
-                        "primarySpeciality": "Liver",
-                        "gender": "Male"
-                      },
-                      {
-                        "doctorUUID": "45b2bf07-0ef4-478f-ae91-a9229332c17a",
-                        "name": "Thor",
-                        "phoneNumber": "444-777-2233",
-                        "primaryFacility": "address",
-                        "primarySpeciality": "Brain",
-                        "gender": "Male"
-                      },
-                      {
-                        "doctorUUID": "0636a4f0-b6d4-452a-88d9-574dc6ffca81",
-                        "name": "Steve Rogers",
-                        "phoneNumber": "223-222-3142",
-                        "primaryFacility": "address",
-                        "primarySpeciality": "Stomach",
-                        "gender": "Male"
-                      },
-                      {
-                        "doctorUUID": "8bbd9f18-829b-4011-a451-df571b369796",
-                        "name": "Natasha Romanoff",
-                        "phoneNumber": "999-567-3983",
-                        "primaryFacility": "address",
-                        "primarySpeciality": "Kidney",
-                        "gender": "Female"
-                      }
-                    ]
+			notificationsList: [],
+      doctorsList: []
 		}
 	}
 
   componentDidMount(){
-    requests.getNotifications("dummy")
-      .then((result) => {
-        console.log("Sucessfully got notifications list from server");
-        this.setState({ notifcationsList:result });
-      })
-      .catch(function(e){
-        console.log("Could not mount request for patients List from Doc")
-      });
+    requests.getNotificationPageLists()
+			.then((result) => {
+        console.log("Sucessfully got notifications and doctors list from server.");
+        result.notificationsList.sort(function(a, b){
+    			return b.date - a.date;
+    		});
+        this.setState(result);
+        console.log(result);
+			})
+			.catch(function(e){
+				console.log("Could not get notifications or doctors list")
+			});
   }
 
   render() {
@@ -216,10 +187,10 @@ class Notifications extends Component {
       <div className="notifications">
         <h3 className="moduleHeader">Notifications</h3>
 
-        <NewNotifcationForm docs={this.state.doctorsList}/>
+        <NewNotificationForm docs={this.state.doctorsList}/>
 
-        {this.state.notifcationsList.length > 0 &&
-            <NotifcationsTable notifcations={this.state.notifcationsList}/>
+        {this.state.notificationsList.length > 0 &&
+            <NotificationsTable notifications={this.state.notificationsList}/>
         }
       </div>
     );

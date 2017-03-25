@@ -41,16 +41,10 @@ var ScheduleTable = React.createClass({
   	var rows =[];
     var filteredRows = this.props.appts.filter(
       (item) => {
-        var date;
-        //ensure that date isn't zero (which depends if appointment is future or not)
-        if(item.dateScheduled === 0){
-          date = item.dateVisited;
-        }else{
-          date = item.dateScheduled;
-        }
+        var date = item.dateVisited || item.dateScheduled;
         //only return this item if its date is between the startDate and endDate
         return((moment.unix(date).isSameOrAfter(this.props.startDate))
-              && (moment.unix(date).isSameOrBefore(this.props.endDate)));
+              && (moment.unix(date).startOf("day").isSameOrBefore(this.props.endDate)));
        }
     );
 
@@ -111,6 +105,8 @@ class Schedule extends Component{
   updateStartRange(event){
     if(moment(event.target.value).isValid()){
       this.setState({startDate: moment(event.target.value).format("MMM/DD/YYYY")});
+    }else{
+      this.setState({startDate: '1000-01-01'});
     }
   }
 
@@ -119,12 +115,19 @@ class Schedule extends Component{
   updateEndRange(event){
     if(moment(event.target.value).isValid()){
       this.setState({endDate: moment(event.target.value).format("MMM/DD/YYYY")});
+    }else{
+      this.setState({endDate: '5555-12-31'});
     }
   }
 
   componentDidMount(){
   	requests.appointmentsByDocSearch("dummy")
   		.then((result) => {
+        result.sort(function(a, b){
+          var aDate = a.dateScheduled || a.dateVisited;
+          var bDate = b.dateScheduled || b.dateVisited;
+          return bDate - aDate;
+        });
   			this.setState({ appointmentsList:result });
   		})
   		.catch(function(e){
@@ -141,6 +144,7 @@ class Schedule extends Component{
         </div>
 
         <div className="moduleBody">
+            <NewAppointmentForm/>
             <form>
                 <div className="dateSelector">
                   <p> From: </p>
@@ -162,7 +166,6 @@ class Schedule extends Component{
                   startDate={this.state.startDate}
                   endDate={this.state.endDate}/>
             }
-            <NewAppointmentForm/>
         </div>
       </div>
     );
@@ -181,7 +184,7 @@ class NewAppointmentForm extends Component{
   componentDidMount(){
     requests.patientsByDocSearch("dummy")
       .then((result) => {
-        console.log("Patients List from server : " + result);
+        console.log("Sucessfully got patients List from server");
         this.setState({ patientsList:result });
       })
       .catch(function(e){
