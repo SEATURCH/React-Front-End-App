@@ -23,7 +23,7 @@ function getClientEnvironment(publicUrl) {
       'PUBLIC_URL': JSON.stringify(publicUrl),
       'GO_ADDR': JSON.stringify(
        //process.env.GO_ADDR || "http://192.168.0.16:8080"
-       "http://localhost:8080"
+       process.env.GO_ADDR || "http://localhost:8080"
       )
     });
   return {'process.env': processEnv};

@@ -4,7 +4,7 @@ $moduleWidth: 100%;
 	display: inline-block;
 	vertical-align: top;
 	width:$moduleWidth;
-	
+
   form{
     text-align: center;
     display: block;
@@ -47,6 +47,39 @@ $moduleWidth: 100%;
 			text-align: center;
 			padding: 5px 0px 5px 10px;
 			border:none;
+			white-space: pre;
 		}
 	}
+}
+
+.scheduleForm{
+  .formContent{
+    textarea{
+			width:100%;
+			resize: none;
+		}
+		margin-bottom: 20px;
+    position: relative;
+    height: 0px;
+    // visibility: hidden;
+    // display: none;
+    overflow:hidden;
+    transition: height 0.25s;
+    -webkit-transition: height 0.25s;
+    &.show{
+      height:300px;
+      // overflow: auto;
+      // display:block;
+      // visibility: visible;
+    }
+    .btn-danger{
+      float:right;
+      margin: 7px 5px;
+    }
+    .btn-success{
+      float:right;
+      margin: 7px 5px;
+
+    }
+  }
 }

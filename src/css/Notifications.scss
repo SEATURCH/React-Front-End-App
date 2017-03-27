@@ -5,6 +5,7 @@ $moduleWidth: 100%;
 	vertical-align: top;
 	padding: 10px 10px;
 	width:$moduleWidth;
+	overflow-y: auto;
 	.moduleHeader{
 		font-weight: 600;
     font-size: 26px;
@@ -14,24 +15,6 @@ $moduleWidth: 100%;
     text-align: center;
     font-style: italic;
 	}
-
-  // form{
-  //   text-align: center;
-  //   display: block;
-  //   margin-bottom: 3%;
-  //
-  //   #startDateText, #endDateText{
-  //     width: 15%;
-  //   }
-  //
-  //   p{
-  //     font-weight: 800;
-  // 		margin: 5px 5px;
-  //     font-style: italic;
-  //     font-size: 18px;
-  //     color: #FFB647;
-  //   }
-  // }
 
 	table{
 		width:100%;

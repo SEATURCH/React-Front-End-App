@@ -40,10 +40,8 @@ class Dashboard extends Component {
 	componentDidMount(){
 		requests.getPatientDashboard(this.props.location.query.id)
 			.then((result) => {
-				// console.log(result)
 				this.setState(result);
-				pubSub.publish("PATI SEL", "Bayb") //this.state.generalInfoList.name)
-				// console.log(this.state);
+				pubSub.publish("PATI SEL", this.state.generalInfoList.name)
 			})
 			.catch(function(e){
 				console.log("Could not mount");

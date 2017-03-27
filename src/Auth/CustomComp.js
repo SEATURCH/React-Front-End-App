@@ -11,14 +11,13 @@ updateForm:function
 reset
 errorHelp
 */
-class ValidatedInput extends React.Component{
+class UserInput extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
 	        error: false,
 	        errorMsg: "",
 	        value:this.props.value
-
 	    }
 	}
 	componentWillReceiveProps(props){
@@ -44,10 +43,15 @@ class ValidatedInput extends React.Component{
 	 		this.props.onFocus(event);
 	}
 	onBlur(event){
-		this.validate(event);
+		event.preventDefault();
+		if(this.props.onBlur)
+	 		this.props.onBlur(event);
 	}
+}
 
+class ValidatedInput extends UserInput {
 	validate(event) {
+		this.onBlur(event);
 		if(event)
 	 		event.preventDefault();
 	 	var errorFound, errorMsg;
@@ -83,7 +87,7 @@ class ValidatedInput extends React.Component{
     			<label className="">{this.props.label}</label>
     			<input className="form-control" 
     				name={this.props.name} type={this.props.type} value={this.state.value}
-    				onBlur={this.onBlur.bind(this)} 
+    				onBlur={this.validate.bind(this)} 
     				onFocus={this.onFocus.bind(this)} 
     				onChange={this.handleChange.bind(this)} />
 				{this.state.error && (
@@ -94,6 +98,54 @@ class ValidatedInput extends React.Component{
 	}
 }
 
+
+class TextInput extends UserInput {
+	render(){
+		return (
+			<textarea value={this.state.value} 
+				onChange={this.handleChange.bind(this)}
+				onFocus={this.onFocus.bind(this)} >
+			</textarea>
+		);
+	}
+}
+
+class SaveButtons extends React.Component {
+	constructor(props){
+		super(props);
+		this.state = {
+	        show: props.init
+	    }
+	}
+	saveClick(event){
+		this.props.saveButton(event);
+		this.setState({show:false });
+	}
+
+	cancelClick(event) {
+	 	event.preventDefault()
+	 	this.props.cancelButton(event);
+		this.setState({show:false });
+    }
+
+	showButtons(event) {
+	 	event.preventDefault()
+	 	this.setState({show:true });
+	}
+
+	render(){
+		var holderClass = classnames("btnHolder", {"reveal":this.state.show});
+		return (
+			<div className={holderClass}>
+				<button type="button" className="btn btn-success" onClick={this.saveClick.bind(this)}>Submit</button>
+				<button type="button" className="btn btn-danger" onClick={this.cancelClick.bind(this)}>Cancel</button>
+			</div>
+		);
+	}
+
+}
 export default {
-	ValidatedInput: ValidatedInput
+	ValidatedInput: ValidatedInput,
+	TextInput: TextInput,
+	SaveButtons: SaveButtons
 };

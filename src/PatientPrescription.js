@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
 import moment from 'moment'
+import classnames from 'classnames'
 
 class MediRow extends React.Component{
 	render(){
+		var currentTime = moment().unix();
+		var fadeOut = classnames({"past":currentTime > this.props.prescript.endDate });
 		var startDate = moment.unix(this.props.prescript.startDate).format("MMM/DD/YYYY");
 		var endDate = moment.unix(this.props.prescript.endDate).format("MMM/DD/YYYY");
 		return (
-			<tr>
+			<tr className={fadeOut}>
 				<td>
-					<div>{this.props.prescript.name}</div>
+					<div>{this.props.prescript.drug}</div>
 					<div className="subheader">
 						{startDate} - {endDate}
 					</div>
 				</td>
-				<td>{this.props.prescript.notes}</td>
-				<td>{this.props.prescript.doctorName}</td>
+				<td>{this.props.prescript.instructions}</td>
+				<td>{this.props.prescript.doctor}</td>
 			</tr>
 		);
 	}
@@ -45,25 +48,17 @@ var MediTable = React.createClass({
 
 class PatientPrescription extends Component {
 	render() {
-		var current = [];
-		var past = [];
-		var currentTime = new Date().getTime()/1000;
-		this.props.prescriptionList.forEach(function(prescript){
-			if(prescript.endDate < currentTime)
-				past.push(prescript);
-			else
-				current.push(prescript);
-		});
+		var prescriptList = this.props.prescriptionList;
+		prescriptList.sort(function(a, b){
+			return b.endDate - a.endDate; 
+		})
 		return (
 			<div className="PatientPrescription module">
 				<h3 className="modeleHeader">Prescriptions</h3>
-				<h4 className="moduleSubHeader">Current</h4> 
-				<MediTable prescripts={current} />
-				<h4 className="moduleSubHeader">Past</h4> 
-				<MediTable prescripts={past} />
+				<MediTable prescripts={prescriptList} />
 			</div>
 		)
 	}
 }
 
-export default PatientPrescription;
+export default PatientPrescription

@@ -75,7 +75,8 @@ ReactDOM.render(
   		<Route onEnter={Auth.requireAuth}>
         <Route path="/" component={App}>
           <Route path="Dashboard" component={Dashboard} />
-          <Route path="Documents" component={Documents} />
+          <Route path="Documents" component={Documents.DocuList} />
+          <Route path="Document" component={Documents.Docu} />
           <Route path="Appointments" component={Appointments} />
           <Route path="RealtimeDisplay" component={RealtimeDisplay} />
           <Route path="Home_Doc" component={Home_Doc} />

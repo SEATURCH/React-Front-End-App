@@ -1,6 +1,7 @@
 //var nocache = require('superagent-no-cache');
 import request from  'superagent';
 import Promise from 'bluebird';
+import PDFJS from 'pdfjs-dist'
 
 //var prefix = require('superagent-prefix')('/static');
 var root = 'https://jsonplaceholder.typicode.com';
@@ -13,24 +14,23 @@ var whoami = function(){
 	return function(currentUser){
 		if(currentUser)
 			user = currentUser
+
 		if(!user){
 			return new Promise(function(resolve, reject){
-				// request
-				//   .get(root+'/posts/'+id)
-				//   .withCredentials()
-				//   .end(function(err, res){
-				//     if(!err && res.ok){
-				//     	resolve(res.body);
-				//     }else {
-				//     	reject();
-				//     }
-
-			 //  	});
-				user = {
-					role: "Doctor",
-					uuid: userUUID
-				}
-				resolve(user);
+				request
+				  .get(goServer+'/users/useruuid/'+userUUID)
+				  .end(function(err, res){
+				    if(!err && res.ok){
+				    	user = {
+				    		name: res.body.name,
+							role: res.body.role,
+							uuid: res.body.userUUID
+						}
+						resolve(user);
+				    }else {
+				    	reject();
+				    }
+			  	});
 			});
 		} else{
 			return user;
@@ -97,6 +97,88 @@ var appointmentsByDocSearch = function(id){
 		});
 }
 
+var getNotificationPageLists = function() {
+	var promises = [
+		new Promise(function(resolve, reject){
+			request
+			  .get(goServer + '/notifications/doctoruuid/' + sessionStorage.userUUID)
+			  .end(function(err, res){
+			    	if(!err && res.ok){
+						resolve({
+							name: "notificationsList",
+							value: res.body
+						});
+					}else {
+						reject();
+			    	}
+				});
+			}),
+			new Promise(function(resolve, reject){
+				request
+				  .get(goServer + '/doctors')
+				  .end(function(err, res){
+				    if(!err && res.ok){
+						resolve({
+							name: "doctorsList",
+							value: res.body
+						});
+						}else {
+							reject();
+				    }
+				})
+	  	})
+	];
+
+	return new Promise(function(resolve, reject){
+		Promise.all(promises.map(function(promise) {
+			return promise.reflect();
+		})).then(function(res){
+			var resolved = {};
+			res.forEach(function(inspection){
+				var value = inspection.value();
+				if(inspection.isFulfilled()){
+					resolved[value.name] = value.value;
+				}else{
+					resolved[value.name] = "Error, Promise rejected";
+				}
+			});
+			resolve(resolved);
+		});
+	});
+}
+
+var postNotification = function(notification){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/notifications')
+		   .type('json')
+		   .send(notification)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.ok);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var postFutureAppointment = function(appointment){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/futureappointments')
+		   .type('json')
+		   .send(appointment)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.ok);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
 var authenticate = function(email, pass) {
     if (sessionStorage.token) {
       	delete sessionStorage.token;
@@ -114,7 +196,8 @@ var authenticate = function(email, pass) {
 		    if(!err && res.ok){
 		    	sessionStorage.userUUID = res.body.userUUID;
 		    	whoami({
-					role: "Doctor",
+		    		name: res.body.name,
+					role: res.body.role,
 					uuid: res.body.userUUID
 				});
 		    	resolve(res.ok );
@@ -157,33 +240,73 @@ var createPatient = function(patient){
 	});
 }
 
-// var appointmentsByPatientSearch = function(patientId){
-// 	return new Promise(function(resolve, reject){
-// 		request
-// 		  .get(goServer+'/appointments/patientuuid/' + patientId)
-// 		  .end(function(err, res){
-// 		    if(!err && res.ok){
-// 					resolve(res.body);
-// 				}else {
-// 					reject();
-// 		    }
-// 			});
-// 		});
-// }
-var getPatientAppointment = function(patientId) {
+
+var updateAppointment = function(apptId, appointment, prescriptions){
 	var promises = [
 		new Promise(function(resolve, reject){
 			request
-			  .get(goServer+'/appointments/patientuuid/'+patientId)
-			  .end(function(err, res){
-			    	if(!err && res.ok){
-						resolve({
-							name: "appointmentInfo",
-							value: res.body
-						});
-					}else {
+		  	.post(goServer+'/completedappointments')
+		  	.send(appointment)
+		  	.end(function(err, res){
+			    if(!err && res.ok){
+					resolve({
+						name: "completedappointments",
+						value: res.body
+					});
+				} else {
 						reject();
 			    }
+			});
+		}),
+		new Promise(function(resolve, reject){
+			request
+			.post(goServer+'/prescription')
+			.send(prescriptions)
+			.end(function(err, res){
+				if(!err && res.ok){
+					resolve({
+						name: "prescriptions",
+						value: res.body
+					});
+				} else {
+						reject();
+			    }
+			});
+		})
+	];
+
+	return new Promise(function(resolve, reject){
+		Promise.all(promises.map(function(promise) {
+			return promise.reflect();
+		})).then(function(res){
+			var resolved = {};
+			res.forEach(function(inspection){
+				var value = inspection.value();
+				if(inspection.isFulfilled()){
+					resolved[value.name] = value.value;
+				}else{
+					resolved[value.name] = "Error, Promise rejected";
+				}
+			});
+			resolve(resolved);
+		});
+	});
+}
+
+var getPatientAppointment = function(appointmentuuid, patientId) {
+	var promises = [
+		new Promise(function(resolve, reject){
+			request
+			  .get(goServer+'/completedappointments/appointmentuuid/'+appointmentuuid)
+			  .end(function(err, res){
+			  		var apptObj = {
+			  			name: "appointmentDetail",
+			  			value: {}
+			  		};
+			  		if(!err && res.ok){
+						apptObj.value = res.body;
+					}
+					resolve(apptObj);
 				});
 			}),
 		new Promise(function(resolve, reject){
@@ -197,7 +320,7 @@ var getPatientAppointment = function(patientId) {
 						});
 					}else {
 						reject();
-			    }
+			    	}
 				});
 			}),
 		new Promise(function(resolve, reject){
@@ -205,10 +328,10 @@ var getPatientAppointment = function(patientId) {
 			  .get(goServer+'/prescriptions/patientuuid/' + patientId)
 			  .end(function(err, res){
 			    if(!err && res.ok){
-						resolve({
-							name: "prescriptionList",
-							value: res.body
-						});
+					resolve({
+						name: "prescriptionList",
+						value: res.body
+					});
 					}else {
 						reject();
 			    }
@@ -245,9 +368,9 @@ var getPatientDashboard = function(patientId){
 							name: "generalInfoList",
 							value: res.body
 						});
-					}else {
+					} else {
 						reject();
-			    }
+			    	}
 				});
 			}),
 		new Promise(function(resolve, reject){
@@ -299,6 +422,42 @@ var getPatientDashboard = function(patientId){
 	});
 }
 
+var uploadDocument = function(file, patientuuid, dateUploaded){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/documents')
+		   .field("dateUploaded", dateUploaded )
+		   .field("filename", file.name)
+		   .field("patientUUID", patientuuid)
+		   .attach("file",file)
+		   .end(function(err, res){
+		   	if(!err){
+		    	resolve(res.body)
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var documentList = function(patientuuid){
+	return new Promise(function(resolve, reject){
+		request
+		   .get(goServer + '/documents/patientuuid/'+patientuuid)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.body);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var getDocument = function(documentuuid){
+	return PDFJS.getDocument(goServer + '/documents/documentuuid/'+documentuuid)
+}
+
 export default {
 	whoami: whoami,
 	authenticate:authenticate,
@@ -306,8 +465,15 @@ export default {
 	patientSearch:patientSearch,
 	patientsByDocSearch:patientsByDocSearch,
 	appointmentsByDocSearch:appointmentsByDocSearch,
+	getNotificationPageLists:getNotificationPageLists,
+	postNotification:postNotification,
+	postFutureAppointment:postFutureAppointment,
 	updatePatient:updatePatient,
 	createPatient:createPatient,
 	getPatientDashboard: getPatientDashboard,
-	getPatientAppointment: getPatientAppointment
+	getPatientAppointment: getPatientAppointment,
+	uploadDocument:uploadDocument,
+	documentList:documentList,
+	getDocument:getDocument,
+	updateAppointment:updateAppointment
 };
