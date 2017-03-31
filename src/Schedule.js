@@ -29,7 +29,7 @@ class AppointmentRow extends Component{
         <td>
           <Link to={"Dashboard?id="+this.props.patientUUID} >{this.props.patientName}</Link>
         </td>
-        <td>{this.props.notes}</td>
+        {/* <td>{this.props.notes}</td> */}
 			</tr>
 		);
 	}
@@ -49,14 +49,14 @@ var ScheduleTable = React.createClass({
     );
 
   	filteredRows.forEach(function(appt, index){
-        var parsedNotes;
-        try {
-          parsedNotes = JSON.parse(appt.notes).chiefComplaints.map(function(elem){
-            return elem.value
-          }).join("\n")
-        } catch (e) {
-          parsedNotes = appt.notes
-        }
+        // var parsedNotes;
+        // try {
+        //   parsedNotes = JSON.parse(appt.notes).chiefComplaints.map(function(elem){
+        //     return elem.value
+        //   }).join("\n")
+        // } catch (e) {
+        //   parsedNotes = appt.notes
+        // }
 
 		    rows.push( <AppointmentRow
           appointmentUUID={appt.appointmentUUID}
@@ -66,7 +66,7 @@ var ScheduleTable = React.createClass({
           dateScheduled={appt.dateScheduled}
           dateVisited={appt.dateVisited}
           key={appt.appointmentUUID}
-          notes={parsedNotes}
+          // notes={parsedNotes}
           action={this.props.action} /> );
     }.bind(this));
 
@@ -78,7 +78,7 @@ var ScheduleTable = React.createClass({
               <th>Date (M/D/Y)</th>
               <th>Time</th>
               <th>Patient</th>
-              <th>Notes</th>
+              {/* <th>Notes</th> */}
             </tr>
           </thead>
       		<tbody>
@@ -95,7 +95,7 @@ class Schedule extends Component{
     super(props);
     this.state = {
       appointmentsList: [],
-      startDate: '1000-01-01',
+      startDate: moment().format("YYYY-MM-DD"),
       endDate: '5555-12-31'
     }
   }
@@ -126,7 +126,7 @@ class Schedule extends Component{
         result.sort(function(a, b){
           var aDate = a.dateScheduled || a.dateVisited;
           var bDate = b.dateScheduled || b.dateVisited;
-          return bDate - aDate;
+          return aDate - bDate;
         });
   			this.setState({ appointmentsList:result });
   		})
@@ -150,7 +150,7 @@ class Schedule extends Component{
                   <p> From: </p>
                   <input type="date" name="start" id="startDateText"
                     onChange={this.updateStartRange.bind(this)}
-                    min="1000-01-01"/>
+                    min="1000-01-01" defaultValue={moment().format("YYYY-MM-DD")}/>
                 </div>
 
                 <div className="dateSelector">
@@ -223,7 +223,7 @@ class NewAppointmentForm extends Component{
   //Posts the notification to the appropriate doctor.
   createAppointment(event) {
     event.preventDefault()
-    const note = this.refs.note.value;
+    // const note = this.refs.note.value;
     const selectedDate = this.refs.selectedDate.value;
     const selectedTime = this.refs.selectedTime.value;
     var patientDescription = this.refs.selectedPatient.value;
@@ -239,16 +239,17 @@ class NewAppointmentForm extends Component{
     var appt = {
       patientUuid: patient.patientUUID,
       doctorUuid: sessionStorage.userUUID,
-      dateScheduled: finalTime,
-      notes: note
+      dateScheduled: finalTime
+      // notes: note
     }
     console.log(appt);
 
     requests.postFutureAppointment(appt)
       .then((res) => {
         console.log("created future appointment sucessfully");
+        location.reload();
       })
-      .catch(function(e){
+      .catch((e) =>{
         console.log("Could not create future appointment");
       });
 
@@ -301,8 +302,8 @@ class NewAppointmentForm extends Component{
               {timeOptions}
             </select>
 
-            <label for="note">Note:</label>
-            <textarea ref="note" className="form-control" rows="2" id="note" placeholder="Type your notes here..."></textarea>
+            {/* <label for="note">Note:</label>
+            <textarea ref="note" className="form-control" rows="2" id="note" placeholder="Type your notes here..."></textarea> */}
 
             <button type="button" className="btn btn-danger" onClick={this.hideForm.bind(this)}>Cancel</button>
             <button type="button" className="btn btn-success" onClick={this.createAppointment.bind(this)}>Create Appointment</button>

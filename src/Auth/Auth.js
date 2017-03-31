@@ -44,7 +44,7 @@ class Login extends Component {
 				<h2>Sign In</h2>
 		        <form className="form-vertical" onSubmit={this.handleSubmit.bind(this)}>
 					<label><input ref="email" placeholder="email" /></label>
-					<label><input ref="pass" placeholder="password" /></label>
+					<label><input type="password" ref="pass" placeholder="password" /></label>
 					<br />
 					<button type="submit" className="btn btn-primary">Login</button>
 					{this.state.error && (
@@ -55,15 +55,15 @@ class Login extends Component {
 	        <div className="createUser">
 	        	<h2>Create Account</h2>
 	        	<form className="form-group" onSubmit={this.handleSubmit.bind(this)}>
-	    			<Comp.ValidatedInput validation="required" label="Name" name="name" type="text" 
+	    			<Comp.ValidatedInput validation="required" label="Name" name="name" type="text"
 	    				errorHelp={{
 	    					required:"Name required"
 	    				}} />
-	    			<Comp.ValidatedInput validation="required" label="User Name" name="username" type="text" 
+	    			<Comp.ValidatedInput validation="required" label="User Name" name="username" type="text"
 	    				errorHelp={{
 	    					required:"Username required"
 	    				}} />
-	    			<Comp.ValidatedInput validation="required" label="Password" name="password" type="text" 
+	    			<Comp.ValidatedInput validation="required" label="Password" name="password" type="text"
 	    				errorHelp={{
 	    					required:"Password required"
 	    				}} />

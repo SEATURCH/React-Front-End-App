@@ -3,18 +3,18 @@ $moduleWidth: 100%;
 .notifications{
 	display: inline-block;
 	vertical-align: top;
-	padding: 10px 10px;
+	// padding: 10px 10px;
 	width:$moduleWidth;
 	overflow-y: auto;
-	.moduleHeader{
-		font-weight: 600;
-    font-size: 26px;
-		margin:0px 0px;
-    color: white;
-    background: #FFB647;
-    text-align: center;
-    font-style: italic;
-	}
+	// .moduleHeader{
+	// 	font-weight: 600;
+  //   font-size: 26px;
+	// 	margin:0px 0px;
+  //   color: white;
+  //   background: #FFB647;
+  //   text-align: center;
+  //   font-style: italic;
+	// }
 
 	table{
 		width:100%;
@@ -42,10 +42,10 @@ $moduleWidth: 100%;
 			border:none;
 		}
 	}
-  .btn-success{
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
+  // .btn-success{
+  //   margin-top: 10px;
+  //   margin-bottom: 10px;
+  // }
 }
 .notificationForm{
   .formContent{

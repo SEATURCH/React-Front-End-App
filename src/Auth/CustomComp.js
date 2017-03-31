@@ -69,12 +69,12 @@ class ValidatedInput extends UserInput {
 		 	}
 	 	}
 	 	if(errorFound){
-		 	this.setState({ 
+		 	this.setState({
 		 		error:true,
 		 		errorMsg: errorMsg
 		 	});
 	 	}else{
-	 		this.setState({ 
+	 		this.setState({
 		 		error:false,
 		 		errorMsg: ""
 		 	});
@@ -85,10 +85,10 @@ class ValidatedInput extends UserInput {
 		return (
 			<div className={holderClass} style={{"position":"relative"}}>
     			<label className="">{this.props.label}</label>
-    			<input className="form-control" 
-    				name={this.props.name} type={this.props.type} value={this.state.value}
-    				onBlur={this.validate.bind(this)} 
-    				onFocus={this.onFocus.bind(this)} 
+    			<input className="form-control"
+    				name={this.props.name} type={this.props.type} value={this.state.value} max={this.props.max}
+    				onBlur={this.validate.bind(this)}
+    				onFocus={this.onFocus.bind(this)}
     				onChange={this.handleChange.bind(this)} />
 				{this.state.error && (
 					<div className="form-control-feedback" style={{"width":"initial"}}>{this.state.errorMsg}</div>
@@ -102,7 +102,7 @@ class ValidatedInput extends UserInput {
 class TextInput extends UserInput {
 	render(){
 		return (
-			<textarea value={this.state.value} 
+			<textarea value={this.state.value}
 				onChange={this.handleChange.bind(this)}
 				onFocus={this.onFocus.bind(this)} >
 			</textarea>
