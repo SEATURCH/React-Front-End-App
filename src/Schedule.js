@@ -96,7 +96,7 @@ class Schedule extends Component{
     this.state = {
       appointmentsList: [],
       startDate: moment().format("YYYY-MM-DD"),
-      endDate: '5555-12-31'
+      endDate: '9999-12-31'
     }
   }
 
@@ -116,7 +116,7 @@ class Schedule extends Component{
     if(moment(event.target.value).isValid()){
       this.setState({endDate: moment(event.target.value).format("MMM/DD/YYYY")});
     }else{
-      this.setState({endDate: '5555-12-31'});
+      this.setState({endDate: '9999-12-31'});
     }
   }
 
@@ -157,7 +157,7 @@ class Schedule extends Component{
                   <p> To: </p>
                   <input type="date" name="end" id="endDateText"
                     onChange={this.updateEndRange.bind(this)}
-                    max="5555-12-31"/>
+                    max="9999-12-31"/>
                 </div>
             </form>
             {this.state.appointmentsList.length > 0 &&
@@ -220,39 +220,48 @@ class NewAppointmentForm extends Component{
     return patient;
   }
 
-  //Posts the notification to the appropriate doctor.
+  //Creats a new future appointment
   createAppointment(event) {
     event.preventDefault()
     // const note = this.refs.note.value;
     const selectedDate = this.refs.selectedDate.value;
     const selectedTime = this.refs.selectedTime.value;
     var patientDescription = this.refs.selectedPatient.value;
-    var patient = this.findPatientIndex(patientDescription, this.state.patientsList);
+    if(patientDescription === ""){
+      alert("Please select a patient!");
+    }else if(moment(selectedDate).isValid() === false
+      || moment(selectedDate).isSameOrAfter(moment(), 'day') === false){
+      alert("Please check if the date is valid and not in the past!");
+    }else if(selectedTime === "Chose Start Time"){
+      alert("Please select a time for the appointment");
 
-    console.log(patient);
+    }else{
+      var patient = this.findPatientIndex(patientDescription, this.state.patientsList);
 
-    var fullTime = selectedDate + " " + selectedTime;
-    var finalTime = moment(fullTime, "YYYY-MM-DD hh:mm A").unix();
-    console.log(moment.unix(finalTime).format("MM/DD/YYYY"));
-    console.log(moment.unix(finalTime).format("LT"));
+      console.log(patient);
 
-    var appt = {
-      patientUuid: patient.patientUUID,
-      doctorUuid: sessionStorage.userUUID,
-      dateScheduled: finalTime
-      // notes: note
+      var fullTime = selectedDate + " " + selectedTime;
+      var finalTime = moment(fullTime, "YYYY-MM-DD hh:mm A").unix();
+      console.log(moment.unix(finalTime).format("MM/DD/YYYY"));
+      console.log(moment.unix(finalTime).format("LT"));
+
+      var appt = {
+        patientUuid: patient.patientUUID,
+        doctorUuid: sessionStorage.userUUID,
+        dateScheduled: finalTime
+        // notes: note
+      }
+      console.log(appt);
+
+      requests.postFutureAppointment(appt)
+        .then((res) => {
+          console.log("created future appointment sucessfully");
+          location.reload();
+        })
+        .catch((e) =>{
+          console.log("Could not create future appointment");
+        });
     }
-    console.log(appt);
-
-    requests.postFutureAppointment(appt)
-      .then((res) => {
-        console.log("created future appointment sucessfully");
-        location.reload();
-      })
-      .catch((e) =>{
-        console.log("Could not create future appointment");
-      });
-
   }
 
   render(){
@@ -294,7 +303,7 @@ class NewAppointmentForm extends Component{
             <input ref="selectedPatient" className="form-control" type="text" list="patientsData" placeholder="Type or select patient name from dropdown"></input>
 
             <label>Select a date:</label>
-            <input ref="selectedDate" type="date" id="newAppointmentDate" className="form-control"/>
+            <input ref="selectedDate" type="date" id="newAppointmentDate" max="9999-12-31" min={moment().format("YYYY-MM-DD")} defaultValue={moment().format("YYYY-MM-DD")} className="form-control"/>
 
             <label>Select a time</label>
             <select ref="selectedTime" className="form-control">

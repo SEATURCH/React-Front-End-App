@@ -90,9 +90,9 @@ class NewNotificationForm extends Component{
   sendNotification(event) {
     event.preventDefault()
     const docDescription = this.refs.doctor.value;
-    if(docDescription !== "Chose one"){
+    if(docDescription){
       const message = this.refs.message.value;
-      if(message !== ""){
+      if(message){
         var doc = this.findDocIndex(docDescription, this.props.docs);
         var currDate = moment().unix();
 
@@ -176,7 +176,6 @@ class Notifications extends Component {
     			return b.date - a.date;
     		});
         this.setState(result);
-        console.log(result);
 			})
 			.catch(function(e){
 				console.log("Could not get notifications or doctors list")
