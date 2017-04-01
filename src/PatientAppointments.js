@@ -31,9 +31,10 @@ class AppRow extends React.Component{
 var AppTable = React.createClass({
   render:function(){
   	var rows =[];
+  	var role = this.props.role;
   	this.props.appts.forEach(function(appt, index){
 		rows.push(
-			<AppRow date={appt.dateScheduled||appt.dateVisited} key={index}
+			<AppRow date={appt.dateScheduled||appt.dateVisited} key={index} role={role}
 			patientUUID={appt.patientUUID} appointmentUUID={appt.appointmentUUID} /> );
 	});
     return (
@@ -57,7 +58,7 @@ class PatientAppointments extends Component {
 		return (
 			<div className="PatientAppointments module">
 				<h3 className="modeleHeader">Appointments</h3>
-				<AppTable appts={apptList} />
+				<AppTable appts={apptList} role={this.props.role} />
 			</div>
 		)
 	}
