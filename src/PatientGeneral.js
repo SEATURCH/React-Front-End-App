@@ -57,7 +57,7 @@ class PatientGeneral extends Component {
 			});
 	    }
     	render() {
-			var holderClass = classnames("btnHolder", {"reveal":this.state.showBtn});
+			var readonly = this.props.role === "Patient";
 			return (
 				<div className="PatientGeneral module">
 					<div style={{position:"relative"}}>
@@ -69,55 +69,55 @@ class PatientGeneral extends Component {
 				      		<div className="row">
 				      			<div className="col col-md-6">
 				      				<Comp.ValidatedInput ref="name"
-				      					validation="required" label="Name" name="name" type="text"
+				      					validation="required" label="Name" name="name" type="text" readonly={readonly}
 				      					value={this.state.patientInfo.name} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
 					    			<Comp.ValidatedInput ref="gender"
-					    				validation="required" label="Gender" name="gender" type="text"
+					    				validation="required" label="Gender" name="gender" type="text" readonly={readonly}
 					    				value={this.state.patientInfo.gender} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
 									<Comp.ValidatedInput ref="dateOfBirth"
-										validation="required" label="Date of Birth" name="dateOfBirth" type="date" max="9999-12-31"
+										validation="required" label="Date of Birth" name="dateOfBirth" type="date"  readonly={readonly} max="9999-12-31"
 										value={moment.unix(this.state.patientInfo.dateOfBirth).format("YYYY-MM-DD")} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
 					      			<Comp.ValidatedInput ref="bloodType"
-					      				validation="required" label="Blood Type" name="bloodType" type="text"
+					      				validation="required" label="Blood Type" name="bloodType" type="text" readonly={readonly}
 					      				value={this.state.patientInfo.bloodType} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
 					      			<Comp.ValidatedInput ref="medicalNumber"
-					      				validation="required" label="Medical Number" name="medicalNumber" type="text"
+					      				validation="required" label="Medical Number" name="medicalNumber" type="text" readonly={readonly}
 					      				value={this.state.patientInfo.medicalNumber} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
 				      				<label htmlFor="allergeisText"><b>Allergies: </b></label>
-				      				<Comp.TextInput ref="allergies" onFocus={this.triggerButtons.bind(this)}
+				      				<Comp.TextInput ref="allergies" onFocus={this.triggerButtons.bind(this)} readonly={readonly}
 						        		value={this.state.patientInfo.notes} reset={!this.state.showBtn} />
 				      			</div>
 				      			<div className="col col-md-6">
 				      				<h4 className="moduleSubHeader">Patient Contacts</h4>
 						            <Comp.ValidatedInput ref="phoneNumber"
-						            	validation="required" label="Phone Number" name="phoneNumber" type="text"
+						            	validation="required" label="Phone Number" name="phoneNumber" type="text" readonly={readonly}
 						            	value={this.state.patientInfo.phoneNumber} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
 				      				<Comp.ValidatedInput ref="emergencyContact"
-				      					validation="required" label="Emergency Contact" name="emergencyContact" type="text"
+				      					validation="required" label="Emergency Contact" name="emergencyContact" type="text" readonly={readonly}
 				      					value={this.state.patientInfo.emergencyContact} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
 					    			<Comp.ValidatedInput ref="address"
-					    				validation="required" label="Address" name="address" type="text"
+					    				validation="required" label="Address" name="address" type="text" readonly={readonly}
 					    				value={this.state.patientInfo.address} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"

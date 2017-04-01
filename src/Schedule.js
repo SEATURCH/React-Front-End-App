@@ -212,7 +212,7 @@ class NewAppointmentForm extends Component{
     var name = query.substring(0, query.indexOf('(')).trim();
     var dob = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
     list.forEach(function(elem){
-      if(elem.name == name &&
+      if(elem.name === name &&
         moment.unix(elem.dateOfBirth).format("MM/DD/YYYY") === dob){
         patient = elem;
       }
@@ -272,7 +272,7 @@ class NewAppointmentForm extends Component{
       var t;
       if (k < 4){
         t = k+8 + " AM";
-      }else if (k == 4) {
+      }else if (k === 4) {
         t = k+8 + " PM";
       }
       else{

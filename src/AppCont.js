@@ -67,13 +67,10 @@ class AppCont extends Component {
 							{ this.state.role === "Patient" && (
 								<ul id="menuList">
 									<li>
-										<Link to="/Dashboard" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
+										<Link to={"/Dashboard"} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
 									</li>
 									<li>
-										<Link to="/Appointments" activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Appointments</Link>
-									</li>
-									<li>
-										<Link to="/Documents" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Documents</Link>
+										<Link to={"/Documents"} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Documents</Link>
 									</li>
 								</ul>
 							)}

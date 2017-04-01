@@ -15,12 +15,14 @@ class AppRow extends React.Component{
 		return (
 			<tr className={fadeOut}>
 				<td>{appDate}</td>
-				<td>{startTime} - {endTime}</td>
-				<td>
-					<Link to={"Appointments?appt="+this.props.appointmentUUID+"&id="+this.props.patientUUID}>
-						View
-					</Link>
-				</td>
+				<td>{startTime} - {endTime}</td>				
+				{ this.props.role === "Doctor" &&
+					<td>
+						<Link to={"Appointments?appt="+this.props.appointmentUUID+"&id="+this.props.patientUUID}>
+							View
+						</Link>
+					</td>
+				}
 			</tr>
 		);
 	}
@@ -33,7 +35,7 @@ var AppTable = React.createClass({
 		rows.push(
 			<AppRow date={appt.dateScheduled||appt.dateVisited} key={index}
 			patientUUID={appt.patientUUID} appointmentUUID={appt.appointmentUUID} /> );
-	}.bind(this));
+	});
     return (
       <div>
         <table className="table-striped table-hover">

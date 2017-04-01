@@ -2,7 +2,6 @@ import React, {Component } from 'react';
 import req from '../requests.js'
 import Comp from './CustomComp.js'
 import { browserHistory } from 'react-router'
-import classnames from 'classnames'
 
 function requireAuth(nextState, replace) {
   if (sessionStorage.token !== 'true') {
@@ -37,7 +36,11 @@ class Login extends Component {
 		req.authenticate(email, pass)
 			.then((res) => {
 				sessionStorage.token = res;
-				browserHistory.push('/Schedule');
+				if(req.whoami().role === "Doctor"){
+					browserHistory.push('/Schedule');
+				} else {
+					browserHistory.push('/Dashboard');
+				}
 				this.props.upp(true);
 			}).catch((res) => {
 				this.setState({error:true});
@@ -70,7 +73,7 @@ class Login extends Component {
     createSubmit(event){
     	var haserror = false;
     	var profile = {
-			name:this.refs.name.getValue().toLowerCase(),
+			name: (this.refs.name)? this.refs.name.getValue().toLowerCase() : "",
 			userName:this.refs.newUsername.getValue(),
 			passWord:this.refs.newPassword.getValue(),
 			role: this.state.role,
@@ -79,7 +82,7 @@ class Login extends Component {
 
     	if(this.state.role ==="Doctor"){
     		haserror = this.refs.name.checkValidation() || this.refs.phoneNumber.checkValidation() || this.refs.phoneNumber.checkValidation()
-	    		|| this.refs.prFacility.checkValidation() || this.refs.prSpecialty.checkValidation();
+	    		|| this.refs.prFacility.checkValidation() || this.refs.prSpecialty.checkValidation() ||  this.refs.verificationKey.checkValidation();
     		if (!haserror) {
 	    		var doctorProfile = {
 	    			name: this.refs.name.getValue(),
@@ -101,12 +104,12 @@ class Login extends Component {
 					});
 	    	}
 	    } else {
-	    	haserror = this.refs.name.checkValidation() || this.refs.verificationKey.checkValidation();
+	    	haserror = this.refs.verificationKey.checkValidation();
 	    	if (!haserror) {
     		req.createPatientProfile(profile)
 				.then((res) => {
 					sessionStorage.token = res;
-					browserHistory.push('/Dashboard');
+					browserHistory.push('/Dashboard?id='+req.whoami().uuid);
 					this.props.upp(true);
 				}).catch((res) => {
 					if (res.createUserError)
@@ -163,20 +166,20 @@ class Login extends Component {
 		    			{this.state.createUserError &&(<p style={{color:"#a94442"}}>Username not available</p>)}
 		    		</div>
 		    		<div style={{left:(!this.state.next)?"100%": "0"}} className="inputPanel detailsInput">
-		    			<Comp.ValidatedInput ref="name"
-		  					validation="required" label="Name" name="name" type="text" 
-		  					value="" errorHelp={{
-		    					required:"Name Required"
-		    				}} />
 		    			{ this.state.role ==="Doctor"  && (
 	    				<div>
+		    				<Comp.ValidatedInput ref="name"
+			  					validation="required" label="Name" name="name" type="text" 
+			  					value="" errorHelp={{
+			    					required:"Name Required"
+			    				}} />
 		    				<div className="btn-group" data-toggle="buttons">
-			        		  <label style={{opacity:(this.state.gender == "male")?"1":"0.5"}} className="btn btn-primary">
-							    <input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
-							  </label>
-							  <label style={{opacity:(this.state.gender == "male")?"0.5":"1"}} className="btn btn-primary">
-							    <input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
-							  </label>
+			        		 	<label style={{opacity:(this.state.gender === "male")?"1":"0.5"}} className="btn btn-primary">
+							    	<input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
+							  	</label>
+							  	<label style={{opacity:(this.state.gender === "male")?"0.5":"1"}} className="btn btn-primary">
+							    	<input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
+							  	</label>
 							</div>
 			    			<Comp.ValidatedInput ref="phoneNumber"
 			  					validation="required" label="Phone Number" name="phoneNumber" type="text" 
@@ -193,7 +196,7 @@ class Login extends Component {
 			  					value="" />
 			    			<Comp.ValidatedInput ref="verificationKey"
 			  					validation="required" label="Access Key" name="accessKey" type="text" 
-			  					value=""  />
+			  					value="" />
 			  				{this.state.licenseError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
 	  					</div>
 		    			)}

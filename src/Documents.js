@@ -104,7 +104,8 @@ class Documents extends Component {
   }
 
   componentDidMount(){
-    requests.documentList(this.props.location.query.id)
+    var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().uuid;
+    requests.documentList(searchId)
       .then((result) => {
         this.setState({documentsList: result});
       })
@@ -121,7 +122,9 @@ class Documents extends Component {
         </div>
         <label style={{float:"right", margin:"10px 20px"}}>
           <input type='file' style={{display:"none"}} ref="file" onChange={this.onSelected.bind(this)} />
-          <button type="upload" className="btn btn-default" onClick={this.clickAdd.bind(this)}>+</button>
+          { requests.whoami().role === "Doctor" &&
+            <button type="upload" className="btn btn-default" onClick={this.clickAdd.bind(this)}>+</button>
+          }
         </label>
 
         {this.state.documentsList.length > 0 &&

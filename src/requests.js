@@ -513,21 +513,6 @@ var createDoctorProfile = function(userProfile, doctorProfile){
 	});
 }
 
-
-var usedNames = function(){
-	return new Promise(function(resolve, reject){
-		request
-		    .get(goServer+'/users')
-		    .end(function(err, res){
-			    if(!err && res.ok){
-					resolve(res.body);
-				}else {
-						reject();
-			    }
-			})
-	  	});
-}
-
 export default {
 	whoami: whoami,
 	authenticate:authenticate,

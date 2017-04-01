@@ -38,7 +38,8 @@ class Dashboard extends Component {
 	}
 
 	componentDidMount(){
-		requests.getPatientDashboard(this.props.location.query.id)
+		var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().uuid;
+		requests.getPatientDashboard(searchId)
 			.then((result) => {
 				this.setState(result);
 				pubSub.publish("PATI SEL", this.state.generalInfoList.name)
@@ -60,15 +61,15 @@ class Dashboard extends Component {
 					<div className="container-fluid">
 			      		<div className="row">
 			      			<div className="col col-md-6">
-			      				<PatientAppointments appointmentList={this.state.appointmentList} />
+			      				<PatientAppointments role={requests.whoami().role} appointmentList={this.state.appointmentList} />
 			      			</div>
 			      			<div className="col col-md-6">
-			  					<PatientPrescription prescriptionList={this.state.prescriptionList} />
+			  					<PatientPrescription role={requests.whoami().role} prescriptionList={this.state.prescriptionList} />
 			      			</div>
 		      			</div>
 		      			<div className="row">
 			      			<div className="col col-md-12">
-			  					<PatientProfile generalInfo={this.state.generalInfoList} patientuuid={this.state.generalInfoList.patientUUID} />
+			  					<PatientProfile role={requests.whoami().role} generalInfo={this.state.generalInfoList} patientuuid={this.state.generalInfoList.patientUUID} />
 			      			</div>
 			      		</div>
 			      	</div>
