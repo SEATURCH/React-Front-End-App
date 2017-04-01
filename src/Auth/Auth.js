@@ -18,16 +18,21 @@ class Login extends Component {
 		super(props);
 		this.state = {
 	        error: false,
-	        role: "Doctor",
+	        patientError: false,
+	        createUserError: false,
+	        // No current licenseError returns
+	        // No software distrbution policy discussed
+	        licenseError: false,
 	        next: false,
 	        pMatch:false,
+	        role: "Doctor",
 	        gender: 'male'
 	    }
 	}
 
 	handleSubmit(event) {
 	 	event.preventDefault()
-		const email = this.refs.email.value
+		const email = this.refs.email.value.toLowerCase()
 		const pass = this.refs.pass.value
 		req.authenticate(email, pass)
 			.then((res) => {
@@ -65,7 +70,7 @@ class Login extends Component {
     createSubmit(event){
     	var haserror = false;
     	var profile = {
-			name:this.refs.name.getValue(),
+			name:this.refs.name.getValue().toLowerCase(),
 			userName:this.refs.newUsername.getValue(),
 			passWord:this.refs.newPassword.getValue(),
 			role: this.state.role,
@@ -89,7 +94,9 @@ class Login extends Component {
 						browserHistory.push('/Schedule');
 						this.props.upp(true);
 					}).catch((res) => {
-						this.setState({error:true});
+						if (res.createUserError)
+							res.next = false;
+						this.setState(res);
 						console.log("Could not create user entry for a doctor");
 					});
 	    	}
@@ -102,7 +109,9 @@ class Login extends Component {
 					browserHistory.push('/Dashboard');
 					this.props.upp(true);
 				}).catch((res) => {
-					this.setState({error:true});
+					if (res.createUserError)
+						res.next = false;
+					this.setState(res);
 					console.log("Could not create user entry for patient");
 				});
     		}
@@ -151,6 +160,7 @@ class Login extends Component {
 		  					value="" />
 		    			<button className="btn btn-primary" id="true" onClick={this.nextClick.bind(this)}>Next</button>
 		    			{this.state.pMatch &&(<p style={{color:"#a94442"}}>Passwords do not match</p>)}
+		    			{this.state.createUserError &&(<p style={{color:"#a94442"}}>Username not available</p>)}
 		    		</div>
 		    		<div style={{left:(!this.state.next)?"100%": "0"}} className="inputPanel detailsInput">
 		    			<Comp.ValidatedInput ref="name"
@@ -184,15 +194,17 @@ class Login extends Component {
 			    			<Comp.ValidatedInput ref="verificationKey"
 			  					validation="required" label="Access Key" name="accessKey" type="text" 
 			  					value=""  />
+			  				{this.state.licenseError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
 	  					</div>
 		    			)}
-	    				{ !this.state.role ==="Doctor"  && (
+	    				{ this.state.role !== "Doctor"  && (
 						<div>
 			    			<Comp.ValidatedInput ref="verificationKey"
 			  					validation="required" label="Medical Number" name="medicalNumber" type="text" 
 			  					value="" errorHelp={{
 			    					required:"Medical Number Required"
 			    				}} />
+			    			{this.state.patientError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
 			    		</div>
 	    				)}
 	    				<button style={{float:"left"}} className="btn btn-default" onClick={this.backClick.bind(this)}>Back</button>

@@ -448,13 +448,15 @@ var createPatientProfile = function(userProfile){
 		   .send(userProfile)
 		   .end(function(err, res){
 		   	if(!err && res.ok){
-		   		whoami({
+		   		sessionStorage.userUUID = res.body.userUUID;
+	   			whoami({
 		    		name: res.body.name,
 					role: res.body.role,
 					uuid: res.body.userUUID
 				});
-		    	resolve(res.ok);
-		    }else {
+				resolve(res.ok);
+			}else {
+		    	reject(res.body);
 		    	reject();
 		    }
 	  	});
@@ -468,27 +470,32 @@ var createDoctorProfile = function(userProfile, doctorProfile){
 		   .send(userProfile)
 		   .end(function(err, res){
 		   		if(!err && res.ok){
-		   			return new Promise(function(resolve, reject){
-						request
-						   .post(goServer + '/doctors')
-						   .send(doctorProfile)
-						   .end(function(err, res){
-						   		if(!err && res.ok){
-									whoami({
-							    		name: res.body.name,
-										role: res.body.role,
-										uuid: res.body.userUUID
-									});
-									resolve(res.ok);
-								} else {
-									reject();
-								}
-							});
-				    });
-		    } else {
-		    	reject();
-		    }
+	   			   	resolve(res.body)
+			    } else {
+			    	reject(res.body);
+			    }
 	  	});
+	}).then(function (res) {
+		return new Promise(function(resolve, reject){
+		   	doctorProfile.doctorUUID = res.userUUID;
+		   		var user = {
+	    		name: res.name,
+				role: res.role,
+				uuid: res.userUUID
+			};
+			request
+			   .post(goServer + '/doctors')
+			   .send(doctorProfile)
+			   .end(function(err, res){
+			   		if(!err && res.ok){
+			   			sessionStorage.userUUID = res.userUUID;
+						whoami(user);
+						resolve(res.ok);
+					} else {
+						reject();
+					}
+				});
+	    });
 	});
 }
 
@@ -510,7 +517,6 @@ var usedNames = function(){
 export default {
 	whoami: whoami,
 	authenticate:authenticate,
-	usedNames:usedNames
 	testApi:getTest,
 	patientSearch:patientSearch,
 	patientsByDocSearch:patientsByDocSearch,
