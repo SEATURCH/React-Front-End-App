@@ -1,36 +1,53 @@
 $moduleWidth: 100%;
 
-.Home_Doc{
+.Home_Doc {
 	display: inline-block;
 	vertical-align: top;
 	width:$moduleWidth;
-
-  form{
-    margin-bottom: 2%;
-
-  }
-
-  input[type=text] {
-      width: 250px;
-      box-sizing: border-box;
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-      background-color: white;
-      background-position: 10px 10px;
-      background-repeat: no-repeat;
-      padding: 12px 20px 12px 40px;
-      -webkit-transition: width 0.4s ease-in-out;
-      transition: width 0.4s ease-in-out;
-      margin: 0 auto;
-      display: block;
-  }
-
-  input[type=text]:focus {
-      width: 45%;
-  }
-
-	table{
+	position: relative;
+	
+	.moduleBody {
+		position: absolute;
+		width:100%;
+		&.patientFormHolder{
+			left:100%;
+			transition: left 0.5s;
+		    -webkit-transition: left 0.5s;
+		    &.show {
+		    	left:0%;
+			}
+		}
+		&.patientListHolder{
+			opacity:0;
+			transition: opacity 0.5s;
+		    -webkit-transition: opacity 0.5s;
+			&.show {
+				opacity: 1 !important;
+			}
+		}
+	}
+	
+  	.filterInput{
+  		&[type=text] {
+			width: 250px;
+			box-sizing: border-box;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			font-size: 16px;
+			background-color: white;
+			background-position: 10px 10px;
+			background-repeat: no-repeat;
+			padding: 12px 20px 12px 40px;
+			-webkit-transition: width 0.4s ease-in-out;
+			transition: width 0.4s ease-in-out;
+			margin: 5px auto;
+			display: block;
+			&:focus {
+	     		width: 45%;
+	  		}
+		}
+  	}
+	table {
 		width:100%;
 		border:none;
 		margin: 5px 5px;
@@ -48,12 +65,44 @@ $moduleWidth: 100%;
 			font-weight: none;
 			padding: 5px 5px;
 			border:none;
-      text-align: center;
+      		text-align: center;
 		}
 		td {
 			text-align: center;
 			padding: 5px 0px 5px 10px;
 			border:none;
+		}
+	}
+
+	.newPatientForm{
+		h3 {
+			margin-top: 0px;
+		}
+		.formContent {
+		    position: relative;
+		    textarea{
+				width:100%;
+				resize: none;
+			}
+		    .btn-danger{
+		      float:right;
+		      margin: 7px 5px;
+		    }
+		    .btn-success{
+		      float:right;
+		      margin: 7px 5px;
+		    }
+	  	}
+	  	.buttonHolder {
+	  		width:100%;
+	  		display: inline-block;
+	  		background: aliceblue;
+	  		.btn{
+	  			float:right;
+	  			font-size:1.2em;
+	  			margin: 15px 10px;
+	  			padding: 10px 15px;
+	  		}
 		}
 	}
 }

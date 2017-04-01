@@ -50,17 +50,21 @@ class AppCont extends Component {
 										<Link to="/Home_Doc" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Patients</Link>
 									</li>
 									<li className="nestedHeaders">
-										<li className="main right-align">
-											Patient: {this.state.selectedPatient}
-										</li>
-										<li className={"sub right-align " + listShow}>
-											<li>
-												<Link to={"/Dashboard?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
+										<ul>
+											<li className="main right-align">
+												Patient: {this.state.selectedPatient}
 											</li>
-											<li>
-												<Link to={"/Documents?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Documents</Link>
+											<li className={"sub right-align " + listShow}>
+												<ul>
+													<li>
+														<Link to={"/Dashboard?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
+													</li>
+													<li>
+														<Link to={"/Documents?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Documents</Link>
+													</li>
+												</ul>
 											</li>
-										</li>
+										</ul>
 									</li>
 								</ul>
 							)}

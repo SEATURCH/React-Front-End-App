@@ -23,7 +23,7 @@ class AppointmentRow extends Component{
 			<tr>
         <td>
           <Link to={"Appointments?appt="+this.props.appointmentUUID+"&id="+this.props.patientUUID}>
-          <span className="glyphicon glyphicon-search"></span>{appDate}</Link>
+          <span className="glyphicon glyphicon-search"> </span>{appDate}</Link>
         </td>
 				<td>{startTime} - {endTime}</td>
         <td>
@@ -49,16 +49,7 @@ var ScheduleTable = React.createClass({
     );
 
   	filteredRows.forEach(function(appt, index){
-        // var parsedNotes;
-        // try {
-        //   parsedNotes = JSON.parse(appt.notes).chiefComplaints.map(function(elem){
-        //     return elem.value
-        //   }).join("\n")
-        // } catch (e) {
-        //   parsedNotes = appt.notes
-        // }
-
-		    rows.push( <AppointmentRow
+        rows.push( <AppointmentRow
           appointmentUUID={appt.appointmentUUID}
           patientUUID={appt.patientUUID}
           doctorUUID={appt.doctorUUID}
@@ -121,7 +112,7 @@ class Schedule extends Component{
   }
 
   componentDidMount(){
-  	requests.appointmentsByDocSearch("dummy")
+  	requests.appointmentsByDocSearch()
   		.then((result) => {
         result.sort(function(a, b){
           var aDate = a.dateScheduled || a.dateVisited;
@@ -182,7 +173,7 @@ class NewAppointmentForm extends Component{
   }
 
   componentDidMount(){
-    requests.patientsByDocSearch("dummy")
+    requests.patientListGet()
       .then((result) => {
         console.log("Sucessfully got patients List from server");
         this.setState({ patientsList:result });

@@ -4,6 +4,7 @@ import PatientProfile from './PatientGeneral';
 import PatientPrescription from './PatientPrescription';
 import PatientAppointments from './PatientAppointments';
 import pubSub from 'pubsub-js'
+
 //import Nav from './Nav';
 //import WelcomeBanner from './WelcomeBanner';
 
@@ -37,7 +38,7 @@ class Dashboard extends Component {
 		}
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().uuid;
 		requests.getPatientDashboard(searchId)
 			.then((result) => {

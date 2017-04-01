@@ -69,7 +69,7 @@ var patientSearch = function(id){
 		});
 }
 
-var patientsByDocSearch = function(id){
+var patientsByDocSearch = function(){
 	return new Promise(function(resolve, reject){
 		request
 		  .get(goServer+'/patients/doctoruuid/'+sessionStorage.userUUID)
@@ -236,6 +236,36 @@ var updatePatient = function(patient){
 		    }
 	  	});
 	});
+}
+
+var createPatient = function(patient){
+	return new Promise(function(resolve, reject){
+		request
+		   .post(goServer + '/patients')
+		   .type('json')
+		   .send(patient)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.body);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
+var patientListGet = function(){
+	return new Promise(function(resolve, reject){
+		request
+		   .get(goServer + '/patients/all')
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.body);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});	
 }
 
 var updateAppointment = function(apptId, appointment, prescriptions){
@@ -533,5 +563,7 @@ export default {
 	getDocument:getDocument,
 	updateAppointment:updateAppointment,
 	createDoctorProfile:createDoctorProfile,
-	createPatientProfile:createPatientProfile
+	createPatientProfile:createPatientProfile,
+	createPatient:createPatient,
+	patientListGet:patientListGet
 };

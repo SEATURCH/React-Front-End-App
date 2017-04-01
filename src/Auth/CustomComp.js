@@ -21,13 +21,11 @@ class UserInput extends React.Component{
 	    }
 	}
 	componentWillReceiveProps(props){
-		if(props.reset){
-			this.setState({
-				value: props.value,
-				error: false,
-		        errorMsg: ""
-	        })
-		}
+		this.setState({
+			value: props.value,
+			error: false,
+	        errorMsg: ""
+        })
 	}
 	getValue(){
 		return this.state.value;

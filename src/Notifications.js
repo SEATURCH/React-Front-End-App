@@ -27,8 +27,8 @@ var NotificationsTable = React.createClass({
           senderUUID={notification.senderUUID}
           receiverUUID={notification.receiverUUID}
           senderName={notification.senderName}
-          date={notification.date}
-          key={index}/> );
+          date={notification.dateCreated}
+          key={index} /> );
     });
 
     return (
@@ -125,9 +125,9 @@ class NewNotificationForm extends Component{
   render(){
     var docOptions =[];
 
-  	this.props.docs.forEach(function(doc){
+  	this.props.docs.forEach(function(doc, index){
         var docDescrip = doc.name + " (Specialty: " + doc.primarySpecialty + ")";
-		    docOptions.push(<option value={docDescrip}></option>);
+		    docOptions.push(<option value={docDescrip} key={index}></option>);
     });
 
     var holderClass = classnames("formContent", {"show":this.state.showForm});
@@ -146,7 +146,7 @@ class NewNotificationForm extends Component{
             <input ref="doctor" className="form-control" type="text"
               list="docsData" placeholder="Type or select recipient from dropdown"></input>
 
-            <label for="message">Message:</label>
+            <label>Message:</label>
             <textarea ref="message" className="form-control" rows="4" id="message" placeholder="Type your message here..."></textarea>
 
             <button type="button" className="btn btn-danger" onClick={this.hideForm.bind(this)}>Cancel</button>
@@ -173,7 +173,7 @@ class Notifications extends Component {
 			.then((result) => {
         console.log("Sucessfully got notifications and doctors list from server.");
         result.notificationsList.sort(function(a, b){
-    			return b.date - a.date;
+    			return b.dateCreated - a.datedateCreated;
     		});
         this.setState(result);
 			})
