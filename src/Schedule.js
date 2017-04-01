@@ -106,7 +106,7 @@ class Schedule extends Component{
     if(moment(event.target.value).isValid()){
       this.setState({startDate: moment(event.target.value).format("MMM/DD/YYYY")});
     }else{
-      this.setState({startDate: '1000-01-01'});
+      this.setState({startDate: '2000-01-01'});
     }
   }
 
@@ -150,7 +150,7 @@ class Schedule extends Component{
                   <p> From: </p>
                   <input type="date" name="start" id="startDateText"
                     onChange={this.updateStartRange.bind(this)}
-                    min="1000-01-01" defaultValue={moment().format("YYYY-MM-DD")}/>
+                    min="2000-01-01" max="9999-12-31" defaultValue={moment().format("YYYY-MM-DD")}/>
                 </div>
 
                 <div className="dateSelector">

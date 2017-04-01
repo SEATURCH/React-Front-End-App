@@ -179,6 +179,20 @@ var postFutureAppointment = function(appointment){
 	});
 }
 
+var deleteFutureAppointment = function(appointmentuuid){
+	return new Promise(function(resolve, reject){
+		request
+		   .delete(goServer + ' /futureappointments/appointmentuuid/' + appointmentuuid)
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.ok);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
+
 var authenticate = function(email, pass) {
     if (sessionStorage.token) {
       	delete sessionStorage.token;
@@ -524,6 +538,7 @@ export default {
 	getNotificationPageLists:getNotificationPageLists,
 	postNotification:postNotification,
 	postFutureAppointment:postFutureAppointment,
+	deleteFutureAppointment:deleteFutureAppointment,
 	updatePatient:updatePatient,
 	getPatientDashboard: getPatientDashboard,
 	getPatientAppointment: getPatientAppointment,

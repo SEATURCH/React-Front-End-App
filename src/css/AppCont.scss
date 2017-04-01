@@ -6,7 +6,7 @@ $selectColor: #FFB647;
 }
 
 #content-body{
-	height:calc(100% - 70px);
+	height:100%;
 	overflow-y:hidden;
 	width:85%;
 	padding: 0% 0%;
@@ -35,7 +35,7 @@ $selectColor: #FFB647;
 		}
 	}
 	.moduleBody{
-		height: calc(100% - 82px);
+		height: calc(100% - 50px);
 		overflow-y:scroll;
 		background: white;
 		padding:10px 25px;
