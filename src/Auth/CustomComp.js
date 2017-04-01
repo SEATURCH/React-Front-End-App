@@ -33,52 +33,49 @@ class UserInput extends React.Component{
 		return this.state.value;
 	}
 	handleChange(event){
-		event.preventDefault();
 		this.setState({value:event.target.value})
 	}
 
 	onFocus(event) {
-		event.preventDefault();
 		if(this.props.onFocus)
 	 		this.props.onFocus(event);
 	}
 	onBlur(event){
-		event.preventDefault();
 		if(this.props.onBlur)
 	 		this.props.onBlur(event);
 	}
 }
 
 class ValidatedInput extends UserInput {
+	checkValidation(){
+		return this.validate();
+	}
 	validate(event) {
-		this.onBlur(event);
-		if(event)
-	 		event.preventDefault();
-	 	var errorFound, errorMsg;
+		this.onBlur();
+		var errorFound, errorMsg;
 	 	var validateBy = this.props.validation.split(',');
 	 	for(var i =0; i < validateBy.length; i++){
 	 		var validation = validateBy[i];
-		 	if(validation ===  'required'){
-		 		if(!this.state.value){
-		 			errorFound = true;
-		 			if(this.props.errorHelp.hasOwnProperty(validation))
-		 				errorMsg = this.props.errorHelp[validation];
-		 			else
-		 				errorMsg = "Field required";
-		 		}
-		 	}
+	 		switch(validation){
+	 			case 'required':
+		 			if(!this.state.value){
+			 			errorFound = true;
+			 			console.log(validation)
+			 			if(this.props.errorHelp && this.props.errorHelp.hasOwnProperty(validation))
+			 				errorMsg = this.props.errorHelp[validation];
+			 			else
+			 				errorMsg = "Field required";
+			 		}
+	 				break;
+	 			default:
+	 				break;
+	 		}
 	 	}
-	 	if(errorFound){
-		 	this.setState({
-		 		error:true,
-		 		errorMsg: errorMsg
-		 	});
-	 	}else{
-	 		this.setState({
-		 		error:false,
-		 		errorMsg: ""
-		 	});
-	 	}
+	 	this.setState({ 
+		 		error:errorFound,
+		 		errorMsg: (errorFound)? errorMsg: ""
+		});
+	 	return errorFound
     }
 	render(){
 		var holderClass = classnames("form-group", {"has-error":this.state.error});

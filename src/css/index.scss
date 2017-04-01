@@ -25,7 +25,6 @@ body {
 
 
 .Header {
-  //text-align: center;
   height: 70px;
   line-height: 70px;
   background: $baseColor;
@@ -62,8 +61,8 @@ body {
 }
 
 .Body {
-  //height:calc(100% - 100px);
-  height: 100%;
+  height:calc(100% - 70px);
+  /*height: 100%;*/
 }
 
 // .Footer {
@@ -74,9 +73,11 @@ body {
 // }
 
 #Login {
+  height:100%;
   padding:10px 10px;
   > div {
     vertical-align: top;
+    height:100%;
     width:calc(50% - #{2*$tenPadding});
     padding:0px 10px;
     display:inline-block;
@@ -93,6 +94,28 @@ body {
   .createUser {
     width:calc(50% - #{2*$tenPadding + 1} );
     border-left: 1px solid $baseColor;
+    position: relative;
+    height:100%;
+    overflow:hidden;
+    .inputPanel{
+      vertical-align: top;
+      width:100%;
+      display: inline-block;
+      &.detailsInput{
+        height: 100%;
+        background:white;
+        position: absolute;
+        left:100%;
+        padding:0px 10px;
+        transition: left .5s;
+        -webkit-transition: left .5s;
+      }
+      &.authInput{
+        opacity:1;
+        transition: opacity .5s;
+        -webkit-transition: opacity .5s; 
+      }
+    }
   }
 }
 
