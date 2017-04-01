@@ -3,6 +3,7 @@ import requests from './requests';
 import Comp from './Auth/CustomComp.js'
 import PatientPrescription from './PatientPrescription';
 import moment from 'moment';
+import { browserHistory } from 'react-router'
 import './css/DetailedAppt.scss';
 
 class TextRow extends React.Component{
@@ -161,9 +162,17 @@ class Appointments extends Component {
 			doctorNotes:this.refs.doctorNotes.getValue(),
 			addedPrescript:temp
 		});
-  }
-	deleteAppointment(){
-		console.log("Appointment Deleted");
+  	}
+
+	deleteAppointment(event){
+		console.log(this.props.location.query)
+		requests.deleteFutureAppointment(this.props.location.query.appt)
+		.then((result) => {
+			browserHistory.push('/Schedule');
+			this.props.upp(true);	
+		})
+		.catch(function(e){
+		});
 	}
 
   render() {
@@ -199,10 +208,12 @@ class Appointments extends Component {
 				<div className="inlineBlock">
 					<h1 className="mainHeader">Appointment {dateVisited}</h1>
 					<h2 className="subHeader">{this.state.generalInfoList.name}</h2>
-					{!(this.state.appointmentDetail.dateVisited) &&
-						<button type="button" className="btn btn-danger btn-lg" onClick={this.deleteAppointment.bind(this)}>Delete Appointment</button>
-					}
 				</div>
+				{!(this.state.appointmentDetail.dateVisited) &&
+					<label style={{float:"right", margin:"10px 20px"}}>
+				    	<button type="button" className="btn btn-danger btn-lg" onClick={this.deleteAppointment.bind(this)}>Delete Appointment</button>
+			        </label>
+				}
 				<Comp.SaveButtons ref="save" init={false} saveButton={this.submitUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} />
 			</div>
 			<div className="moduleBody">

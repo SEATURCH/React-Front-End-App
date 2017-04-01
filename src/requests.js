@@ -182,10 +182,10 @@ var postFutureAppointment = function(appointment){
 var deleteFutureAppointment = function(appointmentuuid){
 	return new Promise(function(resolve, reject){
 		request
-		   .delete(goServer + ' /futureappointments/appointmentuuid/' + appointmentuuid)
+		   .delete(goServer + '/futureappointments/appointmentuuid/' + appointmentuuid)
 		   .end(function(err, res){
 		   	if(!err && res.ok){
-		    	resolve(res.ok);
+		   		resolve(res.ok);
 		    }else {
 		    	reject();
 		    }
