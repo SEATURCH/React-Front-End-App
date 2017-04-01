@@ -361,6 +361,8 @@ var getPatientDashboard = function(patientId){
 			  .get(goServer+'/patients/patientuuid/'+patientId)
 			  .end(function(err, res){
 			    	if(!err && res.ok){
+			    		sessionStorage.currentPatient = patientId;
+			    		sessionStorage.currentPatientName =  res.body.name;
 						resolve({
 							name: "generalInfoList",
 							value: res.body
@@ -413,7 +415,6 @@ var getPatientDashboard = function(patientId){
 					resolved[value.name] = "Error, Promise rejected";
 				}
 			});
-			sessionStorage.currentPatient = patientId;
 			resolve(resolved);
 		});
 	});

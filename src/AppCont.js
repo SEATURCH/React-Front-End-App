@@ -12,7 +12,7 @@ class AppCont extends Component {
 				patientBroadCast: pubSub.subscribe("PATI SEL", function(msg, data) {
 				 	this.setState({ selectedPatient: data });
 				}.bind(this)),
-				selectedPatient:"",
+				selectedPatient:sessionStorage.currentPatientName,
 				role:"",
 				uuid:"",
 				name:"",

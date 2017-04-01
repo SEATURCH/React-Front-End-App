@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import classnames from 'classnames';
 import req from './requests'
 import Comp from './Auth/CustomComp.js'
 import moment from 'moment'
