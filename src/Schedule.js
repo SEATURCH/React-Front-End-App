@@ -29,7 +29,7 @@ class AppointmentRow extends Component{
         <td>
           <Link to={"Dashboard?id="+this.props.patientUUID} >{this.props.patientName}</Link>
         </td>
-        <td>{this.props.notes}</td>
+        {/* <td>{this.props.notes}</td> */}
 			</tr>
 		);
 	}
@@ -49,14 +49,14 @@ var ScheduleTable = React.createClass({
     );
 
   	filteredRows.forEach(function(appt, index){
-        var parsedNotes;
-        try {
-          parsedNotes = JSON.parse(appt.notes).chiefComplaints.map(function(elem){
-            return elem.value
-          }).join("\n")
-        } catch (e) {
-          parsedNotes = appt.notes
-        }
+        // var parsedNotes;
+        // try {
+        //   parsedNotes = JSON.parse(appt.notes).chiefComplaints.map(function(elem){
+        //     return elem.value
+        //   }).join("\n")
+        // } catch (e) {
+        //   parsedNotes = appt.notes
+        // }
 
 		    rows.push( <AppointmentRow
           appointmentUUID={appt.appointmentUUID}
@@ -66,7 +66,7 @@ var ScheduleTable = React.createClass({
           dateScheduled={appt.dateScheduled}
           dateVisited={appt.dateVisited}
           key={appt.appointmentUUID}
-          notes={parsedNotes}
+          // notes={parsedNotes}
           action={this.props.action} /> );
     }.bind(this));
 
@@ -78,7 +78,7 @@ var ScheduleTable = React.createClass({
               <th>Date (M/D/Y)</th>
               <th>Time</th>
               <th>Patient</th>
-              <th>Notes</th>
+              {/* <th>Notes</th> */}
             </tr>
           </thead>
       		<tbody>
@@ -95,8 +95,8 @@ class Schedule extends Component{
     super(props);
     this.state = {
       appointmentsList: [],
-      startDate: '1000-01-01',
-      endDate: '5555-12-31'
+      startDate: moment().format("YYYY-MM-DD"),
+      endDate: '9999-12-31'
     }
   }
 
@@ -106,7 +106,7 @@ class Schedule extends Component{
     if(moment(event.target.value).isValid()){
       this.setState({startDate: moment(event.target.value).format("MMM/DD/YYYY")});
     }else{
-      this.setState({startDate: '1000-01-01'});
+      this.setState({startDate: '2000-01-01'});
     }
   }
 
@@ -116,7 +116,7 @@ class Schedule extends Component{
     if(moment(event.target.value).isValid()){
       this.setState({endDate: moment(event.target.value).format("MMM/DD/YYYY")});
     }else{
-      this.setState({endDate: '5555-12-31'});
+      this.setState({endDate: '9999-12-31'});
     }
   }
 
@@ -126,7 +126,7 @@ class Schedule extends Component{
         result.sort(function(a, b){
           var aDate = a.dateScheduled || a.dateVisited;
           var bDate = b.dateScheduled || b.dateVisited;
-          return bDate - aDate;
+          return aDate - bDate;
         });
   			this.setState({ appointmentsList:result });
   		})
@@ -150,14 +150,14 @@ class Schedule extends Component{
                   <p> From: </p>
                   <input type="date" name="start" id="startDateText"
                     onChange={this.updateStartRange.bind(this)}
-                    min="1000-01-01"/>
+                    min="2000-01-01" max="9999-12-31" defaultValue={moment().format("YYYY-MM-DD")}/>
                 </div>
 
                 <div className="dateSelector">
                   <p> To: </p>
                   <input type="date" name="end" id="endDateText"
                     onChange={this.updateEndRange.bind(this)}
-                    max="5555-12-31"/>
+                    max="9999-12-31"/>
                 </div>
             </form>
             {this.state.appointmentsList.length > 0 &&
@@ -220,38 +220,48 @@ class NewAppointmentForm extends Component{
     return patient;
   }
 
-  //Posts the notification to the appropriate doctor.
+  //Creats a new future appointment
   createAppointment(event) {
     event.preventDefault()
-    const note = this.refs.note.value;
+    // const note = this.refs.note.value;
     const selectedDate = this.refs.selectedDate.value;
     const selectedTime = this.refs.selectedTime.value;
     var patientDescription = this.refs.selectedPatient.value;
-    var patient = this.findPatientIndex(patientDescription, this.state.patientsList);
+    if(patientDescription === ""){
+      alert("Please select a patient!");
+    }else if(moment(selectedDate).isValid() === false
+      || moment(selectedDate).isSameOrAfter(moment(), 'day') === false){
+      alert("Please check if the date is valid and not in the past!");
+    }else if(selectedTime === "Chose Start Time"){
+      alert("Please select a time for the appointment");
 
-    console.log(patient);
+    }else{
+      var patient = this.findPatientIndex(patientDescription, this.state.patientsList);
 
-    var fullTime = selectedDate + " " + selectedTime;
-    var finalTime = moment(fullTime, "YYYY-MM-DD hh:mm A").unix();
-    console.log(moment.unix(finalTime).format("MM/DD/YYYY"));
-    console.log(moment.unix(finalTime).format("LT"));
+      console.log(patient);
 
-    var appt = {
-      patientUuid: patient.patientUUID,
-      doctorUuid: sessionStorage.userUUID,
-      dateScheduled: finalTime,
-      notes: note
+      var fullTime = selectedDate + " " + selectedTime;
+      var finalTime = moment(fullTime, "YYYY-MM-DD hh:mm A").unix();
+      console.log(moment.unix(finalTime).format("MM/DD/YYYY"));
+      console.log(moment.unix(finalTime).format("LT"));
+
+      var appt = {
+        patientUuid: patient.patientUUID,
+        doctorUuid: sessionStorage.userUUID,
+        dateScheduled: finalTime
+        // notes: note
+      }
+      console.log(appt);
+
+      requests.postFutureAppointment(appt)
+        .then((res) => {
+          console.log("created future appointment sucessfully");
+          location.reload();
+        })
+        .catch((e) =>{
+          console.log("Could not create future appointment");
+        });
     }
-    console.log(appt);
-
-    requests.postFutureAppointment(appt)
-      .then((res) => {
-        console.log("created future appointment sucessfully");
-      })
-      .catch(function(e){
-        console.log("Could not create future appointment");
-      });
-
   }
 
   render(){
@@ -293,7 +303,7 @@ class NewAppointmentForm extends Component{
             <input ref="selectedPatient" className="form-control" type="text" list="patientsData" placeholder="Type or select patient name from dropdown"></input>
 
             <label>Select a date:</label>
-            <input ref="selectedDate" type="date" id="newAppointmentDate" className="form-control"/>
+            <input ref="selectedDate" type="date" id="newAppointmentDate" max="9999-12-31" min={moment().format("YYYY-MM-DD")} defaultValue={moment().format("YYYY-MM-DD")} className="form-control"/>
 
             <label>Select a time</label>
             <select ref="selectedTime" className="form-control">
@@ -301,8 +311,8 @@ class NewAppointmentForm extends Component{
               {timeOptions}
             </select>
 
-            <label for="note">Note:</label>
-            <textarea ref="note" className="form-control" rows="2" id="note" placeholder="Type your notes here..."></textarea>
+            {/* <label for="note">Note:</label>
+            <textarea ref="note" className="form-control" rows="2" id="note" placeholder="Type your notes here..."></textarea> */}
 
             <button type="button" className="btn btn-danger" onClick={this.hideForm.bind(this)}>Cancel</button>
             <button type="button" className="btn btn-success" onClick={this.createAppointment.bind(this)}>Create Appointment</button>

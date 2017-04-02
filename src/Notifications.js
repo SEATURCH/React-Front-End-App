@@ -20,7 +20,7 @@ class NotificationRow extends Component{
 var NotificationsTable = React.createClass({
   render:function(){
   	var rows =[];
-    // create a custome row for each notificaiton
+    // create a custome row for each notification
   	this.props.notifications.forEach(function(notification, index){
 		    rows.push( <NotificationRow
           message={notification.message}
@@ -90,9 +90,9 @@ class NewNotificationForm extends Component{
   sendNotification(event) {
     event.preventDefault()
     const docDescription = this.refs.doctor.value;
-    if(docDescription !== "Chose one"){
+    if(docDescription){
       const message = this.refs.message.value;
-      if(message !== ""){
+      if(message){
         var doc = this.findDocIndex(docDescription, this.props.docs);
         var currDate = moment().unix();
 
@@ -108,6 +108,7 @@ class NewNotificationForm extends Component{
         requests.postNotification(notif)
   				.then((res) => {
             console.log("posted notification sucessfully");
+            location.reload();
   				})
   				.catch(function(e){
   					console.log("Couldn't post notification");
@@ -134,7 +135,7 @@ class NewNotificationForm extends Component{
     return (
       <div className="notificationForm">
 
-        <button type="button" className="btn btn-success btn-lg btn-block" onClick={this.showForm.bind(this)}>New Notificaiton</button>
+        <button type="button" className="btn btn-success btn-lg btn-block" onClick={this.showForm.bind(this)}>New Notification</button>
         <div>
           <form className={holderClass}>
             <label>Select a Medical Professional:</label>
@@ -175,7 +176,6 @@ class Notifications extends Component {
     			return b.date - a.date;
     		});
         this.setState(result);
-        console.log(result);
 			})
 			.catch(function(e){
 				console.log("Could not get notifications or doctors list")
@@ -185,13 +185,17 @@ class Notifications extends Component {
   render() {
     return (
       <div className="notifications">
-        <h3 className="moduleHeader">Notifications</h3>
+        <div className="pageHeader">
+          <h1 className="mainHeader">Notifications</h1>
+        </div>
 
-        <NewNotificationForm docs={this.state.doctorsList}/>
+        <div className="moduleBody">
+          <NewNotificationForm docs={this.state.doctorsList}/>
 
-        {this.state.notificationsList.length > 0 &&
-            <NotificationsTable notifications={this.state.notificationsList}/>
-        }
+          {this.state.notificationsList.length > 0 &&
+              <NotificationsTable notifications={this.state.notificationsList}/>
+          }
+        </div>
       </div>
     );
   }

@@ -7,7 +7,7 @@ import moment from 'moment'
 class PatientGeneral extends Component {
 		constructor(props){
 			super(props);
-			this.state = { 
+			this.state = {
 				patientInfo:{}
 			};
 
@@ -30,16 +30,16 @@ class PatientGeneral extends Component {
 				emergencyContact: this.refs.emergencyContact.getValue(),
 				address: this.refs.address.getValue()
 			}
-			
+
 			req.updatePatient(patient)
 				.then((res) => {
-					this.setState({ 
+					this.setState({
 						showBtn:false,
 						patientInfo: patient
-					});					
+					});
 				})
 				.catch(function(e){
-					this.setState({ 
+					this.setState({
 						showBtn:false,
 						patientInfo: patient
 					});
@@ -50,9 +50,9 @@ class PatientGeneral extends Component {
 		 	event.preventDefault()
 			this.refs.save.showButtons(event);
 	    }
-	   	
+
 	   	cancelChanges(event) {
-		 	this.setState({ 
+		 	this.setState({
 				patientInfo: this.state.patientInfo
 			});
 	    }
@@ -62,14 +62,14 @@ class PatientGeneral extends Component {
 				<div className="PatientGeneral module">
 					<div style={{position:"relative"}}>
 				  		<h3 className="modeleHeader">Patient Info</h3>
-				  		<Comp.SaveButtons ref="save" init={false} saveButton={this.submiteUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} /> 
+				  		<Comp.SaveButtons ref="save" init={false} saveButton={this.submiteUpdate.bind(this)} cancelButton={this.cancelChanges.bind(this)} />
 				  	</div>
 					<form>
 				    	<div className="container-fluid">
 				      		<div className="row">
 				      			<div className="col col-md-6">
 				      				<Comp.ValidatedInput ref="name"
-				      					validation="required" label="Name" name="name" type="text" 
+				      					validation="required" label="Name" name="name" type="text"
 				      					value={this.state.patientInfo.name} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
@@ -81,7 +81,7 @@ class PatientGeneral extends Component {
 					    					required:"Required"
 					    				}} />
 									<Comp.ValidatedInput ref="dateOfBirth"
-										validation="required" label="Date of Birth" name="dateOfBirth" type="date"
+										validation="required" label="Date of Birth" name="dateOfBirth" type="date" max="9999-12-31"
 										value={moment.unix(this.state.patientInfo.dateOfBirth).format("YYYY-MM-DD")} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
@@ -121,8 +121,8 @@ class PatientGeneral extends Component {
 					    				value={this.state.patientInfo.address} onFocus={this.triggerButtons.bind(this)} reset={!this.state.showBtn}
 					    				errorHelp={{
 					    					required:"Required"
-					    				}} />   
-						            
+					    				}} />
+
 				      			</div>
 			      			</div>
 		      			</div>
