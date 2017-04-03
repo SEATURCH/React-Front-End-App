@@ -6,7 +6,8 @@ import PDFJS from 'pdfjs-dist'
 //var prefix = require('superagent-prefix')('/static');
 var root = 'https://jsonplaceholder.typicode.com';
 // var goback = 'http://localhost:8080';
-var goServer = process.env.GO_ADDR;
+//var goServer = process.env.GO_ADDR;
+var goServer = "http://localhost:8080";
 
 var whoami = function(){
 	var userUUID = sessionStorage.userUUID;
