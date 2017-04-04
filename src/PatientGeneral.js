@@ -7,42 +7,59 @@ class PatientGeneral extends Component {
 		constructor(props){
 			super(props);
 			this.state = {
-				patientInfo:{}
+				patientInfo:{
+					gender:"male"
+				}
 			};
 
 		}
 		componentWillReceiveProps(prop){
 			this.setState(Object.assign(this.state.patientInfo, prop.generalInfo))
 		}
+		 checkAll () {
+		    var nameError = this.refs.name.checkValidation();
+		    var dateOfBirthError = this.refs.dateOfBirth.checkValidation();
+		    var bloodTypeError = this.refs.bloodType.checkValidation();
+		    var medicalNumberError = this.refs.medicalNumber.checkValidation();
+		    var phoneNumberError = this.refs.phoneNumber.checkValidation();
+		    var emergencyContactError = this.refs.emergencyContact.checkValidation();
+		    var addressError = this.refs.address.checkValidation();
+		    return nameError || dateOfBirthError || bloodTypeError || 
+		      medicalNumberError || phoneNumberError || emergencyContactError || addressError;
+		 }
 
 		submiteUpdate(event) {
 		 	event.preventDefault()
-		 	var patient = {
-				patientUUID: this.props.patientuuid,
-				notes: this.refs.allergies.getValue(),
-				name: this.refs.name.getValue(),
-				gender: this.refs.gender.getValue(),
-				dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
-				bloodType: this.refs.bloodType.getValue(),
-				medicalNumber: this.refs.medicalNumber.getValue(),
-				phoneNumber: this.refs.phoneNumber.getValue(),
-				emergencyContact: this.refs.emergencyContact.getValue(),
-				address: this.refs.address.getValue()
+		 	var hasError = this.checkAll();
+		    if(hasError){
+		      alert("Please fill in all required fields");
+		    } else {
+			 	var patient = {
+					patientUUID: this.props.patientuuid,
+					notes: this.refs.allergies.getValue(),
+					name: this.refs.name.getValue(),
+					gender: this.state.patientInfo.gender,
+					dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
+					bloodType: this.refs.bloodType.getValue(),
+					medicalNumber: this.refs.medicalNumber.getValue(),
+					phoneNumber: this.refs.phoneNumber.getValue(),
+					emergencyContact: this.refs.emergencyContact.getValue(),
+					address: this.refs.address.getValue()
+				}
+				req.updatePatient(patient)
+					.then((res) => {
+						this.setState({
+							showBtn:false,
+							patientInfo: patient
+						});
+					})
+					.catch(function(e){
+						this.setState({
+							showBtn:false,
+							patientInfo: patient
+						});
+					});
 			}
-
-			req.updatePatient(patient)
-				.then((res) => {
-					this.setState({
-						showBtn:false,
-						patientInfo: patient
-					});
-				})
-				.catch(function(e){
-					this.setState({
-						showBtn:false,
-						patientInfo: patient
-					});
-				});
 	    }
 
 	    triggerButtons(event) {
@@ -55,8 +72,27 @@ class PatientGeneral extends Component {
 				patientInfo: this.state.patientInfo
 			});
 	    }
+
+	    genderSel(event){
+	    	console.log(this.refs.dateOfBirth.getValue())
+			this.setState({
+				patientInfo:{
+					gender:event.target.id,
+					patientUUID: this.props.patientuuid,
+					notes: this.refs.allergies.getValue(),
+					name: this.refs.name.getValue(),
+					dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
+					bloodType: this.refs.bloodType.getValue(),
+					medicalNumber: this.refs.medicalNumber.getValue(),
+					phoneNumber: this.refs.phoneNumber.getValue(),
+					emergencyContact: this.refs.emergencyContact.getValue(),
+					address: this.refs.address.getValue()
+				}})
+		}
+
     	render() {
 			var readonly = this.props.role === "Patient";
+			var gender = this.state.patientInfo.gender.toLowerCase();
 			return (
 				<div className="PatientGeneral module">
 					<div style={{position:"relative"}}>
@@ -73,13 +109,18 @@ class PatientGeneral extends Component {
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
-					    			<Comp.ValidatedInput ref="gender"
-					    				validation="required" label="Gender" name="gender" type="text" readonly={readonly}
-					    				value={this.state.patientInfo.gender} onFocus={this.triggerButtons.bind(this)}
-					    				errorHelp={{
-					    					required:"Required"
-					    				}} />
-									<Comp.ValidatedInput ref="dateOfBirth"
+				    				<div>
+					                 	<label>Gender</label>
+					                </div>
+					                <div className="btn-group" data-toggle="buttons">
+					                    <label style={{opacity:( gender === "male" || gender === "m")?"1":"0.5"}} className="btn btn-primary">
+					                      <input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
+					                    </label>
+					                    <label style={{opacity:(gender === "female" || gender === "f")?"1":"0.5"}} className="btn btn-primary">
+					                      <input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
+					                    </label>
+					                </div>
+					    			<Comp.ValidatedInput ref="dateOfBirth"
 										validation="required" label="Date of Birth" name="dateOfBirth" type="date"  readonly={readonly} max="9999-12-31"
 										value={moment.unix(this.state.patientInfo.dateOfBirth).format("YYYY-MM-DD")} onFocus={this.triggerButtons.bind(this)}
 					    				errorHelp={{

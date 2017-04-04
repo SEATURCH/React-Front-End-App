@@ -123,6 +123,7 @@ class Login extends Component {
     }
 	
 	render(){
+		var gender = this.state.gender.toLowerCase();
 		return (
 		<div id="Login">
 			<div className="signIn">
@@ -174,10 +175,10 @@ class Login extends Component {
 			    					required:"Name Required"
 			    				}} />
 		    				<div className="btn-group" data-toggle="buttons">
-			        		 	<label style={{opacity:(this.state.gender === "male")?"1":"0.5"}} className="btn btn-primary">
+			        		 	<label style={{opacity:(gender === "male" || gender === "m" )?"1":"0.5"}} className="btn btn-primary">
 							    	<input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
 							  	</label>
-							  	<label style={{opacity:(this.state.gender === "male")?"0.5":"1"}} className="btn btn-primary">
+							  	<label style={{opacity:(gender === "female" || gender === "f")?"1":"0.5"}} className="btn btn-primary">
 							    	<input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
 							  	</label>
 							</div>
