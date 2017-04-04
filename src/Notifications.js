@@ -74,51 +74,51 @@ class NewNotificationForm extends Component{
 
   //searches and returns the list to find the object based on the given query
   findDocIndex(query, list){
-      var doc = {};
-      // parse query string to extract name and specialty of doctor
-      var name = query.substring(0, query.indexOf('(')).trim();
-      var specialty = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
+      var doc;
+      if (query){
+        // parse query string to extract name and specialty of doctor
+        var name = query.substring(0, query.indexOf('(')).trim();
+        var specialty = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
 
-      list.forEach(function(elem) {
-        if(elem.name === name && elem.primarySpecialty === specialty){
-            doc = elem;
-        }
-      });
+        list.forEach(function(elem) {
+          if(elem.name === name && elem.primarySpecialty === specialty){
+              doc = elem;
+          }
+        });
+      }
       return doc;
   }
   //Posts the notification to the appropriate doctor.
   sendNotification(event) {
     event.preventDefault()
     const docDescription = this.refs.doctor.value;
-    if(docDescription){
-      const message = this.refs.message.value;
-      if(message){
-        var doc = this.findDocIndex(docDescription, this.props.docs);
-        var currDate = moment().unix();
+    const message = this.refs.message.value;
+    var doc = this.findDocIndex(docDescription, this.props.docs);
 
-        var notif = {
-          date : currDate,
-          message : message,
-          receiverUUID : doc.doctorUUID,
-          senderName : requests.whoami().name,
-          senderUUID : sessionStorage.userUUID
-        }
-        console.log(notif);
-
-        requests.postNotification(notif)
-  				.then((res) => {
-            console.log("posted notification sucessfully");
-            location.reload();
-  				})
-  				.catch(function(e){
-  					console.log("Couldn't post notification");
-  				});
-
-      }else{
-        alert("Please write a message and try again!");
-      }
+    if(!doc){
+      alert("Please select a valid recipient!");
+    }else if(!message){
+      alert("Please write a message and try again!");
     }else{
-      alert("Please select a recipient and try again!");
+      var currDate = moment().unix();
+
+      var notif = {
+        date : currDate,
+        message : message,
+        receiverUUID : doc.doctorUUID,
+        senderName : requests.whoami().name,
+        senderUUID : sessionStorage.userUUID
+      }
+      console.log(notif);
+
+      requests.postNotification(notif)
+        .then((res) => {
+          console.log("posted notification sucessfully");
+          location.reload();
+        })
+        .catch(function(e){
+          console.log("Couldn't post notification");
+        });
     }
   }
 

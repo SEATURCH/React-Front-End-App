@@ -49,7 +49,7 @@ class Conts extends Component {
     return (
       <div>
         <div className="Header">
-          <h2>EMR System Company</h2>
+          <h2>EMR</h2>
           <div className="colRight">
             { this.state.loggedIn? <Link to="logout" >Logout</Link> :null}
             {!this.state.loggedIn? <Link to="login" >Login</Link> :null}

@@ -37,6 +37,7 @@ body {
     padding:10px 10px;
     display: inline-block;
     white-space: nowrap;
+    vertical-align: middle;
   }
   a{
     text-decoration: none;
@@ -113,7 +114,7 @@ body {
       &.authInput{
         opacity:1;
         transition: opacity .5s;
-        -webkit-transition: opacity .5s; 
+        -webkit-transition: opacity .5s;
       }
     }
   }
