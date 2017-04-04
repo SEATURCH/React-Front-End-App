@@ -70,7 +70,7 @@ class Home_Doc extends Component {
     return (
       <div className="Home_Doc">
         <div className="pageHeader">
-            <h1 className="mainHeader">Doctor's Patients</h1>
+            <h1 className="mainHeader">Patients</h1>
         </div>
 
         <div className="moduleBody">

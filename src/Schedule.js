@@ -23,7 +23,7 @@ class AppointmentRow extends Component{
 			<tr>
         <td>
           <Link to={"Appointments?appt="+this.props.appointmentUUID+"&id="+this.props.patientUUID}>
-          <span className="glyphicon glyphicon-search"></span>{appDate}</Link>
+          <span className="glyphicon glyphicon-search"> </span>{appDate}</Link>
         </td>
 				<td>{startTime} - {endTime}</td>
         <td>
@@ -140,7 +140,7 @@ class Schedule extends Component{
     return (
       <div className="schedule">
         <div className="pageHeader">
-            <h1 className="mainHeader">Doctor's Appointments</h1>
+            <h1 className="mainHeader">Appointments</h1>
         </div>
 
         <div className="moduleBody">
@@ -207,16 +207,18 @@ class NewAppointmentForm extends Component{
   }
 
   findPatientIndex(query, list){
-    var patient = {};
-    //parse query string to extract name and DOB
-    var name = query.substring(0, query.indexOf('(')).trim();
-    var dob = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
-    list.forEach(function(elem){
-      if(elem.name === name &&
-        moment.unix(elem.dateOfBirth).format("MM/DD/YYYY") === dob){
-        patient = elem;
-      }
-    });
+    var patient;
+    if (query){
+      //parse query string to extract name and DOB
+      var name = query.substring(0, query.indexOf('(')).trim();
+      var dob = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
+      list.forEach(function(elem){
+        if(elem.name === name &&
+          moment.unix(elem.dateOfBirth).format("MM/DD/YYYY") === dob){
+          patient = elem;
+        }
+      });
+    }
     return patient;
   }
 
@@ -227,21 +229,19 @@ class NewAppointmentForm extends Component{
     const selectedDate = this.refs.selectedDate.value;
     const selectedTime = this.refs.selectedTime.value;
     var patientDescription = this.refs.selectedPatient.value;
-    if(patientDescription === ""){
-      alert("Please select a patient!");
+    var patient = this.findPatientIndex(patientDescription, this.state.patientsList);
+    var fullTime = selectedDate + " " + selectedTime;
+    var finalTime = moment(fullTime, "YYYY-MM-DD hh:mm A").unix();
+
+    if(!patient){
+      alert("Please select a valid patient!");
     }else if(moment(selectedDate).isValid() === false
       || moment(selectedDate).isSameOrAfter(moment(), 'day') === false){
       alert("Please check if the date is valid and not in the past!");
-    }else if(selectedTime === "Chose Start Time"){
-      alert("Please select a time for the appointment");
-
+    }else if(moment.unix(finalTime).isSameOrAfter(moment(), 'minute') === false){
+      alert("Please select a valid time!");
     }else{
-      var patient = this.findPatientIndex(patientDescription, this.state.patientsList);
-
       console.log(patient);
-
-      var fullTime = selectedDate + " " + selectedTime;
-      var finalTime = moment(fullTime, "YYYY-MM-DD hh:mm A").unix();
       console.log(moment.unix(finalTime).format("MM/DD/YYYY"));
       console.log(moment.unix(finalTime).format("LT"));
 
