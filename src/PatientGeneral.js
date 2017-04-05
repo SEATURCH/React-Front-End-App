@@ -15,12 +15,14 @@ class PatientGeneral extends Component {
 			this.state = {
 				patientInfo:{
 					gender:"male"
-				}
+				},
+				tmp: {}
 			};
 		}
 
 		componentWillReceiveProps(prop){
-			this.setState(Object.assign(this.state.patientInfo, prop.generalInfo))
+			Object.assign(this.state.patientInfo, prop.generalInfo);
+			Object.assign(this.state.tmp, prop.generalInfo);
 		}
 
 		checkAll() {
@@ -61,7 +63,8 @@ class PatientGeneral extends Component {
 					.then((res) => {
 						this.setState({
 							showBtn:false,
-							patientInfo: patient
+							patientInfo: patient,
+							tmp: patient
 						});
 						pubSub.publish("PATI SEL", patient.name);
 					})
@@ -81,12 +84,13 @@ class PatientGeneral extends Component {
 
 	   	cancelChanges(event) {
 		 	this.setState({
-				patientInfo: this.state.patientInfo
+				patientInfo: this.state.tmp
 			});
 	    }
 
 	    genderSel(event){
 	    	if(this.props.role !== "Patient") {
+	    		this.triggerButtons(event);
 	    		var newState = this.currentStateObject();
 	    		newState.gender = event.target.id;
 		    	this.setState({patientInfo:newState});
@@ -95,7 +99,7 @@ class PatientGeneral extends Component {
 
     	render() {
 			var readonly = this.props.role === "Patient";
-			var gender = this.state.patientInfo.gender.toLowerCase();
+			var gender = (this.state.patientInfo.gender)? this.state.patientInfo.gender.toLowerCase(): "male";
 			return (
 				<div className="PatientGeneral module">
 					<div style={{position:"relative"}}>
