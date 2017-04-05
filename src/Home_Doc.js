@@ -59,7 +59,7 @@ class NewPatientForm extends Component{
     var phoneNumberError = this.refs.phoneNumber.checkValidation();
     var emergencyContactError = this.refs.emergencyContact.checkValidation();
     var addressError = this.refs.address.checkValidation();
-    return nameError || dateOfBirthError || bloodTypeError || 
+    return nameError || dateOfBirthError || bloodTypeError ||
       medicalNumberError || phoneNumberError || emergencyContactError || addressError;
   }
 
@@ -91,7 +91,7 @@ class NewPatientForm extends Component{
         dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
         bloodType: this.refs.bloodType.getValue(),
         medicalNumber: this.refs.medicalNumber.getValue(),
-        phone: this.refs.phoneNumber.getValue(),
+        phoneNumber: this.refs.phoneNumber.getValue(),
         emergencyContact: this.refs.emergencyContact.getValue(),
         address: this.refs.address.getValue(),
         notes: this.refs.allergies.getValue()
@@ -105,7 +105,7 @@ class NewPatientForm extends Component{
           console.log("Could not create patient");
         });
     }
-   
+
   }
 
   render(){
@@ -149,7 +149,7 @@ class NewPatientForm extends Component{
                   required:"Required"
                 }} />
                 <label htmlFor="allergeisText"><b>Allergies: </b></label>
-                <Comp.TextInput ref="allergies" 
+                <Comp.TextInput ref="allergies"
                   value={this.state.allergies} />
               </div>
               <div className="col col-md-6">
