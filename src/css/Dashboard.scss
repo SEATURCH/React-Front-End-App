@@ -60,20 +60,27 @@ $moduleWidth: 100%;
 .PatientGeneral{
 	form {
 		margin:10px 0px;
-		label{
-			margin:0px 0px;
-		}
+
 		textarea{
 			margin-bottom:20px;
 			width:100%;
 			resize: none;
+			border:none;
 		}
 		input{
 			font-weight: normal;
-			border:0;
-			border-bottom: .5px solid #ccc;
+			border: 1px solid #ccc;
 			overflow:hidden;
 			text-overflow:ellipsis;
+			outline:0px;
+			box-shadow: none;
+		}
+		input[readonly], textarea[readonly]{
+			&:focus{
+				outline: 0px;
+				box-shadow: none;
+				border:none;
+			}
 		}
 		.form-group{
 			margin-bottom:5px;

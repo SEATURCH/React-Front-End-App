@@ -70,7 +70,7 @@ var patientSearch = function(id){
 		});
 }
 
-var patientsByDocSearch = function(id){
+var patientsByDocSearch = function(){
 	return new Promise(function(resolve, reject){
 		request
 		  .get(goServer+'/patients/doctoruuid/'+sessionStorage.userUUID)
@@ -247,7 +247,7 @@ var createPatient = function(patient){
 		   .send(patient)
 		   .end(function(err, res){
 		   	if(!err && res.ok){
-		    	resolve(res.ok);
+		    	resolve(res.body);
 		    }else {
 		    	reject();
 		    }
@@ -255,6 +255,19 @@ var createPatient = function(patient){
 	});
 }
 
+var patientListGet = function(){
+	return new Promise(function(resolve, reject){
+		request
+		   .get(goServer + '/patients/all')
+		   .end(function(err, res){
+		   	if(!err && res.ok){
+		    	resolve(res.body);
+		    }else {
+		    	reject();
+		    }
+	  	});
+	});
+}
 
 var updateAppointment = function(apptId, appointment, prescriptions){
 	var promises = [
@@ -379,6 +392,8 @@ var getPatientDashboard = function(patientId){
 			  .get(goServer+'/patients/patientuuid/'+patientId)
 			  .end(function(err, res){
 			    	if(!err && res.ok){
+			    		sessionStorage.currentPatient = patientId;
+			    		sessionStorage.currentPatientName =  res.body.name;
 						resolve({
 							name: "generalInfoList",
 							value: res.body
@@ -431,7 +446,6 @@ var getPatientDashboard = function(patientId){
 					resolved[value.name] = "Error, Promise rejected";
 				}
 			});
-			sessionStorage.currentPatient = patientId;
 			resolve(resolved);
 		});
 	});
@@ -531,21 +545,6 @@ var createDoctorProfile = function(userProfile, doctorProfile){
 	});
 }
 
-
-var usedNames = function(){
-	return new Promise(function(resolve, reject){
-		request
-		    .get(goServer+'/users')
-		    .end(function(err, res){
-			    if(!err && res.ok){
-					resolve(res.body);
-				}else {
-						reject();
-			    }
-			})
-	  	});
-}
-
 export default {
 	whoami: whoami,
 	authenticate:authenticate,
@@ -566,5 +565,7 @@ export default {
 	getDocument:getDocument,
 	updateAppointment:updateAppointment,
 	createDoctorProfile:createDoctorProfile,
-	createPatientProfile:createPatientProfile
+	createPatientProfile:createPatientProfile,
+	createPatient:createPatient,
+	patientListGet:patientListGet
 };

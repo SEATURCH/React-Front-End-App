@@ -224,7 +224,7 @@ class Appointments extends Component {
 							<TextTable list={this.state.appointmentDetail.notes.chiefComplaints || []} />
 							<div style={{marginTop:"10px"}}><b>Add: {today}</b></div>
 							<Comp.TextInput ref="chiefComplaints" onFocus={this.buttonTrigger.bind(this)}
-								value={this.state.chiefComp} reset={!this.state.showBtn} />
+								value={this.state.chiefComp} />
 							</div>
 							<div className="col col-md-8">
 								<h3>Vitals</h3>
@@ -249,7 +249,7 @@ class Appointments extends Component {
 								<TextTable list={this.state.appointmentDetail.notes.doctorNotes || []} />
 								<div style={{marginTop:"10px"}}><b>Add: {today}</b></div>
 								<Comp.TextInput ref="doctorNotes" onFocus={this.buttonTrigger.bind(this)}
-									value={this.state.doctorNotes} reset={!this.state.showBtn} />
+									value={this.state.doctorNotes} />
 								</div>
 								<div className="AddPrescriptions col col-md-6">
 									<div>

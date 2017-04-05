@@ -12,7 +12,7 @@ class AppCont extends Component {
 				patientBroadCast: pubSub.subscribe("PATI SEL", function(msg, data) {
 				 	this.setState({ selectedPatient: data });
 				}.bind(this)),
-				selectedPatient:"",
+				selectedPatient:sessionStorage.currentPatientName,
 				role:"",
 				uuid:"",
 				name:"",
@@ -50,30 +50,31 @@ class AppCont extends Component {
 										<Link to="/Home_Doc" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Patients</Link>
 									</li>
 									<li className="nestedHeaders">
-										<li className="main right-align">
-											Patient: {this.state.selectedPatient}
-										</li>
-										<li className={"sub right-align " + listShow}>
-											<li>
-												<Link to={"/Dashboard?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
+										<ul>
+											<li className="main right-align">
+												Patient: {this.state.selectedPatient}
 											</li>
-											<li>
-												<Link to={"/Documents?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Documents</Link>
+											<li className={"sub right-align " + listShow}>
+												<ul>
+													<li>
+														<Link to={"/Dashboard?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
+													</li>
+													<li>
+														<Link to={"/Documents?id="+sessionStorage.currentPatient} activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Documents</Link>
+													</li>
+												</ul>
 											</li>
-										</li>
+										</ul>
 									</li>
 								</ul>
 							)}
 							{ this.state.role === "Patient" && (
 								<ul id="menuList">
 									<li>
-										<Link to="/Dashboard" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
+										<Link to={"/Dashboard"} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Dashboard</Link>
 									</li>
 									<li>
-										<Link to="/Appointments" activeClassName="active" activeStyle={{fontWeight: 'bold'}} >Appointments</Link>
-									</li>
-									<li>
-										<Link to="/Documents" activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Documents</Link>
+										<Link to={"/Documents"} activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Documents</Link>
 									</li>
 								</ul>
 							)}

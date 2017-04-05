@@ -27,8 +27,8 @@ var NotificationsTable = React.createClass({
           senderUUID={notification.senderUUID}
           receiverUUID={notification.receiverUUID}
           senderName={notification.senderName}
-          date={notification.date}
-          key={index}/> );
+          date={notification.dateCreated}
+          key={index} /> );
     });
 
     return (
@@ -74,60 +74,60 @@ class NewNotificationForm extends Component{
 
   //searches and returns the list to find the object based on the given query
   findDocIndex(query, list){
-      var doc = {};
-      // parse query string to extract name and specialty of doctor
-      var name = query.substring(0, query.indexOf('(')).trim();
-      var specialty = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
+      var doc;
+      if (query){
+        // parse query string to extract name and specialty of doctor
+        var name = query.substring(0, query.indexOf('(')).trim();
+        var specialty = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
 
-      list.forEach(function(elem) {
-        if(elem.name === name && elem.primarySpecialty === specialty){
-            doc = elem;
-        }
-      });
+        list.forEach(function(elem) {
+          if(elem.name === name && elem.primarySpecialty === specialty){
+              doc = elem;
+          }
+        });
+      }
       return doc;
   }
   //Posts the notification to the appropriate doctor.
   sendNotification(event) {
     event.preventDefault()
     const docDescription = this.refs.doctor.value;
-    if(docDescription){
-      const message = this.refs.message.value;
-      if(message){
-        var doc = this.findDocIndex(docDescription, this.props.docs);
-        var currDate = moment().unix();
+    const message = this.refs.message.value;
+    var doc = this.findDocIndex(docDescription, this.props.docs);
 
-        var notif = {
-          date : currDate,
-          message : message,
-          receiverUUID : doc.doctorUUID,
-          senderName : requests.whoami().name,
-          senderUUID : sessionStorage.userUUID
-        }
-        console.log(notif);
-
-        requests.postNotification(notif)
-  				.then((res) => {
-            console.log("posted notification sucessfully");
-            location.reload();
-  				})
-  				.catch(function(e){
-  					console.log("Couldn't post notification");
-  				});
-
-      }else{
-        alert("Please write a message and try again!");
-      }
+    if(!doc){
+      alert("Please select a valid recipient!");
+    }else if(!message){
+      alert("Please write a message and try again!");
     }else{
-      alert("Please select a recipient and try again!");
+      var currDate = moment().unix();
+
+      var notif = {
+        date : currDate,
+        message : message,
+        receiverUUID : doc.doctorUUID,
+        senderName : requests.whoami().name,
+        senderUUID : sessionStorage.userUUID
+      }
+      console.log(notif);
+
+      requests.postNotification(notif)
+        .then((res) => {
+          console.log("posted notification sucessfully");
+          location.reload();
+        })
+        .catch(function(e){
+          console.log("Couldn't post notification");
+        });
     }
   }
 
   render(){
     var docOptions =[];
 
-  	this.props.docs.forEach(function(doc){
+  	this.props.docs.forEach(function(doc, index){
         var docDescrip = doc.name + " (Specialty: " + doc.primarySpecialty + ")";
-		    docOptions.push(<option value={docDescrip}></option>);
+		    docOptions.push(<option value={docDescrip} key={index}></option>);
     });
 
     var holderClass = classnames("formContent", {"show":this.state.showForm});
@@ -146,7 +146,7 @@ class NewNotificationForm extends Component{
             <input ref="doctor" className="form-control" type="text"
               list="docsData" placeholder="Type or select recipient from dropdown"></input>
 
-            <label for="message">Message:</label>
+            <label>Message:</label>
             <textarea ref="message" className="form-control" rows="4" id="message" placeholder="Type your message here..."></textarea>
 
             <button type="button" className="btn btn-danger" onClick={this.hideForm.bind(this)}>Cancel</button>
@@ -173,7 +173,7 @@ class Notifications extends Component {
 			.then((result) => {
         console.log("Sucessfully got notifications and doctors list from server.");
         result.notificationsList.sort(function(a, b){
-    			return b.date - a.date;
+    			return b.dateCreated - a.datedateCreated;
     		});
         this.setState(result);
 			})

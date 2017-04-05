@@ -2,7 +2,6 @@ import React, {Component } from 'react';
 import req from '../requests.js'
 import Comp from './CustomComp.js'
 import { browserHistory } from 'react-router'
-import classnames from 'classnames'
 
 function requireAuth(nextState, replace) {
   if (sessionStorage.token !== 'true') {
@@ -37,7 +36,11 @@ class Login extends Component {
 		req.authenticate(email, pass)
 			.then((res) => {
 				sessionStorage.token = res;
-				browserHistory.push('/Schedule');
+				if(req.whoami().role === "Doctor"){
+					browserHistory.push('/Schedule');
+				} else {
+					browserHistory.push('/Dashboard');
+				}
 				this.props.upp(true);
 			}).catch((res) => {
 				this.setState({error:true});
@@ -45,11 +48,11 @@ class Login extends Component {
 				console.log("Could not mount")
 			});
     }
-    
+
     radioClick(event){
     	this.setState({role:event.target.id})
     }
-    
+
     genderSel(event){
     	this.setState({gender:event.target.id})
     }
@@ -62,15 +65,15 @@ class Login extends Component {
     	else if(!haserror)
     		this.setState({next:event.target.id})
     }
-    
+
     backClick(event){
-    	this.setState({next:event.target.id})	
+    	this.setState({next:event.target.id})
     }
-    
+
     createSubmit(event){
     	var haserror = false;
     	var profile = {
-			name:this.refs.name.getValue().toLowerCase(),
+			name: (this.refs.name)? this.refs.name.getValue().toLowerCase() : "",
 			userName:this.refs.newUsername.getValue(),
 			passWord:this.refs.newPassword.getValue(),
 			role: this.state.role,
@@ -79,7 +82,7 @@ class Login extends Component {
 
     	if(this.state.role ==="Doctor"){
     		haserror = this.refs.name.checkValidation() || this.refs.phoneNumber.checkValidation() || this.refs.phoneNumber.checkValidation()
-	    		|| this.refs.prFacility.checkValidation() || this.refs.prSpecialty.checkValidation();
+	    		|| this.refs.prFacility.checkValidation() || this.refs.prSpecialty.checkValidation() ||  this.refs.verificationKey.checkValidation();
     		if (!haserror) {
 	    		var doctorProfile = {
 	    			name: this.refs.name.getValue(),
@@ -101,12 +104,12 @@ class Login extends Component {
 					});
 	    	}
 	    } else {
-	    	haserror = this.refs.name.checkValidation() || this.refs.verificationKey.checkValidation();
+	    	haserror = this.refs.verificationKey.checkValidation();
 	    	if (!haserror) {
     		req.createPatientProfile(profile)
 				.then((res) => {
 					sessionStorage.token = res;
-					browserHistory.push('/Dashboard');
+					browserHistory.push('/Dashboard?id='+req.whoami().uuid);
 					this.props.upp(true);
 				}).catch((res) => {
 					if (res.createUserError)
@@ -116,10 +119,11 @@ class Login extends Component {
 				});
     		}
 	    }
-	    
+
     }
-	
+
 	render(){
+		var gender = this.state.gender.toLowerCase();
 		return (
 		<div id="Login">
 			<div className="signIn">
@@ -151,56 +155,56 @@ class Login extends Component {
 		    					required:"Username Required"
 		    				}} />
 						<Comp.ValidatedInput ref="newPassword"
-		  					validation="required" label="Password" name="password" type="password" 
+		  					validation="required" label="Password" name="password" type="password"
 		  					value="" errorHelp={{
 		    					required:"Password Required"
 		    				}} />
 		    			<Comp.ValidatedInput ref="repPassword"
-		  					validation="required" label="Password" name="password" type="password" 
+		  					validation="required" label="Password" name="password" type="password"
 		  					value="" />
 		    			<button className="btn btn-primary" id="true" onClick={this.nextClick.bind(this)}>Next</button>
 		    			{this.state.pMatch &&(<p style={{color:"#a94442"}}>Passwords do not match</p>)}
 		    			{this.state.createUserError &&(<p style={{color:"#a94442"}}>Username not available</p>)}
 		    		</div>
 		    		<div style={{left:(!this.state.next)?"100%": "0"}} className="inputPanel detailsInput">
-		    			<Comp.ValidatedInput ref="name"
-		  					validation="required" label="Name" name="name" type="text" 
-		  					value="" errorHelp={{
-		    					required:"Name Required"
-		    				}} />
 		    			{ this.state.role ==="Doctor"  && (
 	    				<div>
+		    				<Comp.ValidatedInput ref="name"
+			  					validation="required" label="Name" name="name" type="text"
+			  					value="" errorHelp={{
+			    					required:"Name Required"
+			    				}} />
 		    				<div className="btn-group" data-toggle="buttons">
-			        		  <label style={{opacity:(this.state.gender == "male")?"1":"0.5"}} className="btn btn-primary">
-							    <input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
-							  </label>
-							  <label style={{opacity:(this.state.gender == "male")?"0.5":"1"}} className="btn btn-primary">
-							    <input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
-							  </label>
+			        		 	<label style={{opacity:(gender === "male" || gender === "m" )?"1":"0.5"}} className="btn btn-primary">
+							    	<input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
+							  	</label>
+							  	<label style={{opacity:(gender === "female" || gender === "f")?"1":"0.5"}} className="btn btn-primary">
+							    	<input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
+							  	</label>
 							</div>
 			    			<Comp.ValidatedInput ref="phoneNumber"
-			  					validation="required" label="Phone Number" name="phoneNumber" type="text" 
+			  					validation="required" label="Phone Number" name="phoneNumber" type="text"
 			  					value="" errorHelp={{
 			    					required:"Required"
 			    				}} />
 			    			<Comp.ValidatedInput ref="prFacility"
-			  					validation="required" label="Primary Facility" name="prFacility" type="text" 
+			  					validation="required" label="Primary Facility" name="prFacility" type="text"
 			  					value="" errorHelp={{
 			    					required:"Required"
 			    				}} />
 			    			<Comp.ValidatedInput ref="prSpecialty"
-			  					validation="required" label="Primary Specialty" name="prSpecialty" type="text" 
+			  					validation="required" label="Primary Specialty" name="prSpecialty" type="text"
 			  					value="" />
 			    			<Comp.ValidatedInput ref="verificationKey"
-			  					validation="required" label="Access Key" name="accessKey" type="text" 
-			  					value=""  />
+			  					validation="required" label="Access Key" name="accessKey" type="text"
+			  					value="" />
 			  				{this.state.licenseError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
 	  					</div>
 		    			)}
 	    				{ this.state.role !== "Doctor"  && (
 						<div>
 			    			<Comp.ValidatedInput ref="verificationKey"
-			  					validation="required" label="Medical Number" name="medicalNumber" type="text" 
+			  					validation="required" label="Medical Number" name="medicalNumber" type="text"
 			  					value="" errorHelp={{
 			    					required:"Medical Number Required"
 			    				}} />
@@ -219,7 +223,7 @@ class Login extends Component {
 
 class Logout extends Component {
 	componentDidMount() {
-		delete sessionStorage.token;
+		sessionStorage.clear();
 		this.props.upp(false);
 	}
 	render(){

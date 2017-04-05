@@ -15,12 +15,14 @@ class AppRow extends React.Component{
 		return (
 			<tr className={fadeOut}>
 				<td>{appDate}</td>
-				<td>{startTime} - {endTime}</td>
-				<td>
-					<Link to={"Appointments?appt="+this.props.appointmentUUID+"&id="+this.props.patientUUID}>
-						View
-					</Link>
-				</td>
+				<td>{startTime} - {endTime}</td>				
+				{ this.props.role === "Doctor" &&
+					<td>
+						<Link to={"Appointments?appt="+this.props.appointmentUUID+"&id="+this.props.patientUUID}>
+							View
+						</Link>
+					</td>
+				}
 			</tr>
 		);
 	}
@@ -29,11 +31,12 @@ class AppRow extends React.Component{
 var AppTable = React.createClass({
   render:function(){
   	var rows =[];
+  	var role = this.props.role;
   	this.props.appts.forEach(function(appt, index){
 		rows.push(
-			<AppRow date={appt.dateScheduled||appt.dateVisited} key={index}
+			<AppRow date={appt.dateScheduled||appt.dateVisited} key={index} role={role}
 			patientUUID={appt.patientUUID} appointmentUUID={appt.appointmentUUID} /> );
-	}.bind(this));
+	});
     return (
       <div>
         <table className="table-striped table-hover">
@@ -55,7 +58,7 @@ class PatientAppointments extends Component {
 		return (
 			<div className="PatientAppointments module">
 				<h3 className="modeleHeader">Appointments</h3>
-				<AppTable appts={apptList} />
+				<AppTable appts={apptList} role={this.props.role} />
 			</div>
 		)
 	}

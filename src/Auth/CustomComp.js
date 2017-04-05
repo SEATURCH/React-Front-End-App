@@ -21,27 +21,25 @@ class UserInput extends React.Component{
 	    }
 	}
 	componentWillReceiveProps(props){
-		if(props.reset){
-			this.setState({
-				value: props.value,
-				error: false,
-		        errorMsg: ""
-	        })
-		}
+		this.setState({
+			value: props.value,
+			error: false,
+	        errorMsg: ""
+        })
 	}
 	getValue(){
 		return this.state.value;
 	}
 	handleChange(event){
-		this.setState({value:event.target.value})
+		this.setState({value:event.target.value});
 	}
 
 	onFocus(event) {
-		if(this.props.onFocus)
+		if(this.props.onFocus && !this.props.readonly)
 	 		this.props.onFocus(event);
 	}
 	onBlur(event){
-		if(this.props.onBlur)
+		if(this.props.onBlur && !this.props.readonly)
 	 		this.props.onBlur(event);
 	}
 }
@@ -51,7 +49,6 @@ class ValidatedInput extends UserInput {
 		return this.validate();
 	}
 	validate(event) {
-		this.onBlur();
 		var errorFound, errorMsg;
 	 	var validateBy = this.props.validation.split(',');
 	 	for(var i =0; i < validateBy.length; i++){
@@ -60,7 +57,6 @@ class ValidatedInput extends UserInput {
 	 			case 'required':
 		 			if(!this.state.value){
 			 			errorFound = true;
-			 			console.log(validation)
 			 			if(this.props.errorHelp && this.props.errorHelp.hasOwnProperty(validation))
 			 				errorMsg = this.props.errorHelp[validation];
 			 			else
@@ -79,11 +75,16 @@ class ValidatedInput extends UserInput {
     }
 	render(){
 		var holderClass = classnames("form-group", {"has-error":this.state.error});
-		return (
+		var readOnly = {};
+		if (this.props.readonly) {
+			readOnly['readOnly'] = 'readOnly';
+		}
+    	return (
 			<div className={holderClass} style={{"position":"relative"}}>
     			<label className="">{this.props.label}</label>
     			<input className="form-control"
     				name={this.props.name} type={this.props.type} value={this.state.value} max={this.props.max}
+    				{...readOnly}
     				onBlur={this.validate.bind(this)}
     				onFocus={this.onFocus.bind(this)}
     				onChange={this.handleChange.bind(this)} />
@@ -98,8 +99,13 @@ class ValidatedInput extends UserInput {
 
 class TextInput extends UserInput {
 	render(){
-		return (
+		var readOnly = {};
+		if (this.props.readonly) {
+			readOnly['readOnly'] = 'readOnly';
+		}
+    	return (
 			<textarea value={this.state.value}
+				{...readOnly}
 				onChange={this.handleChange.bind(this)}
 				onFocus={this.onFocus.bind(this)} >
 			</textarea>
