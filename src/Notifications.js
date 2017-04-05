@@ -100,10 +100,8 @@ class NewNotificationForm extends Component{
     }else if(!message){
       alert("Please write a message and try again!");
     }else{
-      var currDate = moment().unix();
 
       var notif = {
-        date : currDate,
         message : message,
         receiverUUID : doc.doctorUUID,
         senderName : requests.whoami().name,
