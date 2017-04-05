@@ -10,7 +10,6 @@ import AppCont from '../src/AppCont';
 describe('<AppCont/>', function () {
   it('should have initial state', () => {
     const wrapper = mount(<AppCont/>);
-    expect(wrapper.state().selectedPatient).to.equal("");
     expect(wrapper.state().role).to.equal("");
     expect(wrapper.state().uuid).to.equal("");
     expect(wrapper.state().name).to.equal("");
@@ -37,7 +36,7 @@ describe('<AppCont/>', function () {
     expect(wrapper.find('li.main').first().text()).to.equal('Patient: p1');
   });
 
-  it('should render doctor app content if role is Doctor', () => {
+  it('should render patient app content if role is Patient', () => {
     const wrapper = mount(<AppCont/>);
     wrapper.setState({
       uuid: "123",
@@ -46,11 +45,9 @@ describe('<AppCont/>', function () {
     });
     wrapper.update();
     expect(wrapper.find('div#navMenu')).to.have.length(1);
-    expect(wrapper.find(Link)).to.have.length(3);
+    expect(wrapper.find(Link)).to.have.length(2);
     expect(wrapper.findWhere(n => n.props().to === '/Dashboard')).to.be.defined;
     expect(wrapper.findWhere(n => n.props().to === '/Dashboard').first().text()).to.equal('Dashboard');
-    expect(wrapper.findWhere(n => n.props().to === '/Appointments')).to.be.defined;
-    expect(wrapper.findWhere(n => n.props().to === '/Appointments').first().text()).to.equal('Appointments');
     expect(wrapper.findWhere(n => n.props().to === '/Documents')).to.be.defined;
     expect(wrapper.findWhere(n => n.props().to === '/Documents').first().text()).to.equal('Documents');
   });

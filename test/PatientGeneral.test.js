@@ -10,12 +10,12 @@ import moment from 'moment';
 describe('<PatientGeneral/>', function () {
   it('should have initial patientInfo state', () => {
     const wrapper = mount(<PatientGeneral/>);
-    expect(wrapper.state().patientInfo).to.deep.equal({});
+    expect(wrapper.state().patientInfo).to.deep.equal({gender: 'male'});
   });
 
   it('should render 8 <Comp.ValidatedInput> components', () => {
     const wrapper = mount(<PatientGeneral/>);
-    expect(wrapper.find(Comp.ValidatedInput)).to.have.length(8);
+    expect(wrapper.find(Comp.ValidatedInput)).to.have.length(7);
   });
 
   it('should render a <Comp.TextInput> component', () => {
@@ -29,14 +29,17 @@ describe('<PatientGeneral/>', function () {
   });
 
   it('should update patientInfo state after receiving updated props', () => {
-    let dummyid=1;
     let dummyInfo = {
-      patientUUID: dummyid,
+      patientUUID: 1,
       name: 'greg'
     };
     const wrapper = mount(<PatientGeneral/>);
     wrapper.setProps({generalInfo: dummyInfo});
-    expect(wrapper.state('patientInfo')).to.deep.equal(dummyInfo);
+    expect(wrapper.state('patientInfo')).to.deep.equal({
+      gender: 'male',
+      patientUUID: 1,
+      name: 'greg'
+    });
   });
 
   it('should call componentWillReceiveProps', () => {
@@ -52,14 +55,12 @@ describe('<PatientGeneral/>', function () {
   });
 
   it('should show correctly updated values on Comp.ValidatedInput and Comp.TextInput', () => {
-    let dummyid=1;
     let dummyInfo = {
-      patientUUID: dummyid,
+      patientUUID: 1,
       address: "a",
       bloodType: "b",
       dateOfBirth: 0,
       emergencyContact: "c",
-      gender: "d",
       medicalNumber: "123",
       name: "e",
       notes: "f",
@@ -68,7 +69,6 @@ describe('<PatientGeneral/>', function () {
     const wrapper = mount(<PatientGeneral/>);
     wrapper.setProps({generalInfo: dummyInfo});
     expect(wrapper.ref('name').prop('value')).to.equal('e');
-    expect(wrapper.ref('gender').prop('value')).to.equal('d');
     expect(wrapper.ref('bloodType').prop('value')).to.equal('b');
     expect(wrapper.ref('dateOfBirth').prop('value')).to.equal(moment.unix(0).format("YYYY-MM-DD"));
     expect(wrapper.ref('medicalNumber').prop('value')).to.equal('123');
@@ -78,36 +78,5 @@ describe('<PatientGeneral/>', function () {
     expect(wrapper.ref('address').prop('value')).to.equal('a');
   });
 
-  /*
-  it('should correctly update state upon submiteUpdate', () => {
-    let dummyid = 1;
-    const wrapper = mount(<PatientGeneral patientuuid={dummyid}/>);
 
-    //wrapper.ref('name').get(0).value = 'a';
-    //wrapper.ref('gender').get(0).value = 'b';
-    //wrapper.ref('bloodType').get(0).value = 'c';
-    //wrapper.ref('medicalNumber').get(0).value = '123';
-    //wrapper.ref('allergies').get(0).value = 'd';
-    //wrapper.ref('phoneNumber').get(0).value = '789';
-    //wrapper.ref('emergencyContact').get(0).value = 'e';
-    //wrapper.ref('address').get(0).value = 'f';
-    //wrapper.ref('dateOfBirth').get(0).value = moment.unix(0).format("YYYY-MM-DD");
-    //wrapper.ref('save').simulate('click');
-
-    expect(wrapper.find({ref: 'name'})).to.have.length(1);
-    //expect(wrapper.state('patientInfo')).to.deep.equal({
-    //  patientUUID: 1,
-    //  notes: 'd',
-    //  name: 'a',
-    //  gender: 'b',
-    //  dateOfBirth: moment(moment.unix(0).format("YYYY-MM-DD")).unix(),
-    //  bloodType: 'c',
-    //  medicalNumber: '123',
-    //  phoneNumber: '789',
-    //  emergencyContact: 'e',
-    //  address: 'f'
-    //});
-
-  });
-  */
 });
