@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import req from './requests'
 import Comp from './Auth/CustomComp.js'
 import moment from 'moment'
+import pubSub from 'pubsub-js'
 
 class PatientGeneral extends Component {
 		constructor(props){
@@ -52,6 +53,7 @@ class PatientGeneral extends Component {
 							showBtn:false,
 							patientInfo: patient
 						});
+						pubSub.publish("PATI SEL", patient.name);
 					})
 					.catch(function(e){
 						this.setState({

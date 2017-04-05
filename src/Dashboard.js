@@ -14,6 +14,9 @@ class Dashboard extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			patientBroadCast: pubSub.subscribe("PATI SEL", function(msg, data) {
+			 	this.setState({ generalInfoList: {name: data}});
+			}.bind(this)),
 			generalInfoList: {
 				patientUUID: "",
 				address: "",
@@ -49,6 +52,10 @@ class Dashboard extends Component {
 				console.log("Could not mount");
 			});
 	}
+	
+	componentWillUnmount() {
+		pubSub.unsubscribe(this.state.patientBroadCast);
+	}
 
 	render() {
 		return (
@@ -75,10 +82,6 @@ class Dashboard extends Component {
 			      		</div>
 			      	</div>
 		      	</div>
-				{/*
-				<PatientGeneral generalInfo={this.state.generalInfoList} />
-				<PatientMedication medicationInfo = {this.state.medicationList} />
-				<PatientProblems problemsInfo = {this.state.problemsList} /> */}
 			</div>
 		)
 	}
