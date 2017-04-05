@@ -527,7 +527,6 @@ var createDoctorProfile = function(userProfile, doctorProfile){
 export default {
 	whoami: whoami,
 	authenticate:authenticate,
-	testApi:getTest,
 	patientSearch:patientSearch,
 	patientsByDocSearch:patientsByDocSearch,
 	appointmentsByDocSearch:appointmentsByDocSearch,

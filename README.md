@@ -4,6 +4,16 @@ Install required NODE dependecies from pacakge.json
 cd {applicationPath}/
 npm install
 ```
+
+Some versions of the raspbian may be missing the 'node-sass' binary so will have to be built seperately from source. 
+Ensure that g++ is installed.
+```
+sudo apt-get build-essentials
+- - - -
+cd {applicationPath}/
+npm install node-sass
+```
+
 - - - - -
 
 The program can be run in two modes:
