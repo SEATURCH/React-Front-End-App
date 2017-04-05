@@ -2,6 +2,27 @@ import React, { Component } from 'react';
 import moment from 'moment'
 import classnames from 'classnames'
 
+
+// PatientPrescription submodule
+// Props:
+// 		role = role of logged in user
+//		prescriptionList = Array of JSON objects of prescriptions for given patient
+class PatientPrescription extends Component {
+	render() {
+		var prescriptList = this.props.prescriptionList;
+		prescriptList.sort(function(a, b){
+			return b.endDate - a.endDate; 
+		})
+		return (
+			<div className="PatientPrescription module">
+				<h3 className="modeleHeader">Prescriptions</h3>
+				<MediTable prescripts={prescriptList} />
+			</div>
+		)
+	}
+}
+
+// Single row in a patient's prescriptions <table>
 class MediRow extends React.Component{
 	render(){
 		var currentTime = moment().unix();
@@ -23,6 +44,7 @@ class MediRow extends React.Component{
 	}
 }
 
+// Prescriptions <table>
 var MediTable = React.createClass({
   render:function(){
   	var rows =[];
@@ -33,9 +55,11 @@ var MediTable = React.createClass({
       <div>																																																																				
         <table className="table-striped table-hover">
 			<thead>
-				<th>Drug</th>
-				<th>Notes</th>
-				<th>Written By</th>
+				<tr>
+					<th>Drug</th>
+					<th>Notes</th>
+					<th>Written By</th>
+				</tr>
 			</thead>
 			<tbody>
 				{rows}
@@ -45,20 +69,5 @@ var MediTable = React.createClass({
     );																				
   }
 });
-
-class PatientPrescription extends Component {
-	render() {
-		var prescriptList = this.props.prescriptionList;
-		prescriptList.sort(function(a, b){
-			return b.endDate - a.endDate; 
-		})
-		return (
-			<div className="PatientPrescription module">
-				<h3 className="modeleHeader">Prescriptions</h3>
-				<MediTable prescripts={prescriptList} />
-			</div>
-		)
-	}
-}
 
 export default PatientPrescription

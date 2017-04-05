@@ -63,15 +63,7 @@ body {
 
 .Body {
   height:calc(100% - 70px);
-  /*height: 100%;*/
 }
-
-// .Footer {
-//   font-size: large;
-//   min-height: 50px;
-//   background: rgba(0,0,0, 0.5);
-//   position:relative;
-// }
 
 #Login {
   height:100%;
@@ -120,6 +112,7 @@ body {
   }
 }
 
+// Custom Comp savebuttons
 .btnHolder{
     position: absolute;
     top: 0;
@@ -140,6 +133,5 @@ body {
       line-height: 100%;
       height: 100%;
       margin: 0px 5px;
-      /*vertical-align: top;*/
     }
   }

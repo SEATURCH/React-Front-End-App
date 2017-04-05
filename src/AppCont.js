@@ -5,6 +5,9 @@ import requests from './requests';
 import pubSub from 'pubsub-js'
 import classnames from 'classnames';
 
+// Main container component components inside "body' of index component
+// Includes the side navigation bar and a content-body div where each children component
+// or module of application is rendered.
 class AppCont extends Component {
 	constructor(props){
 			super(props);
@@ -17,8 +20,8 @@ class AppCont extends Component {
 				userUUID:"",
 				name:"",
 			};
-
 		}
+
 	componentDidMount() {
 		if(requests.whoami().then){
 			requests.whoami().then((res) => {
@@ -28,9 +31,11 @@ class AppCont extends Component {
 			this.setState(requests.whoami())
 		}
 	}
+
 	componentWillUnmount() {
 		pubSub.unsubscribe(this.state.patientBroadCast);
 	}
+
 	render() {
 		var listShow = classnames({"show":this.state.selectedPatient });
 		return (

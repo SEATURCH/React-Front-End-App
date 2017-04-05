@@ -4,6 +4,11 @@ import Comp from './Auth/CustomComp.js'
 import moment from 'moment'
 import pubSub from 'pubsub-js'
 
+// Patient Profile submodule
+// Shows and update patient basic info
+// Props:
+// 		role = role of logged in user
+//		generalInfo = JSON object containing patient basic informaiton
 class PatientGeneral extends Component {
 		constructor(props){
 			super(props);
@@ -12,12 +17,13 @@ class PatientGeneral extends Component {
 					gender:"male"
 				}
 			};
-
 		}
+
 		componentWillReceiveProps(prop){
 			this.setState(Object.assign(this.state.patientInfo, prop.generalInfo))
 		}
-		 checkAll () {
+
+		checkAll() {
 		    var nameError = this.refs.name.checkValidation();
 		    var dateOfBirthError = this.refs.dateOfBirth.checkValidation();
 		    var bloodTypeError = this.refs.bloodType.checkValidation();
@@ -27,7 +33,22 @@ class PatientGeneral extends Component {
 		    var addressError = this.refs.address.checkValidation();
 		    return nameError || dateOfBirthError || bloodTypeError || 
 		      medicalNumberError || phoneNumberError || emergencyContactError || addressError;
-		 }
+		}
+
+		currentStateObject() {
+			return {
+				patientUUID: this.state.patientInfo.patientUUID,
+				notes: this.refs.allergies.getValue(),
+				name: this.refs.name.getValue(),
+				gender: this.state.patientInfo.gender,
+				dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
+				bloodType: this.refs.bloodType.getValue(),
+				medicalNumber: this.refs.medicalNumber.getValue(),
+				phoneNumber: this.refs.phoneNumber.getValue(),
+				emergencyContact: this.refs.emergencyContact.getValue(),
+				address: this.refs.address.getValue()
+			}
+		}
 
 		submiteUpdate(event) {
 		 	event.preventDefault()
@@ -35,19 +56,8 @@ class PatientGeneral extends Component {
 		    if(hasError){
 		      alert("Please fill in all required fields");
 		    } else {
-			 	var patient = {
-					patientUUID: this.props.patientuuid,
-					notes: this.refs.allergies.getValue(),
-					name: this.refs.name.getValue(),
-					gender: this.state.patientInfo.gender,
-					dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
-					bloodType: this.refs.bloodType.getValue(),
-					medicalNumber: this.refs.medicalNumber.getValue(),
-					phoneNumber: this.refs.phoneNumber.getValue(),
-					emergencyContact: this.refs.emergencyContact.getValue(),
-					address: this.refs.address.getValue()
-				}
-				req.updatePatient(patient)
+			 	var patient = this.currentStateObject();
+			 	req.updatePatient(patient)
 					.then((res) => {
 						this.setState({
 							showBtn:false,
@@ -77,19 +87,9 @@ class PatientGeneral extends Component {
 
 	    genderSel(event){
 	    	if(this.props.role !== "Patient") {
-		    	this.setState({
-					patientInfo:{
-						gender:event.target.id,
-						patientUUID: this.props.patientuuid,
-						notes: this.refs.allergies.getValue(),
-						name: this.refs.name.getValue(),
-						dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
-						bloodType: this.refs.bloodType.getValue(),
-						medicalNumber: this.refs.medicalNumber.getValue(),
-						phoneNumber: this.refs.phoneNumber.getValue(),
-						emergencyContact: this.refs.emergencyContact.getValue(),
-						address: this.refs.address.getValue()
-					}});
+	    		var newState = this.currentStateObject();
+	    		newState.gender = event.target.id;
+		    	this.setState({patientInfo:newState});
 		    }
 		}
 
@@ -165,7 +165,6 @@ class PatientGeneral extends Component {
 					    				errorHelp={{
 					    					required:"Required"
 					    				}} />
-
 				      			</div>
 			      			</div>
 		      			</div>

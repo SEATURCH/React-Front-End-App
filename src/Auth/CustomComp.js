@@ -1,16 +1,8 @@
 import React from 'react';
 import classnames from 'classnames'
-/* props:
-validation
-label
-name
-type
-value
-onFocus:funciton
-updateForm:function
-reset
-errorHelp
-*/
+
+
+// Base class with event handler functionalities for custom form validation components
 class UserInput extends React.Component{
 	constructor(props){
 		super(props);
@@ -44,6 +36,22 @@ class UserInput extends React.Component{
 	}
 }
 
+
+/*
+	Extends UserInput - customizable <input> tag with extendable error-checking
+	Props:
+		validation = string of all validation types component checked against 
+		label = surronding <input> label tag
+		name = <input> name
+		type = <input> type
+		value = <input> value
+		onFocus = Parent defined function to execute on component focus  
+		onBlur = Parent defined function to execute on component focus  
+		errorHelp = Object containing custom error msg passed in from parent
+			Key corresponds validation type listed in props.validation
+		readOnly = boolean, <input> readonly attribute
+		tabDisable = boolean, sets tabIndex 
+*/
 class ValidatedInput extends UserInput {
 	checkValidation(){
 		return this.validate();
@@ -97,7 +105,17 @@ class ValidatedInput extends UserInput {
 	}
 }
 
-
+/*
+	Extends UserInput - customizable <textarea> tag
+	Props:
+		value = <textarea> value
+		onFocus = Parent defined function to execute on component focus  
+		onBlur = Parent defined function to execute on component focus  
+		errorHelp = Object containing custom error msg passed in from parent
+			Key corresponds validation type listed in props.validation
+		readOnly = boolean, <textarea> readonly attribute
+		tabDisable = boolean, sets tabIndex 
+*/
 class TextInput extends UserInput {
 	render(){
 		var readOnly = {};
@@ -115,6 +133,13 @@ class TextInput extends UserInput {
 	}
 }
 
+/*
+	Reusable 'Save' and 'Cancel' buttons that shows and hide on event
+	Props:
+		init = boolean, initial state of buttons
+		saveButton = Parent defined function to execute on 'Save' button click  
+		cancelButton = Parent defined function to execute on 'Cancel' button click
+*/
 class SaveButtons extends React.Component {
 	constructor(props){
 		super(props);

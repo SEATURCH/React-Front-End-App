@@ -14,6 +14,8 @@ import Notifications from './Notifications'
 import './css/index.scss';
 import './css/bootstrap.min.css'
 
+
+// Page not found warning
 class NotFound extends Component {
   render() {
     return (
@@ -30,6 +32,9 @@ class NotFound extends Component {
   }
 }
 
+// Main overhead component used in the React-Router logic.
+// Includes the header, footer, and it's children components 
+// is selectively shown by React-Router according to URL
 class Conts extends Component {
   constructor(){
     super();
@@ -57,14 +62,14 @@ class Conts extends Component {
         <div className="Body">
           {React.cloneElement(this.props.children, {upp: this.updateAuth.bind(this)})}
         </div>
-        <div className="Footer">
-        </div>
       </div>
     );
   }
 }
 
 
+// Only accessible page outside of requiring authorization
+// (onEnter={Auth.requireAuth}) is login, logout
 ReactDOM.render(
   <Router history={browserHistory}>
     <Route component={Conts} >

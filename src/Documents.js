@@ -4,52 +4,8 @@ import moment from 'moment'
 import { Link } from 'react-router';
 import requests from './requests';
 
-class DocumentRow extends Component{
-  render(){
-    var docDate = moment.unix(this.props.date).format("MM/DD/YYYY");
-    var actionURL = "/document?document=" + this.props.docUUID +"&name="+this.props.fname;
-    return (
-			<tr>
-        <td>{docDate}</td>
-        <td>{this.props.fname}</td>
-        <td><Link to={actionURL} >View</Link></td>
-			</tr>
-		);
-	}
-}
-
-class DocumentsTable extends Component{
-  render(){
-    var rows = [];
-
-    this.props.docs.forEach(function(doc, index){
-        rows.push( <DocumentRow
-          fname={doc.filename}
-          docUUID={doc.documentUUID}
-          date={doc.dateUploaded}
-          patientUUID={doc.patientUUID}
-          key={index}/> );
-    });
-
-    return (
-      <div>
-        <table className="table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Date Uploaded</th>
-              <th>File Name</th>
-              <th>Contents</th>
-            </tr>
-          </thead>
-      		<tbody>
-      			{rows}
-      		</tbody>
-    		</table>
-      </div>
-    );
-  }
-}
-
+// Patient Documents List Module
+// List out all doucments uploaded for a given patient, allows for document upload
 class Documents extends Component {
   constructor(props){
     super(props);
@@ -106,7 +62,6 @@ class Documents extends Component {
             <button type="upload" className="btn btn-default" onClick={this.clickAdd.bind(this)}>+</button>
           }
         </label>
-
         {this.state.documentsList.length > 0 &&
             <DocumentsTable docs={this.state.documentsList}/>
         }
@@ -115,7 +70,53 @@ class Documents extends Component {
   }
 }
 
+// Single row in documents <table>
+class DocumentRow extends Component{
+  render(){
+    var docDate = moment.unix(this.props.date).format("MM/DD/YYYY");
+    var actionURL = "/document?document=" + this.props.docUUID +"&name="+this.props.fname;
+    return (
+      <tr>
+        <td>{docDate}</td>
+        <td>{this.props.fname}</td>
+        <td><Link to={actionURL} >View</Link></td>
+      </tr>
+    );
+  }
+}
 
+// Documents <table>
+class DocumentsTable extends Component{
+  render(){
+    var rows = [];
+    this.props.docs.forEach(function(doc, index){
+        rows.push( <DocumentRow
+          fname={doc.filename}
+          docUUID={doc.documentUUID}
+          date={doc.dateUploaded}
+          patientUUID={doc.patientUUID}
+          key={index}/> );
+    });
+    return (
+      <div>
+        <table className="table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Date Uploaded</th>
+              <th>File Name</th>
+              <th>Contents</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+// Module for embedded view of patient document
 class DocumentView extends Component {
   constructor(props){
     super(props);
@@ -148,9 +149,8 @@ class DocumentView extends Component {
         }
       });
     });
-    this.setState(this.state)
     // Update page counters
-    // document.getElementById('page_num').textContent = num;
+    this.setState(this.state)
   }
 
   queueRenderPage(num) {
@@ -197,7 +197,6 @@ class DocumentView extends Component {
         this.state.numPages = pdfDoc_.numPages
         // Initial/first page rendering
         this.state.pageNum  = 1
-        // this
         this.renderPage(this.state.pageNum);
     });
   }
@@ -216,9 +215,9 @@ class DocumentView extends Component {
           <button className="btn btn-default" onClick={this.onNextPage.bind(this)}>Next</button>
         </div>
         <div className="moduleBody">
-        <div style={{position:"relative"}}>
-          <canvas ref="canvas" id="the-canvas"></canvas>
-        </div>
+          <div style={{position:"relative"}}>
+            <canvas ref="canvas" id="the-canvas"></canvas>
+          </div>
         </div>
       </div>
     );

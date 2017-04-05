@@ -3,6 +3,7 @@ import req from '../requests.js'
 import Comp from './CustomComp.js'
 import { browserHistory } from 'react-router'
 
+// Rerouting to redirect any non authenticated access to login page
 function requireAuth(nextState, replace) {
   if (sessionStorage.token !== 'true') {
   	replace({
@@ -11,7 +12,7 @@ function requireAuth(nextState, replace) {
   }
 }
 
-
+// Login component includes the login and create user component
 class Login extends Component {
 	constructor(props){
 		super(props);
@@ -53,9 +54,9 @@ class Login extends Component {
 
 	handleSubmit(event) {
 	 	event.preventDefault()
-		const email = this.refs.email.value.toLowerCase()
-		const pass = this.refs.pass.value
-		req.authenticate(email, pass)
+		var username = this.refs.loginUsername.value.toLowerCase()
+		var pass = this.refs.pass.value
+		req.authenticate(username, pass)
 			.then((res) => {
 				sessionStorage.token = res;
 				if(req.whoami().role === "Doctor"){
@@ -163,7 +164,7 @@ class Login extends Component {
 			<div className="signIn">
 				<h2>Sign In</h2>
 		        <div>
-					<label><input ref="email" placeholder="email" /></label>
+					<label><input ref="loginUsername" placeholder="email" /></label>
 					<label><input type="password" ref="pass" placeholder="password" /></label>
 					<br />
 					<button type="submit" className="btn btn-primary" onClick={this.handleSubmit.bind(this)}>Login</button>
@@ -254,7 +255,7 @@ class Login extends Component {
 	}
 }
 
-
+// Static page to verify logout action. Clears sessionstorage.
 class Logout extends Component {
 	componentDidMount() {
 		sessionStorage.clear();

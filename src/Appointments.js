@@ -6,6 +6,7 @@ import moment from 'moment';
 import { browserHistory } from 'react-router'
 import './css/DetailedAppt.scss';
 
+// Single row in to addendum <table>
 class TextRow extends React.Component{
 	render(){
 		var date = moment.unix(this.props.date).format("MMM/DD/YYYY");
@@ -22,6 +23,7 @@ class TextRow extends React.Component{
 	}
 }
 
+// Addendum <table>
 var TextTable = React.createClass({
   render:function(){
   	var rows =[];
@@ -41,6 +43,12 @@ var TextTable = React.createClass({
   }
 });
 
+// Appointment Summary Module
+// Update a completed appointment entry or create one from a scheduled appoitnment 
+//
+// Appends to Chief Complaint and Doctor notes and lists all previous entries in 'addendum' table
+// Can add to a patient's prescription
+// Can delete appointment if it is a scheduled appointment and has not ben submitted as a completedAppointment 
 class Appointments extends Component {
 	constructor(props){
 		super(props);
@@ -128,18 +136,19 @@ class Appointments extends Component {
 		})
 	}
 
+	// Button triggers for SaveButtons from CustomComp
 	buttonTrigger(event) {
 		event.preventDefault()
 		this.refs.save.showButtons(event);
 	}
-
 	cancelChanges(event) {
 		this.setState({
 			appointmentDetail: this.state.appointmentDetail,
 			addedPrescript: []
 		});
-  }
+  	}
 
+  	// Add a blank prescription entry form to table
 	clickAdd(event) {
 		var temp = this.state.addedPrescript
 		temp.push({
@@ -152,8 +161,9 @@ class Appointments extends Component {
 			doctorNotes:this.refs.doctorNotes.getValue(),
 			addedPrescript:temp
 		});
-  }
-
+  	}
+	
+	// Remove a prescription entry form to table
 	clickRm(event) {
 		var temp = this.state.addedPrescript
 		temp.splice(event.target.id, 1)
@@ -164,8 +174,8 @@ class Appointments extends Component {
 		});
   	}
 
+  	// Delete the current appoitment
 	deleteAppointment(event){
-		console.log(this.props.location.query)
 		requests.deleteFutureAppointment(this.props.location.query.appt)
 		.then((result) => {
 			browserHistory.push('/Schedule');
@@ -180,6 +190,7 @@ class Appointments extends Component {
 		var dateVisited = (this.state.appointmentDetail.dateVisited)?
 		moment.unix(this.state.appointmentDetail.dateVisited).format("MMM/DD/YYYY") : "New";
 		var rows = [];
+		// Template to for an 'Add prescription' form 
 		this.state.addedPrescript.forEach((item, index) => {
 			rows.push(
 				<div className="newPrescript" key={index} >
@@ -258,11 +269,6 @@ class Appointments extends Component {
 									</div>
 									<div>
 										{rows}
-										<table className="table-striped">
-											<tbody>
-
-											</tbody>
-										</table>
 									</div>
 								</div>
 							</div>

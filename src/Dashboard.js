@@ -5,11 +5,10 @@ import PatientPrescription from './PatientPrescription';
 import PatientAppointments from './PatientAppointments';
 import pubSub from 'pubsub-js'
 
-//import Nav from './Nav';
-//import WelcomeBanner from './WelcomeBanner';
-
 import './css/Dashboard.scss';
 
+// Patient Dashboard or Patient Summary Modele
+// Created from 3 seperate sub-modules PatientProfile, PatientPrescription, PatientAppointments
 class Dashboard extends Component {
 	constructor(props){
 		super(props);
@@ -52,7 +51,7 @@ class Dashboard extends Component {
 				console.log("Could not mount");
 			});
 	}
-	
+
 	componentWillUnmount() {
 		pubSub.unsubscribe(this.state.patientBroadCast);
 	}
@@ -77,7 +76,7 @@ class Dashboard extends Component {
 		      			</div>
 		      			<div className="row">
 			      			<div className="col col-md-12">
-			  					<PatientProfile role={requests.whoami().role} generalInfo={this.state.generalInfoList} patientuuid={this.state.generalInfoList.patientUUID} />
+			  					<PatientProfile role={requests.whoami().role} generalInfo={this.state.generalInfoList} />
 			      			</div>
 			      		</div>
 			      	</div>
