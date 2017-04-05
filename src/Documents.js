@@ -84,7 +84,7 @@ class Documents extends Component {
   }
 
   componentDidMount(){
-    var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().uuid;
+    var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().userUUID;
     requests.documentList(searchId)
       .then((result) => {
         this.setState({documentsList: result});

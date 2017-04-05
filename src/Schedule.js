@@ -269,13 +269,13 @@ class NewAppointmentForm extends Component{
       else{
         t = k-4 + " PM";
       }
-      timeOptions.push(<option>{t}</option>);
+      timeOptions.push(<option key={k}>{t}</option>);
     }
 
     this.state.patientsList.forEach(function(patient, index){
       var pDob = moment.unix(patient.dateOfBirth).format("MM/DD/YYYY");
       var patientDescip = patient.name + " (DOB: " + pDob + ")";
-      patientOptions.push(<option value={patientDescip}></option>);
+      patientOptions.push(<option value={patientDescip} key={index}></option>);
     });
 
     var holderClass = classnames("formContent", {"show":this.state.showForm});
@@ -286,7 +286,7 @@ class NewAppointmentForm extends Component{
         <button type="button" className="btn btn-success btn-lg btn-block" onClick={this.showForm.bind(this)}>New Appointment</button>
         <div>
           <form className={holderClass}>
-            <label for="sel1">Select a Patient:</label>
+            <label>Select a Patient:</label>
 
             <datalist id="patientsData">
               {patientOptions}

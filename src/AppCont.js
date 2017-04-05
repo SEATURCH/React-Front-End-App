@@ -14,7 +14,7 @@ class AppCont extends Component {
 				}.bind(this)),
 				selectedPatient:sessionStorage.currentPatientName,
 				role:"",
-				uuid:"",
+				userUUID:"",
 				name:"",
 			};
 
@@ -22,7 +22,7 @@ class AppCont extends Component {
 	componentDidMount() {
 		if(requests.whoami().then){
 			requests.whoami().then((res) => {
-				this.setState(res)
+				this.setState(res);
 			})
 		} else {
 			this.setState(requests.whoami())
@@ -35,7 +35,7 @@ class AppCont extends Component {
 		var listShow = classnames({"show":this.state.selectedPatient });
 		return (
 			<div id="AppContainer">
-				{ this.state.uuid && ( <div style={{height:"100%"}}>
+				{ this.state.userUUID && ( <div style={{height:"100%"}}>
 					<div id="navMenu">
 						<ul id="menuList">
 							{ this.state.role === "Doctor" && (

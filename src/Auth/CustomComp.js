@@ -85,6 +85,7 @@ class ValidatedInput extends UserInput {
     			<input className="form-control"
     				name={this.props.name} type={this.props.type} value={this.state.value} max={this.props.max}
     				{...readOnly}
+    				tabIndex={this.props.tabDisable? "-1": "1"}
     				onBlur={this.validate.bind(this)}
     				onFocus={this.onFocus.bind(this)}
     				onChange={this.handleChange.bind(this)} />
@@ -106,6 +107,7 @@ class TextInput extends UserInput {
     	return (
 			<textarea value={this.state.value}
 				{...readOnly}
+				tabIndex={this.props.tabDisable? "-1": "1"}
 				onChange={this.handleChange.bind(this)}
 				onFocus={this.onFocus.bind(this)} >
 			</textarea>

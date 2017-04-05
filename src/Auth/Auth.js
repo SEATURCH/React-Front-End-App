@@ -24,9 +24,31 @@ class Login extends Component {
 	        licenseError: false,
 	        next: false,
 	        pMatch:false,
+
+			newUsername:"",
+			newPassword:"",
+			repPassword:"",
+			name:"",
+			phoneNumber:"",
+			prFacility:"",
+			prSpecialty:"",
+			verificationKey:"",
 	        role: "Doctor",
 	        gender: 'male'
 	    }
+	}
+
+	currentStateObject(){
+		return {
+			newUsername: (this.refs.newUsername)? this.refs.newUsername.getValue() : "",
+			newPassword: (this.refs.newPassword)? this.refs.newPassword.getValue() : "",
+			repPassword: (this.refs.repPassword)? this.refs.repPassword.getValue() : "",
+			name: (this.refs.name)? this.refs.name.getValue() : "",
+			phoneNumber: (this.refs.phoneNumber)? this.refs.phoneNumber.getValue() : "",
+			prFacility: (this.refs.prFacility)? this.refs.prFacility.getValue() : "",
+			prSpecialty: (this.refs.prSpecialty)? this.refs.prSpecialty.getValue() : "",
+			verificationKey: (this.refs.verificationKey)? this.refs.verificationKey.getValue() : ""
+		}
 	}
 
 	handleSubmit(event) {
@@ -43,31 +65,43 @@ class Login extends Component {
 				}
 				this.props.upp(true);
 			}).catch((res) => {
-				this.setState({error:true});
+				var newState = this.currentStateObject();
+    			newState.error = true;
+				this.setState(newState);
 				this.refs.pass.value = '';
-				console.log("Could not mount")
+				console.log("Invalid username or password")
 			});
     }
 
     radioClick(event){
-    	this.setState({role:event.target.id})
+    	var newState = this.currentStateObject();
+    	newState.role = event.target.id;
+    	this.setState(newState);
     }
 
     genderSel(event){
-    	this.setState({gender:event.target.id})
+    	var newState = this.currentStateObject();
+    	newState.gender = event.target.id;
+    	this.setState(newState);
     }
 
     nextClick(event){
     	event.preventDefault();
+    	var newState = this.currentStateObject();
     	var haserror = this.refs.newUsername.checkValidation() || this.refs.newPassword.checkValidation();
-    	if(this.refs.newPassword.getValue() !== this.refs.repPassword.getValue())
-    		this.setState({pMatch:true})
-    	else if(!haserror)
-    		this.setState({next:event.target.id})
+    	if(this.refs.newPassword.getValue() !== this.refs.repPassword.getValue()) {
+    		newState.pMatch = true;
+    		this.setState(newState);
+    	} else if (!haserror) {
+    		newState.next = event.target.id;
+    		this.setState(newState);
+    	}
     }
 
     backClick(event){
-    	this.setState({next:event.target.id})
+    	var newState = this.currentStateObject();
+    	newState.next = event.target.id;
+    	this.setState(newState)
     }
 
     createSubmit(event){
@@ -109,7 +143,7 @@ class Login extends Component {
     		req.createPatientProfile(profile)
 				.then((res) => {
 					sessionStorage.token = res;
-					browserHistory.push('/Dashboard?id='+req.whoami().uuid);
+					browserHistory.push('/Dashboard');
 					this.props.upp(true);
 				}).catch((res) => {
 					if (res.createUserError)
@@ -140,80 +174,80 @@ class Login extends Component {
 	        </div>
 	        <div className="createUser">
 	        	<h2>Create Account</h2>
-	        		<div style={{opacity:(!this.state.next)?"1": "0"}} className="inputPanel authInput">
-		        		<div className="btn-group" data-toggle="buttons">
-		        		  <label style={{opacity:(this.state.role ==="Doctor")?"1":"0.5"}} className="btn btn-primary">
-						    <input type="radio" id="Doctor" onClick={this.radioClick.bind(this)} /> Doctor
-						  </label>
-						  <label style={{opacity:(this.state.role ==="Doctor")?"0.5":"1"}} className="btn btn-primary">
-						    <input type="radio" id="Patient" onClick={this.radioClick.bind(this)} />Patient
-						  </label>
+	    		<div style={{opacity:(!this.state.next)?"1": "0"}} className="inputPanel authInput">
+	        		<div className="btn-group" data-toggle="buttons">
+	        		  <label style={{opacity:(this.state.role ==="Doctor")?"1":"0.5"}} className="btn btn-primary">
+					    <input type="radio" id="Doctor" tabIndex="-1" onClick={this.radioClick.bind(this)} /> Doctor
+					  </label>
+					  <label style={{opacity:(this.state.role ==="Doctor")?"0.5":"1"}} className="btn btn-primary">
+					    <input type="radio" id="Patient" tabIndex="-1" onClick={this.radioClick.bind(this)} />Patient
+					  </label>
+					</div>
+	    			<Comp.ValidatedInput ref="newUsername"
+	  					validation="required" label="User Name" name="username" type="text" tabDisable={this.state.next}
+	  					value={this.state.newUsername} errorHelp={{
+	    					required:"Username Required"
+	    				}} />
+					<Comp.ValidatedInput ref="newPassword"
+	  					validation="required" label="Password" name="password" type="password" tabDisable={this.state.next}
+	  					value={this.state.newPassword} errorHelp={{
+	    					required:"Password Required"
+	    				}} />
+	    			<Comp.ValidatedInput ref="repPassword"
+	  					validation="required" label="Password" name="password" type="password" tabDisable={this.state.next}
+	  					value={this.state.repPassword} />
+	    			<button tabIndex="-1" className="btn btn-primary" id="true" onClick={this.nextClick.bind(this)}>Next</button>
+	    			{this.state.pMatch &&(<p style={{color:"#a94442"}}>Passwords do not match</p>)}
+	    			{this.state.createUserError &&(<p style={{color:"#a94442"}}>Username not available</p>)}
+	    		</div>
+	    		<div style={{left:(!this.state.next)?"100%": "0"}} className="inputPanel detailsInput">
+	    			{ this.state.role ==="Doctor"  && (
+					<div>
+	    				<Comp.ValidatedInput ref="name"
+		  					validation="required" label="Name" name="name" type="text" tabDisable={!this.state.next}
+		  					value={this.state.name} errorHelp={{
+		    					required:"Name Required"
+		    				}} />
+	    				<div className="btn-group" data-toggle="buttons">
+		        		 	<label style={{opacity:(gender === "male" || gender === "m" )?"1":"0.5"}} className="btn btn-primary">
+						    	<input type="radio" id="male" tabIndex="-1" onClick={this.genderSel.bind(this)} />Male
+						  	</label>
+						  	<label style={{opacity:(gender === "female" || gender === "f")?"1":"0.5"}} className="btn btn-primary">
+						    	<input type="radio" id="female" tabIndex="-1" onClick={this.genderSel.bind(this)} />Female
+						  	</label>
 						</div>
-		    			<Comp.ValidatedInput ref="newUsername"
-		  					validation="required" label="User Name" name="username" type="text"
-		  					value="" errorHelp={{
-		    					required:"Username Required"
+		    			<Comp.ValidatedInput ref="phoneNumber"
+		  					validation="required" label="Phone Number" name="phoneNumber" type="text" tabDisable={!this.state.next}
+		  					value={this.state.phoneNumber} errorHelp={{
+		    					required:"Required"
 		    				}} />
-						<Comp.ValidatedInput ref="newPassword"
-		  					validation="required" label="Password" name="password" type="password"
-		  					value="" errorHelp={{
-		    					required:"Password Required"
+		    			<Comp.ValidatedInput ref="prFacility"
+		  					validation="required" label="Primary Facility" name="prFacility" type="text" tabDisable={!this.state.next}
+		  					value={this.state.prFacility} errorHelp={{
+		    					required:"Required"
 		    				}} />
-		    			<Comp.ValidatedInput ref="repPassword"
-		  					validation="required" label="Password" name="password" type="password"
-		  					value="" />
-		    			<button className="btn btn-primary" id="true" onClick={this.nextClick.bind(this)}>Next</button>
-		    			{this.state.pMatch &&(<p style={{color:"#a94442"}}>Passwords do not match</p>)}
-		    			{this.state.createUserError &&(<p style={{color:"#a94442"}}>Username not available</p>)}
+		    			<Comp.ValidatedInput ref="prSpecialty"
+		  					validation="required" label="Primary Specialty" name="prSpecialty" type="text" tabDisable={!this.state.next}
+		  					value={this.state.prSpecialty} />
+		    			<Comp.ValidatedInput ref="verificationKey"
+		  					validation="required" label="Access Key" name="accessKey" type="text" tabDisable={!this.state.next}
+		  					value={this.state.verificationKey} />
+		  				{this.state.licenseError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
+						</div>
+	    			)}
+					{ this.state.role !== "Doctor"  && (
+					<div>
+		    			<Comp.ValidatedInput ref="verificationKey"
+		  					validation="required" label="Medical Number" name="medicalNumber" type="text" tabDisable={!this.state.next}
+		  					value={this.state.verificationKey} errorHelp={{
+		    					required:"Medical Number Required"
+		    				}} />
+		    			{this.state.patientError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
 		    		</div>
-		    		<div style={{left:(!this.state.next)?"100%": "0"}} className="inputPanel detailsInput">
-		    			{ this.state.role ==="Doctor"  && (
-	    				<div>
-		    				<Comp.ValidatedInput ref="name"
-			  					validation="required" label="Name" name="name" type="text"
-			  					value="" errorHelp={{
-			    					required:"Name Required"
-			    				}} />
-		    				<div className="btn-group" data-toggle="buttons">
-			        		 	<label style={{opacity:(gender === "male" || gender === "m" )?"1":"0.5"}} className="btn btn-primary">
-							    	<input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
-							  	</label>
-							  	<label style={{opacity:(gender === "female" || gender === "f")?"1":"0.5"}} className="btn btn-primary">
-							    	<input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
-							  	</label>
-							</div>
-			    			<Comp.ValidatedInput ref="phoneNumber"
-			  					validation="required" label="Phone Number" name="phoneNumber" type="text"
-			  					value="" errorHelp={{
-			    					required:"Required"
-			    				}} />
-			    			<Comp.ValidatedInput ref="prFacility"
-			  					validation="required" label="Primary Facility" name="prFacility" type="text"
-			  					value="" errorHelp={{
-			    					required:"Required"
-			    				}} />
-			    			<Comp.ValidatedInput ref="prSpecialty"
-			  					validation="required" label="Primary Specialty" name="prSpecialty" type="text"
-			  					value="" />
-			    			<Comp.ValidatedInput ref="verificationKey"
-			  					validation="required" label="Access Key" name="accessKey" type="text"
-			  					value="" />
-			  				{this.state.licenseError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
-	  					</div>
-		    			)}
-	    				{ this.state.role !== "Doctor"  && (
-						<div>
-			    			<Comp.ValidatedInput ref="verificationKey"
-			  					validation="required" label="Medical Number" name="medicalNumber" type="text"
-			  					value="" errorHelp={{
-			    					required:"Medical Number Required"
-			    				}} />
-			    			{this.state.patientError &&(<p style={{color:"#a94442"}}>Unable to create user</p>)}
-			    		</div>
-	    				)}
-	    				<button style={{float:"left"}} className="btn btn-default" onClick={this.backClick.bind(this)}>Back</button>
-		    			<button style={{float:"right"}} onClick={this.createSubmit.bind(this)} className="btn btn-primary">Submit</button>
-		    		</div>
+					)}
+					<button tabIndex="-1" style={{float:"left"}} className="btn btn-default" onClick={this.backClick.bind(this)}>Back</button>
+	    			<button tabIndex="-1" style={{float:"right"}} onClick={this.createSubmit.bind(this)} className="btn btn-primary">Submit</button>
+	    		</div>
 	        </div>
         </div>
       );

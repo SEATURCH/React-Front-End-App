@@ -24,7 +24,7 @@ var whoami = function(){
 				    	user = {
 				    		name: res.body.name,
 							role: res.body.role,
-							uuid: res.body.userUUID
+							userUUID: res.body.userUUID
 						}
 						resolve(user);
 				    }else {
@@ -207,12 +207,12 @@ var authenticate = function(email, pass) {
 		   		password: pass
 		   })
 		  .end(function(err, res){
-		    if(!err && res.ok){
+		  	if(!err && res.ok){
 		    	sessionStorage.userUUID = res.body.userUUID;
 		    	whoami({
 		    		name: res.body.name,
 					role: res.body.role,
-					uuid: res.body.userUUID
+					userUUID: res.body.userUUID
 				});
 		    	resolve(res.ok );
 		    } else {
@@ -497,7 +497,7 @@ var createPatientProfile = function(userProfile){
 	   			whoami({
 		    		name: res.body.name,
 					role: res.body.role,
-					uuid: res.body.userUUID
+					userUUID: res.body.userUUID
 				});
 				resolve(res.ok);
 			}else {
@@ -523,17 +523,17 @@ var createDoctorProfile = function(userProfile, doctorProfile){
 	}).then(function (res) {
 		return new Promise(function(resolve, reject){
 		   	doctorProfile.doctorUUID = res.userUUID;
-		   		var user = {
-	    		name: res.name,
+	   		var user = {
+    			name: res.name,
 				role: res.role,
-				uuid: res.userUUID
+				userUUID: res.userUUID
 			};
 			request
 			   .post(goServer + '/doctors')
 			   .send(doctorProfile)
 			   .end(function(err, res){
 			   		if(!err && res.ok){
-			   			sessionStorage.userUUID = res.userUUID;
+			   			sessionStorage.userUUID = user.userUUID;
 						whoami(user);
 						resolve(res.ok);
 					} else {

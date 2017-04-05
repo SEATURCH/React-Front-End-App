@@ -51,7 +51,7 @@ class Appointments extends Component {
 			appointmentDetail: {
 				appointmentUUID: this.props.location.query.appt,
 				patientUUID: this.props.location.query.id,
-				doctorUUID: requests.whoami().uuid,
+				doctorUUID: requests.whoami().userUUID,
 				dateVisited: 0,
 				breathingRate: 0,
 				heartRate: 0,
@@ -112,7 +112,7 @@ class Appointments extends Component {
 		this.state.addedPrescript.forEach((item, index) => {
 			prescriptions.push({
 				patientUUID: this.props.location.query.id,
-				doctorUUID: requests.whoami().uuid,
+				doctorUUID: requests.whoami().userUUID,
 				doctor:requests.whoami().name,
 				drug: this.refs["drugName"+index].getValue(),
 				startDate:item.endDate<moment().unix()? item.endDate: moment().unix(),

@@ -76,20 +76,21 @@ class PatientGeneral extends Component {
 	    }
 
 	    genderSel(event){
-	    	console.log(this.refs.dateOfBirth.getValue())
-			this.setState({
-				patientInfo:{
-					gender:event.target.id,
-					patientUUID: this.props.patientuuid,
-					notes: this.refs.allergies.getValue(),
-					name: this.refs.name.getValue(),
-					dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
-					bloodType: this.refs.bloodType.getValue(),
-					medicalNumber: this.refs.medicalNumber.getValue(),
-					phoneNumber: this.refs.phoneNumber.getValue(),
-					emergencyContact: this.refs.emergencyContact.getValue(),
-					address: this.refs.address.getValue()
-				}})
+	    	if(this.props.role !== "Patient") {
+		    	this.setState({
+					patientInfo:{
+						gender:event.target.id,
+						patientUUID: this.props.patientuuid,
+						notes: this.refs.allergies.getValue(),
+						name: this.refs.name.getValue(),
+						dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
+						bloodType: this.refs.bloodType.getValue(),
+						medicalNumber: this.refs.medicalNumber.getValue(),
+						phoneNumber: this.refs.phoneNumber.getValue(),
+						emergencyContact: this.refs.emergencyContact.getValue(),
+						address: this.refs.address.getValue()
+					}});
+		    }
 		}
 
     	render() {

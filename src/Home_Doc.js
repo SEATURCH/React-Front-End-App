@@ -63,29 +63,8 @@ class NewPatientForm extends Component{
       medicalNumberError || phoneNumberError || emergencyContactError || addressError;
   }
 
-  genderSel(event){
-    this.setState({
-        gender:event.target.id,
-        patientUUID: this.props.patientuuid,
-        notes: this.refs.allergies.getValue(),
-        name: this.refs.name.getValue(),
-        dateOfBirth: this.refs.dateOfBirth.getValue(),
-        bloodType: this.refs.bloodType.getValue(),
-        medicalNumber: this.refs.medicalNumber.getValue(),
-        phoneNumber: this.refs.phoneNumber.getValue(),
-        emergencyContact: this.refs.emergencyContact.getValue(),
-        address: this.refs.address.getValue()
-    })
-  }
-
-  //Posts the notification to the appropriate doctor.
-  createPatient (event) {
-    event.preventDefault(this.state.name)
-    var hasError = this.checkAll();
-    if(hasError){
-      alert("Please fill in all required fields");
-    } else {
-      var patient = {
+  currentStateObject(){
+    return {
         name: this.refs.name.getValue(),
         gender: this.state.gender,
         dateOfBirth: moment(this.refs.dateOfBirth.getValue()).unix(),
@@ -96,6 +75,22 @@ class NewPatientForm extends Component{
         address: this.refs.address.getValue(),
         notes: this.refs.allergies.getValue()
       }
+  }
+
+  genderSel(event){
+    var newState = this.currentStateObject();
+    newState.gender = event.target.id;
+    this.setState(newState);
+  }
+
+  //Posts the notification to the appropriate doctor.
+  createPatient (event) {
+    event.preventDefault(this.state.name)
+    var hasError = this.checkAll();
+    if(hasError){
+      alert("Please fill in all required fields");
+    } else {
+      var patient = this.currentStateObject();
       requests.createPatient(patient)
         .then((result) => {
           this.setState(this.state);
@@ -118,7 +113,7 @@ class NewPatientForm extends Component{
             <div className="row">
               <div className="col col-md-6">
                 <Comp.ValidatedInput ref="name"
-                  validation="required" label="Name" name="name" type="text"
+                  validation="required" label="Name" name="name" type="text" tabDisable={!this.props.formFocus}
                   value={this.state.name}  errorHelp={{
                   required:"Required"
                 }} />
@@ -127,45 +122,46 @@ class NewPatientForm extends Component{
                 </div>
                 <div className="btn-group" data-toggle="buttons">
                     <label style={{opacity:(gender === "male" || gender === "m")?"1":"0.5"}} className="btn btn-primary">
-                      <input type="radio" id="male" onClick={this.genderSel.bind(this)} />Male
+                      <input type="radio" id="male" tabIndex="-1" onClick={this.genderSel.bind(this)} />Male
                     </label>
                     <label style={{opacity:(gender === "female" || gender === "f")?"1":"0.5"}} className="btn btn-primary">
-                      <input type="radio" id="female" onClick={this.genderSel.bind(this)} />Female
+                      <input type="radio" id="female" tabIndex="-1" onClick={this.genderSel.bind(this)} />Female
                     </label>
                 </div>
                 <Comp.ValidatedInput ref="dateOfBirth"
-                  validation="required" label="Date of Birth" name="dateOfBirth" type="date"  max="9999-12-31"
+                  validation="required" label="Date of Birth" name="dateOfBirth" type="date"  max="9999-12-31" tabDisable={!this.props.formFocus}
                   value={this.state.dateOfBirth}  errorHelp={{
                   required:"Required"
                 }} />
                 <Comp.ValidatedInput ref="bloodType"
-                  validation="required" label="Blood Type" name="bloodType" type="text"
+                  validation="required" label="Blood Type" name="bloodType" type="text" tabDisable={!this.props.formFocus}
                   value={this.state.bloodType} errorHelp={{
                   required:"Required"
                 }} />
                 <Comp.ValidatedInput ref="medicalNumber"
-                  validation="required" label="Medical Number" name="medicalNumber" type="text"
+                  validation="required" label="Medical Number" name="medicalNumber" type="text" tabDisable={!this.props.formFocus}
                   value={this.state.medicalNumber} errorHelp={{
                   required:"Required"
                 }} />
                 <label htmlFor="allergeisText"><b>Allergies: </b></label>
                 <Comp.TextInput ref="allergies"
+                  tabDisable={!this.props.formFocus}
                   value={this.state.allergies} />
               </div>
               <div className="col col-md-6">
                 <h4 className="moduleSubHeader">Patient Contacts</h4>
                   <Comp.ValidatedInput ref="phoneNumber"
-                    validation="required" label="Phone Number" name="phoneNumber" type="text"
+                    validation="required" label="Phone Number" name="phoneNumber" type="text" tabDisable={!this.props.formFocus}
                     value={this.state.phoneNumber} errorHelp={{
                     required:"Required"
                 }} />
                 <Comp.ValidatedInput ref="emergencyContact"
-                  validation="required" label="Emergency Contact" name="emergencyContact" type="text"
+                  validation="required" label="Emergency Contact" name="emergencyContact" type="text" tabDisable={!this.props.formFocus}
                   value={this.state.emergencyContact} errorHelp={{
                   required:"Required"
                 }} />
                 <Comp.ValidatedInput ref="address"
-                  validation="required" label="Address" name="address" type="text"
+                  validation="required" label="Address" name="address" type="text" tabDisable={!this.props.formFocus}
                   value={this.state.address} errorHelp={{
                   required:"Required"
                 }} />
@@ -174,8 +170,8 @@ class NewPatientForm extends Component{
           </div>
         </form>
         <div className="buttonHolder">
-          <button type="button" className="btn btn-danger" onClick={this.resetForm.bind(this)}>Cancel</button>
-          <button type="button" className="btn btn-success" onClick={this.createPatient.bind(this)}>Create Patient</button>
+          <button type="button" tabIndex="-1" className="btn btn-danger" onClick={this.resetForm.bind(this)}>Cancel</button>
+          <button type="button" tabIndex="-1" className="btn btn-success" onClick={this.createPatient.bind(this)}>Create Patient</button>
         </div>
       </div>
     );
@@ -279,7 +275,7 @@ class Home_Doc extends Component {
           </table>
         </div>
         <div className={formClass}>
-          <NewPatientForm hideForm={this.hideForm.bind(this)}/>
+          <NewPatientForm formFocus={this.state.showForm} hideForm={this.hideForm.bind(this)}/>
         </div>
       </div>
     );

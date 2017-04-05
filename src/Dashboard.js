@@ -42,7 +42,7 @@ class Dashboard extends Component {
 	}
 
 	componentDidMount() {
-		var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().uuid;
+		var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().userUUID;
 		requests.getPatientDashboard(searchId)
 			.then((result) => {
 				this.setState(result);
