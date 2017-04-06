@@ -13,7 +13,7 @@ describe('<PatientGeneral/>', function () {
     expect(wrapper.state().patientInfo).to.deep.equal({gender: 'male'});
   });
 
-  it('should render 8 <Comp.ValidatedInput> components', () => {
+  it('should render 7 <Comp.ValidatedInput> components', () => {
     const wrapper = mount(<PatientGeneral/>);
     expect(wrapper.find(Comp.ValidatedInput)).to.have.length(7);
   });
