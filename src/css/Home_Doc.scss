@@ -5,30 +5,30 @@ $moduleWidth: 100%;
 	vertical-align: top;
 	width:$moduleWidth;
 	position: relative;
-	
+
 	.moduleBody {
 		position: absolute;
 		width:100%;
 		&.patientFormHolder{
 			left:100%;
 			transition: left 0.5s;
-		    -webkit-transition: left 0.5s;
-		    &.show {
-		    	left:0%;
+			-webkit-transition: left 0.5s;
+			&.show {
+				left:0%;
 			}
 		}
 		&.patientListHolder{
 			opacity:0;
 			transition: opacity 0.5s;
-		    -webkit-transition: opacity 0.5s;
+			-webkit-transition: opacity 0.5s;
 			&.show {
 				opacity: 1 !important;
 			}
 		}
 	}
-	
-  	.filterInput{
-  		&[type=text] {
+
+	.filterInput{
+		&[type=text] {
 			width: 250px;
 			box-sizing: border-box;
 			border: 2px solid #ccc;
@@ -43,10 +43,10 @@ $moduleWidth: 100%;
 			margin: 5px auto;
 			display: block;
 			&:focus {
-	     		width: 45%;
-	  		}
+				width: 45%;
+			}
 		}
-  	}
+	}
 	table {
 		width:100%;
 		border:none;
@@ -58,14 +58,13 @@ $moduleWidth: 100%;
 		}
 		thead{
 			border-bottom: 1px solid #9f9f9f;
-
 		}
 		th {
 			font-size:1.1em;
 			font-weight: none;
 			padding: 5px 5px;
 			border:none;
-      		text-align: center;
+			text-align: center;
 		}
 		td {
 			text-align: center;
@@ -79,30 +78,30 @@ $moduleWidth: 100%;
 			margin-top: 0px;
 		}
 		.formContent {
-		    position: relative;
-		    textarea{
+			position: relative;
+			textarea{
 				width:100%;
 				resize: none;
 			}
-		    .btn-danger{
-		      float:right;
-		      margin: 7px 5px;
-		    }
-		    .btn-success{
-		      float:right;
-		      margin: 7px 5px;
-		    }
-	  	}
-	  	.buttonHolder {
-	  		width:100%;
-	  		display: inline-block;
-	  		background: aliceblue;
-	  		.btn{
-	  			float:right;
-	  			font-size:1.2em;
-	  			margin: 15px 10px;
-	  			padding: 10px 15px;
-	  		}
+			.btn-danger{
+				float:right;
+				margin: 7px 5px;
+			}
+			.btn-success{
+				float:right;
+				margin: 7px 5px;
+			}
+		}
+		.buttonHolder {
+			width:100%;
+			display: inline-block;
+			background: aliceblue;
+			.btn{
+				float:right;
+				font-size:1.2em;
+				margin: 15px 10px;
+				padding: 10px 15px;
+			}
 		}
 	}
 }

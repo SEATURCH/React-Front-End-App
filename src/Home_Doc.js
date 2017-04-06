@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import './css/Home_Doc.scss';
 import Comp from './Auth/CustomComp.js'
 
-// The Custom Row format that will be displayed in the Patients Table
+// This class represents the custom row for a single row of the Patients table
 var CustomRow = React.createClass({
     render: function() {
       var patientAge = moment.unix(this.props.dateOfBirth).format("MM/DD/YYYY");
@@ -100,7 +100,6 @@ class NewPatientForm extends Component{
           console.log("Could not create patient");
         });
     }
-
   }
 
   render(){
@@ -217,7 +216,6 @@ class Home_Doc extends Component {
     });
   }
 
-
   render() {
     var formClass = classnames("moduleBody patientFormHolder", {"show":this.state.showForm});
     var listClass = classnames("moduleBody patientListHolder", {"show": !this.state.showForm});
@@ -249,7 +247,6 @@ class Home_Doc extends Component {
         <div className="pageHeader">
             <h1 className="mainHeader">Patients</h1>
         </div>
-
         <div className={listClass}>
           <button type="button" className="btn btn-success btn-lg btn-block" onClick={this.showForm.bind(this)}>New Patient</button>
           <form>
@@ -257,7 +254,6 @@ class Home_Doc extends Component {
             onChange={this.updateSearch.bind(this)}
             value={this.state.search}/>
           </form>
-
           <table className="table-striped table-hover" id="allPatientsTable">
              <thead>
                  <tr>

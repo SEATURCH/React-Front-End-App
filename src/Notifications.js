@@ -4,6 +4,7 @@ import './css/Notifications.scss'
 import classnames from 'classnames';
 import moment from 'moment'
 
+// This class represents the custom format for a single row of the Notifications Table
 class NotificationRow extends Component{
   render(){
     var notifDate = moment.unix(this.props.date).format("MM/DD/YYYY");
@@ -17,6 +18,7 @@ class NotificationRow extends Component{
 	}
 }
 
+// This class represents the entire Notifications Table, it has rows of 'NotificationRow'
 var NotificationsTable = React.createClass({
   render:function(){
   	var rows =[];
@@ -50,6 +52,7 @@ var NotificationsTable = React.createClass({
   }
 });
 
+// This class represents the entire UI for creating a new notificaiton
 class NewNotificationForm extends Component{
   constructor(props){
     super(props);
@@ -72,11 +75,11 @@ class NewNotificationForm extends Component{
     });
   }
 
-  //searches and returns the list to find the object based on the given query
+  // Searches a given list for specific doctor by matching name and specialty
   findDocIndex(query, list){
       var doc;
       if (query){
-        // parse query string to extract name and specialty of doctor
+        // parse to extract name & specialty of doctor, use these to find object
         var name = query.substring(0, query.indexOf('(')).trim();
         var specialty = query.substring((query.indexOf(':') + 2), (query.indexOf(')'))).trim();
 
@@ -88,6 +91,7 @@ class NewNotificationForm extends Component{
       }
       return doc;
   }
+
   //Posts the notification to the appropriate doctor.
   sendNotification(event) {
     event.preventDefault()
@@ -107,7 +111,6 @@ class NewNotificationForm extends Component{
         senderName : requests.whoami().name,
         senderUUID : sessionStorage.userUUID
       }
-      console.log(notif);
 
       requests.postNotification(notif)
         .then((res) => {
@@ -120,6 +123,7 @@ class NewNotificationForm extends Component{
     }
   }
 
+  // This will render the entire notificaiton create UI
   render(){
     var docOptions =[];
 
@@ -132,26 +136,21 @@ class NewNotificationForm extends Component{
 
     return (
       <div className="notificationForm">
-
         <button type="button" className="btn btn-success btn-lg btn-block" onClick={this.showForm.bind(this)}>New Notification</button>
         <div>
           <form className={holderClass}>
             <label>Select a Medical Professional:</label>
-
             <datalist id="docsData">
               {docOptions}
             </datalist>
             <input ref="doctor" className="form-control" type="text"
               list="docsData" placeholder="Type or select recipient from dropdown"></input>
-
             <label>Message:</label>
             <textarea ref="message" className="form-control" rows="4" id="message" placeholder="Type your message here..."></textarea>
-
             <button type="button" className="btn btn-danger" onClick={this.hideForm.bind(this)}>Cancel</button>
             <button type="button" className="btn btn-success" onClick={this.sendNotification.bind(this)}>Send Notification</button>
           </form>
         </div>
-
       </div>
 		);
 	}
@@ -166,6 +165,7 @@ class Notifications extends Component {
 		}
 	}
 
+  // This function tries to get the notifications and doctors list from the server
   componentDidMount(){
     requests.getNotificationPageLists()
 			.then((result) => {
@@ -180,16 +180,15 @@ class Notifications extends Component {
 			});
   }
 
+  // This will render the entire page
   render() {
     return (
       <div className="notifications">
         <div className="pageHeader">
           <h1 className="mainHeader">Notifications</h1>
         </div>
-
         <div className="moduleBody">
           <NewNotificationForm docs={this.state.doctorsList}/>
-
           {this.state.notificationsList.length > 0 &&
               <NotificationsTable notifications={this.state.notificationsList}/>
           }

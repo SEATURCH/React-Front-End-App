@@ -5,23 +5,22 @@ $moduleWidth: 100%;
 	vertical-align: top;
 	width:$moduleWidth;
 
-  form{
-    text-align: center;
-    display: block;
-    // margin-bottom: 3%;
+	form{
+		text-align: center;
+		display: block;
 
-    #startDateText, #endDateText{
-      width: 15%;
-    }
+		#startDateText, #endDateText{
+			width: 15%;
+		}
 
-    p{
-      font-weight: 800;
-  		margin: 5px 5px;
-      font-style: italic;
-      font-size: 18px;
-      color: #FFB647;
-    }
-  }
+		p{
+			font-weight: 800;
+			margin: 5px 5px;
+			font-style: italic;
+			font-size: 18px;
+			color: #FFB647;
+		}
+	}
 
 	table{
 		width:100%;
@@ -34,14 +33,13 @@ $moduleWidth: 100%;
 		}
 		thead{
 			border-bottom: 1px solid #9f9f9f;
-
 		}
 		th {
 			font-size:1.1em;
 			font-weight: none;
 			padding: 5px 5px;
 			border:none;
-      text-align: center;
+			text-align: center;
 		}
 		td {
 			text-align: center;
@@ -53,33 +51,26 @@ $moduleWidth: 100%;
 }
 
 .scheduleForm{
-  .formContent{
-    textarea{
+	.formContent{
+		textarea{
 			width:100%;
 			resize: none;
 		}
-		// margin-bottom: 20px;
-    position: relative;
-    height: 0px;
-    // visibility: hidden;
-    // display: none;
-    overflow:hidden;
-    transition: height 0.25s;
-    -webkit-transition: height 0.25s;
-    &.show{
-      height:220px;
-      // overflow: auto;
-      // display:block;
-      // visibility: visible;
-    }
-    .btn-danger{
-      float:right;
-      margin: 7px 5px;
-    }
-    .btn-success{
-      float:right;
-      margin: 7px 5px;
-
-    }
-  }
+		position: relative;
+		height: 0px;
+		overflow:hidden;
+		transition: height 0.25s;
+		-webkit-transition: height 0.25s;
+		&.show{
+			height:220px;
+		}
+		.btn-danger{
+			float:right;
+			margin: 7px 5px;
+		}
+		.btn-success{
+			float:right;
+			margin: 7px 5px;
+		}
+	}
 }

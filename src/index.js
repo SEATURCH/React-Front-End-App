@@ -6,7 +6,6 @@ import App from './AppCont';
 import Dashboard from './Dashboard';
 import Documents from './Documents';
 import Appointments from './Appointments';
-import RealtimeDisplay from './RealtimeDisplay';
 import Auth from './Auth/Auth.js';
 import Home_Doc from './Home_Doc';
 import Schedule from './Schedule';
@@ -78,7 +77,6 @@ ReactDOM.render(
           <Route path="Documents" component={Documents.DocuList} />
           <Route path="Document" component={Documents.Docu} />
           <Route path="Appointments" component={Appointments} />
-          <Route path="RealtimeDisplay" component={RealtimeDisplay} />
           <Route path="Home_Doc" component={Home_Doc} />
           <Route path="Schedule" component={Schedule} />
           <Route path="Notifications" component={Notifications} />
