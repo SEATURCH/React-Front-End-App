@@ -1,6 +1,10 @@
 $baseColor: rgba(4,4,4, 0.75);
 $tenPadding: 10px;
 
+html{
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -10,8 +14,8 @@ body {
 }
 
 #root{
-	height:100%;
-	width:100%;
+	height:100vh;
+	width:100vw;
 
   > div:first-child {
     height:inherit;
@@ -21,8 +25,8 @@ body {
 
 
 .Header {
-  //text-align: center;
   height: 70px;
+  line-height: 70px;
   background: $baseColor;
   div{
     display: inline-block;
@@ -31,6 +35,9 @@ body {
     color:white;
     margin: 0;
     padding:10px 10px;
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: middle;
   }
   a{
     text-decoration: none;
@@ -39,6 +46,15 @@ body {
   }
   .colRight{
     width:10%;
+    float:right;
+    text-align: center;
+    a {
+      line-height: 100%;
+      text-decoration: none;
+      &:hover, &:focus{
+        color:white;
+      }
+    }
   }
   .colLeft{
     width:90%;
@@ -46,21 +62,15 @@ body {
 }
 
 .Body {
-  //height:calc(100% - 100px);
-  height: 100%;
-}
-
-.Footer {
-  font-size: large;
-  min-height: 50px;
-  background: rgba(0,0,0, 0.5);
-  position:relative;
+  height:calc(100% - 70px);
 }
 
 #Login {
+  height:100%;
   padding:10px 10px;
   > div {
     vertical-align: top;
+    height:100%;
     width:calc(50% - #{2*$tenPadding});
     padding:0px 10px;
     display:inline-block;
@@ -77,5 +87,51 @@ body {
   .createUser {
     width:calc(50% - #{2*$tenPadding + 1} );
     border-left: 1px solid $baseColor;
+    position: relative;
+    height:100%;
+    overflow:hidden;
+    .inputPanel{
+      vertical-align: top;
+      width:100%;
+      display: inline-block;
+      &.detailsInput{
+        height: 100%;
+        background:white;
+        position: absolute;
+        left:100%;
+        padding:0px 10px;
+        transition: left .5s;
+        -webkit-transition: left .5s;
+      }
+      &.authInput{
+        opacity:1;
+        transition: opacity .5s;
+        -webkit-transition: opacity .5s;
+      }
+    }
   }
 }
+
+// Custom Comp savebuttons
+.btnHolder{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 0px;
+    overflow:hidden;
+    display: inline-block !important;
+    line-height: 100%;
+    vertical-align: top;
+    margin-left: 15px;
+    transition: height .25s;
+    -webkit-transition: height .25s;
+    &.reveal{
+      height:26px;
+    }
+    .btn {
+      line-height: 100%;
+      height: 100%;
+      margin: 0px 5px;
+    }
+  }

@@ -1,58 +1,86 @@
 import React, { Component } from 'react';
 import requests from './requests';
-import PatientGeneral from './PatientGeneral';
-//import Nav from './Nav';
-//import WelcomeBanner from './WelcomeBanner';
+import PatientProfile from './PatientGeneral';
+import PatientPrescription from './PatientPrescription';
+import PatientAppointments from './PatientAppointments';
+import pubSub from 'pubsub-js'
 
+import './css/Dashboard.scss';
+
+// Patient Dashboard or Patient Summary Modele
+// Created from 3 seperate sub-modules PatientProfile, PatientPrescription, PatientAppointments
 class Dashboard extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			patientBroadCast: pubSub.subscribe("PATI SEL", function(msg, data) {
+			 	this.setState({ generalInfoList: {name: data}});
+			}.bind(this)),
 			generalInfoList: {
-				"patientUUID": "",
-				"age": 0,
-				"gender": "",
-				"insuranceNumber": "",
-				"name": ""
-				// userId: "1u4c5",
-				// medicalNumber: "12345678",
-				// firstName: "Steven",
-				// lastName: "Strange",
-				// gender: "Male",
-				// birthDate: "Feb-29-1700",
-				// contactInfo: "111-222-3333",
-				// address: "111 Mall Street, Vancouver, BC, Canada",
-				// primaryDoctor: "Dr. Popular"
+				patientUUID: "",
+				address: "",
+				bloodType: "",
+				dateOfBirth: 0,
+				emergencyContact: "",
+				gender: "",
+				medicalNumber: "",
+				name: "",
+				notes: "",
+				phoneNumber: ""
 			},
-			allergyList : {},
-			medicationList: {},
-			vitalList: {},
+			prescriptionList:[{
+					doctorName:"",
+					startDate:0,
+					endDate:0,
+					name:"",
+					notes:""
+				}],
+			appointmentList: [],
 			problemsList: {}
 		}
 	}
 
-	componentDidMount(){
-		// if(!this.props.location.query.id)
-		// 	return;
-			console.log(this.props.location)
-			requests.patientSearch("dummy")
-				.then((result) => {
-					console.log("JSON from server : " + result);
-					this.setState({ generalInfoList:result });
-					console.log(this.state)
-				})
-				.catch(function(e){
-					console.log("Could not mount")
-				});
+	componentDidMount() {
+		var searchId = (requests.whoami().role==="Doctor")? this.props.location.query.id: requests.whoami().userUUID;
+		requests.getPatientDashboard(searchId)
+			.then((result) => {
+				this.setState(result);
+				pubSub.publish("PATI SEL", this.state.generalInfoList.name)
+			})
+			.catch(function(e){
+				console.log("Could not mount");
+			});
+	}
+
+	componentWillUnmount() {
+		pubSub.unsubscribe(this.state.patientBroadCast);
 	}
 
 	render() {
 		return (
-			<div>
-				<PatientGeneral generalInfo={this.state.generalInfoList} />
-				{/* <PatientAllergy allergyInfo = {this.state.allergyList} />
-				<PatientMedication medicationInfo = {this.state.medicationList} />
-				<PatientProblems problemsInfo = {this.state.problemsList} /> */}
+			<div className="Dashboard">
+				<div className="pageHeader">
+			      	<h1 className="mainHeader">Patient Profile</h1>
+				    <h2 className="subHeader">{this.state.generalInfoList.name}</h2>
+			    </div>
+
+			    <div className="moduleBody">
+					<div className="container-fluid">
+			      		<div className="row">
+			      			<div className="col col-md-6">
+			      				<PatientAppointments role={requests.whoami().role} appointmentList={this.state.appointmentList} />
+			      			</div>
+			      			<div className="col col-md-6">
+			  					<PatientPrescription role={requests.whoami().role} prescriptionList={this.state.prescriptionList} />
+			      			</div>
+		      			</div>
+		      			<div className="row">
+			      			<div className="col col-md-12">
+			  					<PatientProfile role={requests.whoami().role} generalInfo={this.state.generalInfoList} />
+			      			</div>
+			      		</div>
+			      	</div>
+		      	</div>
 			</div>
 		)
 	}

@@ -1,0 +1,95 @@
+$headerMargin: 0px 0px;
+$listPadding: 8px 16px;
+$selectColor: #FFB647;
+#AppContainer {
+	height:100%;
+}
+
+#content-body{
+	height:100%;
+	overflow-y:hidden;
+	width:85%;
+	padding: 0% 0%;
+	display:inline-block;
+	vertical-align: top;
+	> div{
+		height:100%;
+	}
+	.pageHeader {
+		padding: 5px 10px;
+		color:white;
+		background: #FFB647;
+		background
+		.mainHeader{
+			padding:0px 10px;
+		}
+		.subHeader{
+			height:33px;
+			padding:0px 20px;
+		}
+		h1, h2, h3, h4 {
+			margin: $headerMargin;
+		}
+		.inlineBlock{
+			display: inline-block;
+		}
+	}
+	.moduleBody{
+		height: calc(100% - 50px);
+		overflow-y:scroll;
+		overflow-x:hidden;
+		background: white;
+		padding:10px 25px;
+	}
+}
+
+#navMenu {
+	width:15%;
+	height:100%;
+	display:inline-block;
+	border-right: 7px solid $selectColor;
+	ul {
+	    list-style-type: none;
+	    margin: 0;
+	    padding: 0;
+	    width: 100%;
+	    background-color: #f1f1f1;
+	    height: 100%;
+	    overflow: auto;
+	}
+	li a {
+	    display: block;
+	    color: #000;
+	    padding: $listPadding;
+	    text-decoration: none;
+	}
+
+	li a.active {
+	    background-color: $selectColor;
+	    color: white;
+	}
+
+	li a:hover:not(.active) {
+	    background-color: #555;
+	    color: white;
+	}
+
+	.nestedHeaders{
+		.main{
+			padding:$listPadding;
+			background: palegoldenrod;
+		}
+		.sub{
+			height: 0px;
+			overflow: hidden;
+			transition: height .25s;
+			-webkit-transition: height .25s;
+			&.show{
+				height: 108px;
+			}
+		}
+		.right-align{
+			text-align: right;
+		}
+	}
+}

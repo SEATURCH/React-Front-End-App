@@ -1,0 +1,76 @@
+$moduleWidth: 100%;
+
+.schedule{
+	display: inline-block;
+	vertical-align: top;
+	width:$moduleWidth;
+
+	form{
+		text-align: center;
+		display: block;
+
+		#startDateText, #endDateText{
+			width: 15%;
+		}
+
+		p{
+			font-weight: 800;
+			margin: 5px 5px;
+			font-style: italic;
+			font-size: 18px;
+			color: #FFB647;
+		}
+	}
+
+	table{
+		width:100%;
+		border:none;
+		margin: 5px 5px;
+		margin-bottom: 20px;
+		.subheader{
+			font-size: .75em;
+			padding-left:10%;
+		}
+		thead{
+			border-bottom: 1px solid #9f9f9f;
+		}
+		th {
+			font-size:1.1em;
+			font-weight: none;
+			padding: 5px 5px;
+			border:none;
+			text-align: center;
+		}
+		td {
+			text-align: center;
+			padding: 5px 0px 5px 10px;
+			border:none;
+			white-space: pre;
+		}
+	}
+}
+
+.scheduleForm{
+	.formContent{
+		textarea{
+			width:100%;
+			resize: none;
+		}
+		position: relative;
+		height: 0px;
+		overflow:hidden;
+		transition: height 0.25s;
+		-webkit-transition: height 0.25s;
+		&.show{
+			height:220px;
+		}
+		.btn-danger{
+			float:right;
+			margin: 7px 5px;
+		}
+		.btn-success{
+			float:right;
+			margin: 7px 5px;
+		}
+	}
+}

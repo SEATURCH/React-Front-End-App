@@ -1,0 +1,59 @@
+$moduleWidth: 100%;
+
+.notifications{
+	display: inline-block;
+	vertical-align: top;
+	width:$moduleWidth;
+	overflow-y: auto;
+
+	table{
+		width:100%;
+		border:none;
+		margin: 5px 5px;
+		margin-bottom: 20px;
+		.subheader{
+			font-size: .75em;
+			padding-left:10%;
+		}
+		thead{
+			border-bottom: 1px solid #9f9f9f;
+		}
+		th {
+			font-size:1.1em;
+			font-weight: none;
+			padding: 5px 5px;
+			border:none;
+			text-align: center;
+		}
+		td {
+			text-align: center;
+			padding: 5px 0px 5px 10px;
+			border:none;
+		}
+	}
+
+	.notificationForm{
+		.formContent{
+			position: relative;
+			height: 0px;
+			overflow:hidden;
+			transition: height 0.25s;
+			-webkit-transition: height 0.25s;
+			&.show{
+				height:230px;
+			}
+			textarea{
+				width:100%;
+				resize: none;
+			}
+			.btn-danger{
+				float:right;
+				margin: 7px 5px;
+			}
+			.btn-success{
+				float:right;
+				margin: 7px 5px;
+			}
+		}
+	}
+}

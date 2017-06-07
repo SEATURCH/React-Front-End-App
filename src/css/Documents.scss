@@ -1,0 +1,41 @@
+$moduleWidth: 100%;
+
+.documents{
+	display: inline-block;
+	vertical-align: top;
+	width:$moduleWidth;
+
+	table{
+		width:100%;
+		border:none;
+		margin: 5px 5px;
+		margin-bottom: 20px;
+		.subheader{
+			font-size: .75em;
+			padding-left:10%;
+		}
+		thead{
+			border-bottom: 1px solid #9f9f9f;
+
+		}
+		th {
+			font-size:1.1em;
+			font-weight: none;
+			padding: 5px 5px;
+			border:none;
+      text-align: center;
+		}
+		td {
+			text-align: center;
+			padding: 5px 0px 5px 10px;
+			border:none;
+		}
+	}
+
+	canvas {
+	    margin: auto;
+	    position: absolute;
+	    left: 0;
+	    right: 0;
+	}
+}
